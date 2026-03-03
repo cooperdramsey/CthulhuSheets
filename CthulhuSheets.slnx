@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="CthulhuSheets/CthulhuSheets.Client/CthulhuSheets.Client.csproj" />
+  <Project Path="CthulhuSheets/CthulhuSheets/CthulhuSheets.csproj" />
+</Solution>
