@@ -1,0 +1,21 @@
+<MudAppBar Color="Color.Primary" Fixed="true" Dense="true">
+    <MudText Typo="Typo.h5" Class="mr-4">CthulhuSheets</MudText>
+    <MudSpacer />
+    <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Inherit"
+                   OnClick="OnCreateNewCharacter" Title="Create New Character" />
+    <MudIconButton Icon="@Icons.Material.Filled.FileUpload" Color="Color.Inherit"
+                   OnClick="OnFileUpload" Class="ml-2" Title="Upload" />
+    <MudIconButton Icon="@Icons.Material.Filled.FileDownload" Color="Color.Inherit"
+                   OnClick="OnFileDownload" Class="ml-2" Title="Download" />
+</MudAppBar>
+
+@code {
+    [Parameter]
+    public EventCallback OnCreateNewCharacter { get; set; }
+
+    [Parameter]
+    public EventCallback OnFileUpload { get; set; }
+
+    [Parameter]
+    public EventCallback OnFileDownload { get; set; }
+}

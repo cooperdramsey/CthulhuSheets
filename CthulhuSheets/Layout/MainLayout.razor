@@ -1,16 +1,26 @@
 ﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
+<NavBar OnCreateNewCharacter="HandleCreateNewCharacter"
+        OnFileUpload="HandleFileUpload"
+        OnFileDownload="HandleFileDownload" />
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+<MudMainContent Class="pt-16 px-4">
+    @Body
+</MudMainContent>
+
+@code {
+private void HandleCreateNewCharacter()
+    {
+        // TODO: Navigate to character creation or open a dialog
+    }
+
+    private void HandleFileUpload()
+    {
+        // TODO: Process the uploaded file
+    }
+
+    private void HandleFileDownload()
+    {
+        // TODO: Trigger file download
+    }
+}
