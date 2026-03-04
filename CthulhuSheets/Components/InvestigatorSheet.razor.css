@@ -42,6 +42,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.portrait-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
 }
 
 .portrait-icon {

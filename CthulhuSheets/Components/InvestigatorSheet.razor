@@ -8,9 +8,17 @@
             }
         </div>
 
-        <div class="portrait-box">
-            <MudIcon Icon="@Icons.Material.Filled.Person" Class="portrait-icon" />
-        </div>
+        <label for="@_portraitInputId" class="portrait-box">
+            @if (!string.IsNullOrEmpty(Investigator.PortraitDataUrl))
+            {
+                <img src="@Investigator.PortraitDataUrl" class="portrait-image" alt="Portrait" />
+            }
+            else
+            {
+                <MudIcon Icon="@Icons.Material.Filled.Person" Class="portrait-icon" />
+            }
+            <InputFile id="@_portraitInputId" OnChange="HandlePortraitUpload" accept="image/*" style="display:none" />
+        </label>
 
         <div class="sidebar-pools">
             <div class="pool-item">

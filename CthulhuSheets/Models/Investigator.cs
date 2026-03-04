@@ -9,6 +9,7 @@ public class Investigator
     public string? Occupation { get; set; }
     public string? Residence { get; set; }
     public int? Age { get; set; }
+    public string? PortraitDataUrl { get; set; }
 
     // Characteristics
     public Characteristic Strength { get; set; } = new() { Name = "STR" };
