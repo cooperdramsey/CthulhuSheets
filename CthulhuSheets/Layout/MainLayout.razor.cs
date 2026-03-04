@@ -6,9 +6,14 @@ public partial class MainLayout
     [Inject] private ISnackbar Snackbar { get; set; } = default!;
     [Inject] private IJSRuntime JS { get; set; } = default!;
 
-    private void HandleCreateNewCharacter()
+    protected override async Task OnInitializedAsync()
     {
-        // TODO: Navigate to character creation or open a dialog
+        await InvestigatorService.TryRestoreAsync();
+    }
+
+    private async Task HandleCreateNewCharacter()
+    {
+        // TODO character creation screen
     }
 
     private async Task HandleFileSelected(IBrowserFile file)
@@ -21,7 +26,7 @@ public partial class MainLayout
 
             if (investigator is not null)
             {
-                InvestigatorService.Load(investigator);
+                await InvestigatorService.LoadAsync(investigator);
                 Snackbar.Add($"Loaded {investigator.Name ?? "investigator"}", Severity.Success);
             }
             else

@@ -109,7 +109,40 @@
             @switch (_activeTab)
             {
                 case "Stats":
-                    <MudText Color="Color.Secondary">Stats content coming soon.</MudText>
+                    <div class="char-grid">
+                        @foreach (var (label, stat) in CharacteristicList)
+                        {
+                            <MudCard Elevation="1" Class="char-card">
+                                <MudCardContent Class="char-card-content">
+                                    <div class="char-header">
+                                        <div class="char-title-row">
+                                            <MudText Typo="Typo.h4" Class="char-abbr">@stat.Name</MudText>
+                                            <MudTooltip Text="Roll d100">
+                                                <MudIconButton Icon="@Icons.Material.Filled.Casino"
+                                                               Size="Size.Small"
+                                                               Color="Color.Primary"
+                                                               OnClick="RollD100" />
+                                            </MudTooltip>
+                                        </div>
+                                        <MudText Typo="Typo.overline" Color="Color.Secondary">@label</MudText>
+                                    </div>
+                                    <MudDivider Class="my-2" />
+                                    <div class="char-value-row">
+                                        <span class="char-value-label">Regular</span>
+                                        <span class="char-value-num">@(stat.Regular?.ToString() ?? "—")</span>
+                                    </div>
+                                    <div class="char-value-row">
+                                        <span class="char-value-label">Half</span>
+                                        <span class="char-value-num">@(stat.Half?.ToString() ?? "—")</span>
+                                    </div>
+                                    <div class="char-value-row">
+                                        <span class="char-value-label">Fifth</span>
+                                        <span class="char-value-num">@(stat.Fifth?.ToString() ?? "—")</span>
+                                    </div>
+                                </MudCardContent>
+                            </MudCard>
+                        }
+                    </div>
                     break;
                 case "Skills":
                     <MudText Color="Color.Secondary">Skills content coming soon.</MudText>
