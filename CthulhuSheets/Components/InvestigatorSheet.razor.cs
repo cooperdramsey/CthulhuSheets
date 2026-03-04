@@ -20,6 +20,8 @@ public partial class InvestigatorSheet
         !Investigator.Unconscious &&
         !Investigator.Dying;
 
+    private Task PersistAsync() => InvestigatorService.PersistAsync();
+
     private IEnumerable<(string Label, Characteristic Stat)> CharacteristicList =>
     [
         ("Strength",     Investigator.Strength),

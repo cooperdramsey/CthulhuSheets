@@ -83,8 +83,8 @@
 
 .condition-list {
     display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
+    flex-direction: column;
+    gap: 0;
 }
 
 .sidebar-stats {

@@ -43,35 +43,33 @@
 
         <div class="sidebar-conditions">
             <MudText Typo="Typo.overline">Conditions</MudText>
-            @if (IsHealthy)
-            {
-                <MudText Typo="Typo.caption" Color="Color.Success">Healthy</MudText>
-            }
-            else
-            {
-                <div class="condition-list">
-                    @if (Investigator.TemporaryInsanity)
-                    {
-                        <MudChip T="string" Color="Color.Warning" Size="Size.Small">Temp. Insanity</MudChip>
-                    }
-                    @if (Investigator.IndefiniteInsanity)
-                    {
-                        <MudChip T="string" Color="Color.Error" Size="Size.Small">Indef. Insanity</MudChip>
-                    }
-                    @if (Investigator.MajorWound)
-                    {
-                        <MudChip T="string" Color="Color.Error" Size="Size.Small">Major Wound</MudChip>
-                    }
-                    @if (Investigator.Unconscious)
-                    {
-                        <MudChip T="string" Color="Color.Error" Size="Size.Small">Unconscious</MudChip>
-                    }
-                    @if (Investigator.Dying)
-                    {
-                        <MudChip T="string" Color="Color.Error" Size="Size.Small">Dying</MudChip>
-                    }
-                </div>
-            }
+            <div class="condition-list">
+                <MudCheckBox @bind-Value="Investigator.TemporaryInsanity"
+                             @bind-Value:after="PersistAsync"
+                             Label="Temp. Insanity"
+                             Color="Color.Warning"
+                             Size="Size.Small" />
+                <MudCheckBox @bind-Value="Investigator.IndefiniteInsanity"
+                             @bind-Value:after="PersistAsync"
+                             Label="Indef. Insanity"
+                             Color="Color.Error"
+                             Size="Size.Small" />
+                <MudCheckBox @bind-Value="Investigator.MajorWound"
+                             @bind-Value:after="PersistAsync"
+                             Label="Major Wound"
+                             Color="Color.Error"
+                             Size="Size.Small" />
+                <MudCheckBox @bind-Value="Investigator.Unconscious"
+                             @bind-Value:after="PersistAsync"
+                             Label="Unconscious"
+                             Color="Color.Error"
+                             Size="Size.Small" />
+                <MudCheckBox @bind-Value="Investigator.Dying"
+                             @bind-Value:after="PersistAsync"
+                             Label="Dying"
+                             Color="Color.Error"
+                             Size="Size.Small" />
+            </div>
         </div>
 
         <MudDivider />
