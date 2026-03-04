@@ -8,7 +8,7 @@ public partial class InvestigatorSheet
     [Inject] private InvestigatorService InvestigatorService { get; set; } = default!;
     [Inject] private DiceRollService DiceRollService { get; set; } = default!;
 
-    private static readonly string[] Tabs = ["Stats", "Skills", "Assets", "Notes"];
+    private static readonly string[] Tabs = ["Stats", "Skills", "Combat", "Items", "Wealth", "Info"];
 
     private string _activeTab = Tabs[0];
     private readonly string _portraitInputId = $"portrait-upload-{Guid.NewGuid():N}";
