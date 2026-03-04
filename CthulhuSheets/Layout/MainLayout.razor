@@ -1,6 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @inject InvestigatorService InvestigatorService
 @inject ISnackbar Snackbar
+@inject IJSRuntime JS
 
 <NavBar OnCreateNewCharacter="HandleCreateNewCharacter"
         OnFileSelected="HandleFileSelected"
@@ -46,8 +47,23 @@
         }
     }
 
-    private void HandleFileDownload()
+    private async Task HandleFileDownload()
     {
-        // TODO: Trigger file download
+        if (InvestigatorService.Current is null)
+        {
+            Snackbar.Add("No investigator loaded to download.", Severity.Warning);
+            return;
+        }
+
+        var options = new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+
+        var json = JsonSerializer.Serialize(InvestigatorService.Current, options);
+        var filename = $"{InvestigatorService.Current.Name?.Replace(' ', '-') ?? "investigator"}.json";
+
+        await JS.InvokeVoidAsync("downloadFile", filename, json);
     }
 }
