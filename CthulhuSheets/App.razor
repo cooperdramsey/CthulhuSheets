@@ -1,4 +1,4 @@
-﻿<MudThemeProvider Theme="_theme"/>
+﻿<MudThemeProvider @bind-IsDarkMode="_isDarkMode" @ref="_mudThemeProvider" />
 <MudPopoverProvider/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
@@ -11,16 +11,15 @@
 </Router>
 
 @code {
-    private readonly MudTheme _theme = new()
+    private bool _isDarkMode;
+    private MudThemeProvider _mudThemeProvider;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        PaletteLight = new PaletteLight
+        if (firstRender)
         {
-            Primary = Colors.DeepPurple.Default,
-            PrimaryDarken = Colors.DeepPurple.Darken1,
-            PrimaryLighten = Colors.DeepPurple.Lighten1,
-            Tertiary = Colors.Pink.Default,
-            TertiaryDarken = Colors.Pink.Darken1,
-            TertiaryLighten = Colors.Pink.Lighten1
+            _isDarkMode = await _mudThemeProvider.GetSystemDarkModeAsync();
+            StateHasChanged();
         }
-    };
+    }
 }
