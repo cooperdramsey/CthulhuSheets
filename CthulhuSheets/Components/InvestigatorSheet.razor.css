@@ -292,3 +292,39 @@
     overflow-y: auto;
     min-width: 0;
 }
+
+/* ── Wealth tab ─────────────────────────────────────── */
+
+.wealth-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.wealth-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 200px));
+    gap: 16px;
+}
+
+.wealth-assets-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.wealth-assets-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.asset-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.asset-field {
+    flex: 1;
+}

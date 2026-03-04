@@ -75,4 +75,16 @@ public partial class InvestigatorSheet
         Investigator.FellowInvestigators.Remove(fellow);
         await PersistAsync();
     }
+
+    private async Task AddAsset()
+    {
+        Investigator.Wealth.Assets.Add(string.Empty);
+        await PersistAsync();
+    }
+
+    private async Task RemoveAsset(int index)
+    {
+        Investigator.Wealth.Assets.RemoveAt(index);
+        await PersistAsync();
+    }
 }
