@@ -13,17 +13,3 @@
     <MudIconButton Icon="@Icons.Material.Filled.FileDownload" Color="Color.Inherit"
                    OnClick="OnFileDownload" Class="ml-2" Title="Download" />
 </MudAppBar>
-
-@code {
-    [Parameter]
-    public EventCallback OnCreateNewCharacter { get; set; }
-
-    [Parameter]
-    public EventCallback<IBrowserFile> OnFileSelected { get; set; }
-
-    [Parameter]
-    public EventCallback OnFileDownload { get; set; }
-
-    private async Task HandleFileSelected(IBrowserFile file) =>
-        await OnFileSelected.InvokeAsync(file);
-}

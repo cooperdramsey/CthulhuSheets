@@ -9,17 +9,3 @@
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
 </Router>
-
-@code {
-    private bool _isDarkMode;
-    private MudThemeProvider _mudThemeProvider;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            _isDarkMode = await _mudThemeProvider.GetSystemDarkModeAsync();
-            StateHasChanged();
-        }
-    }
-}

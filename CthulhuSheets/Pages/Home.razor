@@ -1,39 +1,17 @@
 ﻿@page "/"
-@inject InvestigatorService InvestigatorService
-@implements IDisposable
 
 <PageTitle>Home</PageTitle>
 
 @if (InvestigatorService.Current is null)
 {
-    <MudText Typo="Typo.body1" Color="Color.Secondary">
-        No investigator loaded. Use the upload button in the toolbar to load a character file.
-    </MudText>
+    <div class="pa-4">
+        <MudText Typo="Typo.body1" Color="Color.Secondary">
+            No investigator loaded. Use the upload button in the toolbar to load a character file.
+        </MudText>
+    </div>
 }
 else
 {
-    <MudText Typo="Typo.h6" Class="mb-2">@InvestigatorService.Current.Name</MudText>
-    <MudPaper Class="pa-4">
-        <pre style="white-space: pre-wrap; word-break: break-all; font-size: 0.8rem;">@_json</pre>
-    </MudPaper>
+    <InvestigatorSheet Investigator="@InvestigatorService.Current" />
 }
 
-@code {
-    private string _json = string.Empty;
-
-    protected override void OnInitialized()
-    {
-        InvestigatorService.OnChanged += Refresh;
-        Refresh();
-    }
-
-    private void Refresh()
-    {
-        _json = InvestigatorService.Current is not null
-            ? JsonSerializer.Serialize(InvestigatorService.Current, new JsonSerializerOptions { WriteIndented = true })
-            : string.Empty;
-        StateHasChanged();
-    }
-
-    public void Dispose() => InvestigatorService.OnChanged -= Refresh;
-}

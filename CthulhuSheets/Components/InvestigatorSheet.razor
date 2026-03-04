@@ -1,0 +1,118 @@
+<div class="sheet-container">
+    <aside class="sheet-sidebar">
+        <div class="sidebar-identity">
+            <MudText Typo="Typo.h6">@Investigator.Name</MudText>
+            @if (!string.IsNullOrWhiteSpace(Investigator.Occupation))
+            {
+                <MudText Typo="Typo.caption" Color="Color.Secondary">@Investigator.Occupation</MudText>
+            }
+        </div>
+
+        <div class="portrait-box">
+            <MudIcon Icon="@Icons.Material.Filled.Person" Class="portrait-icon" />
+        </div>
+
+        <div class="sidebar-pools">
+            <div class="pool-item">
+                <MudText Typo="Typo.overline">Hit Points</MudText>
+                <MudText Typo="Typo.h6">@(Investigator.HitPoints.Current ?? 0) <span class="pool-max">/ @(Investigator.HitPoints.Max ?? 0)</span></MudText>
+            </div>
+            <div class="pool-item">
+                <MudText Typo="Typo.overline">Magic Points</MudText>
+                <MudText Typo="Typo.h6">@(Investigator.MagicPoints.Current ?? 0) <span class="pool-max">/ @(Investigator.MagicPoints.Max ?? 0)</span></MudText>
+            </div>
+            <div class="pool-item">
+                <MudText Typo="Typo.overline">Sanity</MudText>
+                <MudText Typo="Typo.h6">@(Investigator.Sanity.Current ?? 0) <span class="pool-max">/ @(Investigator.Sanity.Max ?? 0)</span></MudText>
+            </div>
+            <div class="pool-item">
+                <MudText Typo="Typo.overline">Luck</MudText>
+                <MudText Typo="Typo.h6">@(Investigator.Luck.Current ?? 0)</MudText>
+            </div>
+        </div>
+
+        <MudDivider />
+
+        <div class="sidebar-conditions">
+            <MudText Typo="Typo.overline">Conditions</MudText>
+            @if (IsHealthy)
+            {
+                <MudText Typo="Typo.caption" Color="Color.Success">Healthy</MudText>
+            }
+            else
+            {
+                <div class="condition-list">
+                    @if (Investigator.TemporaryInsanity)
+                    {
+                        <MudChip T="string" Color="Color.Warning" Size="Size.Small">Temp. Insanity</MudChip>
+                    }
+                    @if (Investigator.IndefiniteInsanity)
+                    {
+                        <MudChip T="string" Color="Color.Error" Size="Size.Small">Indef. Insanity</MudChip>
+                    }
+                    @if (Investigator.MajorWound)
+                    {
+                        <MudChip T="string" Color="Color.Error" Size="Size.Small">Major Wound</MudChip>
+                    }
+                    @if (Investigator.Unconscious)
+                    {
+                        <MudChip T="string" Color="Color.Error" Size="Size.Small">Unconscious</MudChip>
+                    }
+                    @if (Investigator.Dying)
+                    {
+                        <MudChip T="string" Color="Color.Error" Size="Size.Small">Dying</MudChip>
+                    }
+                </div>
+            }
+        </div>
+
+        <MudDivider />
+
+        <div class="sidebar-stats">
+            <MudText Typo="Typo.overline">Other Stats</MudText>
+            <div class="stat-row">
+                <MudText Typo="Typo.caption" Color="Color.Secondary">Movement Rate</MudText>
+                <MudText Typo="Typo.body2">@(Investigator.MovementRate ?? 0)</MudText>
+            </div>
+            <div class="stat-row">
+                <MudText Typo="Typo.caption" Color="Color.Secondary">Build</MudText>
+                <MudText Typo="Typo.body2">@(Investigator.Build ?? 0)</MudText>
+            </div>
+            <div class="stat-row">
+                <MudText Typo="Typo.caption" Color="Color.Secondary">Damage Bonus</MudText>
+                <MudText Typo="Typo.body2">@(Investigator.DamageBonus ?? 0)</MudText>
+            </div>
+        </div>
+    </aside>
+
+    <div class="sheet-main">
+        <nav class="tab-rail" aria-label="Character sheet sections">
+            @foreach (var tab in Tabs)
+            {
+                <button class="tab-button @(_activeTab == tab ? "active" : "")"
+                        @onclick="() => _activeTab = tab"
+                        aria-selected="@(_activeTab == tab)">
+                    @tab
+                </button>
+            }
+        </nav>
+
+        <div class="tab-content" role="tabpanel">
+            @switch (_activeTab)
+            {
+                case "Stats":
+                    <MudText Color="Color.Secondary">Stats content coming soon.</MudText>
+                    break;
+                case "Skills":
+                    <MudText Color="Color.Secondary">Skills content coming soon.</MudText>
+                    break;
+                case "Assets":
+                    <MudText Color="Color.Secondary">Assets content coming soon.</MudText>
+                    break;
+                case "Notes":
+                    <MudText Color="Color.Secondary">Notes content coming soon.</MudText>
+                    break;
+            }
+        </div>
+    </div>
+</div>
