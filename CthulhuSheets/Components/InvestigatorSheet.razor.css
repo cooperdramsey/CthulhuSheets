@@ -44,6 +44,7 @@
     justify-content: center;
     cursor: pointer;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 .portrait-image {
@@ -82,8 +83,8 @@
 }
 
 .condition-list {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 0;
 }
 
@@ -166,10 +167,17 @@
     padding: 16px !important;
 }
 
-.char-title-row {
+.char-value-right {
     display: flex;
     align-items: center;
     gap: 2px;
+}
+
+.char-check-btn {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: unset !important;
+    padding: 0 !important;
 }
 
 .char-header {

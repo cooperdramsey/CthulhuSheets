@@ -1,6 +1,6 @@
 namespace CthulhuSheets.Services;
 
-public record DiceGroup(int Total, string Expression, DateTime RolledAt);
+public record DiceGroup(int Total, string Expression, DateTime RolledAt, bool? Success = null);
 
 public class DiceRollService
 {
@@ -24,6 +24,20 @@ public class DiceRollService
 
         var expression = string.Join(" + ", requestList.Select(r => $"{r.count}d{r.sides}"));
         var group = new DiceGroup(total, expression, DateTime.Now);
+
+        _groupHistory.Add(group);
+        if (_groupHistory.Count > MaxGroupHistory)
+            _groupHistory.RemoveAt(0);
+
+        OnRollHistoryChanged?.Invoke();
+        return group;
+    }
+
+    public DiceGroup RollCheck(string label, int threshold)
+    {
+        var roll = _random.Next(1, 101);
+        var expression = $"{label} ≤{threshold} {(roll <= threshold ? "✓" : "✗")}";
+        var group = new DiceGroup(roll, expression, DateTime.Now, roll <= threshold);
 
         _groupHistory.Add(group);
         if (_groupHistory.Count > MaxGroupHistory)

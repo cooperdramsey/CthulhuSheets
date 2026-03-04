@@ -47,7 +47,7 @@
                 <MudCheckBox @bind-Value="Investigator.TemporaryInsanity"
                              @bind-Value:after="PersistAsync"
                              Label="Temp. Insanity"
-                             Color="Color.Warning"
+                             Color="Color.Error"
                              Size="Size.Small" />
                 <MudCheckBox @bind-Value="Investigator.IndefiniteInsanity"
                              @bind-Value:after="PersistAsync"
@@ -113,29 +113,48 @@
                             <MudCard Elevation="1" Class="char-card">
                                 <MudCardContent Class="char-card-content">
                                     <div class="char-header">
-                                        <div class="char-title-row">
-                                            <MudText Typo="Typo.h4" Class="char-abbr">@stat.Name</MudText>
-                                            <MudTooltip Text="Roll d100">
-                                                <MudIconButton Icon="@Icons.Material.Filled.Casino"
-                                                               Size="Size.Small"
-                                                               Color="Color.Primary"
-                                                               OnClick="RollD100" />
-                                            </MudTooltip>
-                                        </div>
+                                        <MudText Typo="Typo.h4" Class="char-abbr">@stat.Name</MudText>
                                         <MudText Typo="Typo.overline" Color="Color.Secondary">@label</MudText>
                                     </div>
                                     <MudDivider Class="my-2" />
                                     <div class="char-value-row">
                                         <span class="char-value-label">Regular</span>
-                                        <span class="char-value-num">@(stat.Regular?.ToString() ?? "—")</span>
+                                        <span class="char-value-right">
+                                            <span class="char-value-num">@(stat.Regular?.ToString() ?? "—")</span>
+                                            @if (stat.Regular.HasValue)
+                                            {
+                                                <MudIconButton Icon="@Icons.Material.Filled.Casino"
+                                                               Size="Size.Small"
+                                                               Class="char-check-btn"
+                                                               OnClick="() => RollRegular(stat)" />
+                                            }
+                                        </span>
                                     </div>
                                     <div class="char-value-row">
                                         <span class="char-value-label">Half</span>
-                                        <span class="char-value-num">@(stat.Half?.ToString() ?? "—")</span>
+                                        <span class="char-value-right">
+                                            <span class="char-value-num">@(stat.Half?.ToString() ?? "—")</span>
+                                            @if (stat.Half.HasValue)
+                                            {
+                                                <MudIconButton Icon="@Icons.Material.Filled.Casino"
+                                                               Size="Size.Small"
+                                                               Class="char-check-btn"
+                                                               OnClick="() => RollHalf(stat)" />
+                                            }
+                                        </span>
                                     </div>
                                     <div class="char-value-row">
                                         <span class="char-value-label">Fifth</span>
-                                        <span class="char-value-num">@(stat.Fifth?.ToString() ?? "—")</span>
+                                        <span class="char-value-right">
+                                            <span class="char-value-num">@(stat.Fifth?.ToString() ?? "—")</span>
+                                            @if (stat.Fifth.HasValue)
+                                            {
+                                                <MudIconButton Icon="@Icons.Material.Filled.Casino"
+                                                               Size="Size.Small"
+                                                               Class="char-check-btn"
+                                                               OnClick="() => RollFifth(stat)" />
+                                            }
+                                        </span>
                                     </div>
                                 </MudCardContent>
                             </MudCard>

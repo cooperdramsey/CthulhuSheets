@@ -44,5 +44,7 @@ public partial class InvestigatorSheet
         await InvestigatorService.PersistAsync();
     }
 
-    private void RollD100() => DiceRollService.RollMany([(sides: 100, count: 1)]);
+    private void RollRegular(Characteristic stat) => DiceRollService.RollCheck($"{stat.Name} Reg", stat.Regular!.Value);
+    private void RollHalf(Characteristic stat) => DiceRollService.RollCheck($"{stat.Name} Half", stat.Half!.Value);
+    private void RollFifth(Characteristic stat) => DiceRollService.RollCheck($"{stat.Name} Fifth", stat.Fifth!.Value);
 }

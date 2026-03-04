@@ -30,6 +30,16 @@
     pointer-events: none;
 }
 
+.dice-chip-success {
+    background: color-mix(in oklab, var(--mud-palette-success) 20%, Canvas 80%);
+    box-shadow: 0 6px 16px color-mix(in oklab, var(--mud-palette-success) 35%, transparent 65%);
+}
+
+.dice-chip-failure {
+    background: color-mix(in oklab, var(--mud-palette-error) 20%, Canvas 80%);
+    box-shadow: 0 6px 16px color-mix(in oklab, var(--mud-palette-error) 35%, transparent 65%);
+}
+
 .dice-chip-meta {
     font-size: 0.85rem;
     line-height: 1;
