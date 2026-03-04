@@ -1,0 +1,97 @@
+:host {
+  /* Shared positioning and size (mat-fab defaults to 56px) */
+  --fab-spacing-block: calc(env(safe-area-inset-bottom, 0px) + clamp(12px, 2.5vh, 24px));
+  --fab-spacing-inline: clamp(12px, 3vw, 24px);
+  --fab-size: 56px; /* set to 40px if you switch to mat-mini-fab */
+}
+
+.dice-fab {
+  position: fixed;
+  /* Respect notches and be responsive */
+  inset-block-end: calc(env(safe-area-inset-bottom, 0px) + clamp(12px, 2.5vh, 24px));
+  inset-inline-end: clamp(12px, 3vw, 24px);
+  z-index: 1000;
+}
+
+.dice-stack {
+  position: fixed;
+  inset-inline-end: var(--fab-spacing-inline);
+  inset-block-end: calc(var(--fab-spacing-block) + var(--fab-size) + 8px);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column; /* latest at bottom, older above */
+  gap: 8px;
+  align-items: flex-end; /* right align chips */
+}
+
+.dice-chip {
+  padding: 6px 12px;
+  border-radius: 16px;
+  background: color-mix(in oklab, CanvasText 12%, Canvas 88%);
+  color: CanvasText;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  font-weight: 600;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  animation: fadeInUp 160ms ease-out both;
+  pointer-events: none;
+}
+
+.dice-chip-meta {
+  font-size: 0.85rem;
+  line-height: 1;
+  color: color-mix(in oklab, CanvasText 55%, Canvas 45%);
+  opacity: 0.75;
+}
+
+.dice-dock {
+  position: fixed;
+  inset-block-end: var(--fab-spacing-block);
+  inset-inline-end: calc(var(--fab-spacing-inline) + var(--fab-size) + 12px);
+  z-index: 1001;
+  display: flex;
+  flex-direction: row-reverse; /* put last item (d100) nearest the FAB */
+  gap: 8px;
+  align-items: center;
+  pointer-events: auto;
+  animation: fadeInUp 140ms ease-out both;
+}
+
+.dice-option {
+  font-weight: 700;
+  font-size: 0.8rem;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  position: relative; /* for badge positioning */
+}
+
+:host-context([dir='rtl']) .dice-dock {
+  inset-inline-start: calc(var(--fab-spacing-inline) + var(--fab-size) + 12px);
+  inset-inline-end: auto;
+  flex-direction: row;
+}
+
+/* RTL: move to the left side */
+:host-context([dir='rtl']) .dice-fab,
+:host-context([dir='rtl']) .dice-stack {
+  inset-inline-start: var(--fab-spacing-inline);
+  inset-inline-end: auto;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 500px) {
+  .dice-fab {
+    transform: scale(1.1);
+  }
+}

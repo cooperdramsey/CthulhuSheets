@@ -1,0 +1,99 @@
+@inject DiceRollService DiceRollService
+@implements IDisposable
+
+@if (_historyView.Count > 0)
+{
+    <div class="dice-stack" aria-live="polite" role="status">
+        @foreach (var group in _historyView)
+        {
+            <div class="dice-chip">
+                <strong>@group.Total</strong>
+                <span class="dice-chip-meta">@group.Expression</span>
+            </div>
+        }
+    </div>
+}
+
+@if (_menuOpen)
+{
+    <div class="dice-dock" aria-label="Dice options">
+        @foreach (var sides in DiceSides)
+        {
+            <MudBadge Content="@_selectedCounts.GetValueOrDefault(sides)"
+                      Visible="@(_selectedCounts.ContainsKey(sides))"
+                      Color="Color.Secondary" Overlap="true">
+                <div @oncontextmenu="() => RemoveDie(sides)" @oncontextmenu:preventDefault>
+                    <MudFab Size="Size.Small" Color="Color.Primary" Label="@($"d{sides}")"
+                            Class="dice-option" OnClick="() => AddDie(sides)" />
+                </div>
+            </MudBadge>
+        }
+    </div>
+}
+
+<div class="dice-fab">
+    <MudFab Color="Color.Primary"
+            StartIcon="@(_menuOpen ? Icons.Material.Filled.PlayArrow : Icons.Material.Filled.Casino)"
+            OnClick="OnFabClick" />
+</div>
+
+@code {
+    private record DiceGroupView(int Total, string Expression);
+
+    private static readonly int[] DiceSides = [2, 4, 6, 10, 12, 20, 100];
+
+    private bool _menuOpen;
+    private readonly Dictionary<int, int> _selectedCounts = [];
+    private readonly List<DiceGroupView> _historyView = [];
+
+    protected override void OnInitialized()
+    {
+        DiceRollService.OnRollHistoryChanged += StateHasChanged;
+    }
+
+    private void OnFabClick()
+    {
+        if (!_menuOpen)
+        {
+            _menuOpen = true;
+            return;
+        }
+        if (_selectedCounts.Count > 0)
+            RollSelection();
+        else
+            _menuOpen = false;
+    }
+
+    private void AddDie(int sides) =>
+        _selectedCounts[sides] = _selectedCounts.GetValueOrDefault(sides) + 1;
+
+    private void RemoveDie(int sides)
+    {
+        if (!_selectedCounts.TryGetValue(sides, out var count)) return;
+        if (count <= 1) _selectedCounts.Remove(sides);
+        else _selectedCounts[sides] = count - 1;
+    }
+
+    private void RollSelection()
+    {
+        var requests = _selectedCounts
+            .Select(kvp => (sides: kvp.Key, count: kvp.Value))
+            .ToList();
+
+        var results = DiceRollService.RollMany(requests);
+        var total = results.Sum(r => r.Result);
+        var expression = string.Join(" + ", requests.Select(r => $"{r.count}d{r.sides}"));
+
+        _historyView.Add(new DiceGroupView(total, expression));
+        if (_historyView.Count > 5)
+            _historyView.RemoveAt(0);
+
+        _selectedCounts.Clear();
+        _menuOpen = false;
+    }
+
+    public void Dispose()
+    {
+        DiceRollService.OnRollHistoryChanged -= StateHasChanged;
+    }
+}

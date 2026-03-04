@@ -1,0 +1,74 @@
+.dice-fab {
+    position: fixed;
+    inset-block-end: calc(env(safe-area-inset-bottom, 0px) + clamp(12px, 2.5vh, 24px));
+    inset-inline-end: clamp(12px, 3vw, 24px);
+    z-index: 1000;
+}
+
+.dice-stack {
+    position: fixed;
+    inset-inline-end: clamp(12px, 3vw, 24px);
+    inset-block-end: calc(clamp(12px, 2.5vh, 24px) + 56px + 8px);
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.dice-chip {
+    padding: 6px 12px;
+    border-radius: 16px;
+    background: color-mix(in oklab, CanvasText 12%, Canvas 88%);
+    color: CanvasText;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    font-weight: 600;
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    animation: fadeInUp 160ms ease-out both;
+    pointer-events: none;
+}
+
+.dice-chip-meta {
+    font-size: 0.85rem;
+    line-height: 1;
+    color: color-mix(in oklab, CanvasText 55%, Canvas 45%);
+    opacity: 0.75;
+}
+
+.dice-dock {
+    position: fixed;
+    inset-block-end: clamp(12px, 2.5vh, 24px);
+    inset-inline-end: calc(clamp(12px, 3vw, 24px) + 56px + 12px);
+    z-index: 1001;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 8px;
+    align-items: center;
+    animation: fadeInUp 140ms ease-out both;
+}
+
+.dice-option {
+    font-weight: 700;
+    font-size: 0.8rem;
+    line-height: 1;
+    letter-spacing: 0.5px;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 500px) {
+    .dice-fab {
+        transform: scale(1.1);
+    }
+}

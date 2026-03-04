@@ -1,0 +1,43 @@
+<div>
+  <button
+    mat-fab
+    color="primary"
+    class="dice-fab"
+    (click)="onFabClick()"
+    [attr.aria-label]="menuOpen ? 'Roll selection' : 'Choose die to roll'"
+  >
+    <mat-icon>{{ menuOpen ? 'play_arrow' : 'casino' }}</mat-icon>
+  </button>
+
+  @if (menuOpen) {
+    <div class="dice-dock" aria-label="Dice options">
+      @for (sides of diceOptions; track sides) {
+        <button
+          mat-mini-fab
+          color="primary"
+          class="dice-option"
+          (click)="addDie(sides)"
+          (contextmenu)="$event.preventDefault(); removeDie(sides)"
+          [attr.aria-label]="'Select d' + sides"
+          [matBadge]="selectedCounts[sides]"
+          matBadgeColor="accent"
+          matBadgeOverlap="true"
+          [matBadgeHidden]="!selectedCounts[sides]"
+        >
+          d{{ sides }}
+        </button>
+      }
+    </div>
+  }
+
+  @if (historyView.length) {
+    <div class="dice-stack" aria-live="polite" role="status">
+      @for (group of historyView; track group.timestamp) {
+        <div class="dice-chip">
+          <strong>{{ group.total }}</strong>
+          <span class="dice-chip-meta">{{ group.expression }}</span>
+        </div>
+      }
+    </div>
+  }
+</div>
