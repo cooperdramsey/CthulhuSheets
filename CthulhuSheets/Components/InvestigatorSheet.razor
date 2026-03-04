@@ -173,7 +173,22 @@
                             <MudCard Elevation="1" Class="char-card">
                                 <MudCardContent Class="char-card-content">
                                     <div class="char-header">
-                                        <MudText Typo="Typo.h4" Class="char-abbr">@stat.Name</MudText>
+                                        <div class="char-title-row">
+                                            <div></div>
+                                            <MudText Typo="Typo.h4" Class="char-abbr">@stat.Name</MudText>
+                                            <div class="char-title-actions">
+                                                <MudTooltip Text="Roll d100">
+                                                    <MudIconButton Icon="@Icons.Material.Filled.Casino"
+                                                                   Size="Size.Small"
+                                                                   Color="Color.Primary"
+                                                                   OnClick="() => RollStat(stat)" />
+                                                </MudTooltip>
+                                                @if (_lastRolls.TryGetValue(stat.Name, out var lastRoll))
+                                                {
+                                                    <span class="char-roll-result">@lastRoll</span>
+                                                }
+                                            </div>
+                                        </div>
                                         <MudText Typo="Typo.overline" Color="Color.Secondary">@label</MudText>
                                     </div>
                                     <MudDivider Class="my-2" />
@@ -181,12 +196,9 @@
                                         <span class="char-value-label">Regular</span>
                                         <span class="char-value-right">
                                             <span class="char-value-num">@(stat.Regular?.ToString() ?? "—")</span>
-                                            @if (stat.Regular.HasValue)
+                                            @if (CheckIcon(stat.Name, stat.Regular) is { } regIcon)
                                             {
-                                                <MudIconButton Icon="@Icons.Material.Filled.Casino"
-                                                               Size="Size.Small"
-                                                               Class="char-check-btn"
-                                                               OnClick="() => RollRegular(stat)" />
+                                                <MudIcon Icon="@regIcon" Color="@CheckColor(stat.Name, stat.Regular)" Size="Size.Small" Class="char-check-icon" />
                                             }
                                         </span>
                                     </div>
@@ -194,12 +206,9 @@
                                         <span class="char-value-label">Half</span>
                                         <span class="char-value-right">
                                             <span class="char-value-num">@(stat.Half?.ToString() ?? "—")</span>
-                                            @if (stat.Half.HasValue)
+                                            @if (CheckIcon(stat.Name, stat.Half) is { } halfIcon)
                                             {
-                                                <MudIconButton Icon="@Icons.Material.Filled.Casino"
-                                                               Size="Size.Small"
-                                                               Class="char-check-btn"
-                                                               OnClick="() => RollHalf(stat)" />
+                                                <MudIcon Icon="@halfIcon" Color="@CheckColor(stat.Name, stat.Half)" Size="Size.Small" Class="char-check-icon" />
                                             }
                                         </span>
                                     </div>
@@ -207,12 +216,9 @@
                                         <span class="char-value-label">Fifth</span>
                                         <span class="char-value-right">
                                             <span class="char-value-num">@(stat.Fifth?.ToString() ?? "—")</span>
-                                            @if (stat.Fifth.HasValue)
+                                            @if (CheckIcon(stat.Name, stat.Fifth) is { } fifthIcon)
                                             {
-                                                <MudIconButton Icon="@Icons.Material.Filled.Casino"
-                                                               Size="Size.Small"
-                                                               Class="char-check-btn"
-                                                               OnClick="() => RollFifth(stat)" />
+                                                <MudIcon Icon="@fifthIcon" Color="@CheckColor(stat.Name, stat.Fifth)" Size="Size.Small" Class="char-check-icon" />
                                             }
                                         </span>
                                     </div>

@@ -44,7 +44,23 @@ public partial class InvestigatorSheet
         await InvestigatorService.PersistAsync();
     }
 
-    private void RollRegular(Characteristic stat) => DiceRollService.RollCheck($"{stat.Name} Reg", stat.Regular!.Value);
-    private void RollHalf(Characteristic stat) => DiceRollService.RollCheck($"{stat.Name} Half", stat.Half!.Value);
-    private void RollFifth(Characteristic stat) => DiceRollService.RollCheck($"{stat.Name} Fifth", stat.Fifth!.Value);
+    private readonly Dictionary<string, int> _lastRolls = new();
+
+    private void RollStat(Characteristic stat)
+    {
+        var result = DiceRollService.RollMany([(sides: 100, count: 1)]);
+        _lastRolls[stat.Name] = result.Total;
+    }
+
+    private string? CheckIcon(string statName, int? threshold)
+    {
+        if (!threshold.HasValue || !_lastRolls.TryGetValue(statName, out var roll)) return null;
+        return roll <= threshold.Value ? Icons.Material.Filled.Check : Icons.Material.Filled.Close;
+    }
+
+    private Color CheckColor(string statName, int? threshold)
+    {
+        if (!threshold.HasValue || !_lastRolls.TryGetValue(statName, out var roll)) return Color.Default;
+        return roll <= threshold.Value ? Color.Success : Color.Error;
+    }
 }

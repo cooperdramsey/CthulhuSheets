@@ -3,7 +3,7 @@
     <div class="dice-stack" aria-live="polite" role="status">
         @foreach (var group in DiceRollService.GroupHistory)
         {
-            <div class="dice-chip @(group.Success == true ? "dice-chip-success" : group.Success == false ? "dice-chip-failure" : "")">
+            <div class="dice-chip">
                 <strong>@group.Total</strong>
                 <span class="dice-chip-meta">@group.Expression</span>
             </div>
