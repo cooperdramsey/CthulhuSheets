@@ -71,8 +71,20 @@
     gap: 1px;
 }
 
-.pool-max {
-    font-size: 0.85em;
+.pool-inputs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.pool-input {
+    flex: 1;
+    min-width: 0;
+}
+
+.pool-sep {
+    flex-shrink: 0;
+    font-size: 0.85rem;
     opacity: 0.5;
 }
 

@@ -23,19 +23,79 @@
         <div class="sidebar-pools">
             <div class="pool-item">
                 <MudText Typo="Typo.overline">Hit Points</MudText>
-                <MudText Typo="Typo.h6">@(Investigator.HitPoints.Current ?? 0) <span class="pool-max">/ @(Investigator.HitPoints.Max ?? 0)</span></MudText>
+                <div class="pool-inputs">
+                    <MudNumericField T="int?"
+                                     @bind-Value="Investigator.HitPoints.Current"
+                                     @bind-Value:after="PersistAsync"
+                                     Placeholder="Cur"
+                                     Variant="Variant.Outlined"
+                                     Margin="Margin.Dense"
+                                     HideSpinButtons="true"
+                                     Class="pool-input" />
+                    <span class="pool-sep">/</span>
+                    <MudNumericField T="int?"
+                                     @bind-Value="Investigator.HitPoints.Max"
+                                     @bind-Value:after="PersistAsync"
+                                     Placeholder="Max"
+                                     Variant="Variant.Outlined"
+                                     Margin="Margin.Dense"
+                                     HideSpinButtons="true"
+                                     Class="pool-input" />
+                </div>
             </div>
             <div class="pool-item">
                 <MudText Typo="Typo.overline">Magic Points</MudText>
-                <MudText Typo="Typo.h6">@(Investigator.MagicPoints.Current ?? 0) <span class="pool-max">/ @(Investigator.MagicPoints.Max ?? 0)</span></MudText>
+                <div class="pool-inputs">
+                    <MudNumericField T="int?"
+                                     @bind-Value="Investigator.MagicPoints.Current"
+                                     @bind-Value:after="PersistAsync"
+                                     Placeholder="Cur"
+                                     Variant="Variant.Outlined"
+                                     Margin="Margin.Dense"
+                                     HideSpinButtons="true"
+                                     Class="pool-input" />
+                    <span class="pool-sep">/</span>
+                    <MudNumericField T="int?"
+                                     @bind-Value="Investigator.MagicPoints.Max"
+                                     @bind-Value:after="PersistAsync"
+                                     Placeholder="Max"
+                                     Variant="Variant.Outlined"
+                                     Margin="Margin.Dense"
+                                     HideSpinButtons="true"
+                                     Class="pool-input" />
+                </div>
             </div>
             <div class="pool-item">
                 <MudText Typo="Typo.overline">Sanity</MudText>
-                <MudText Typo="Typo.h6">@(Investigator.Sanity.Current ?? 0) <span class="pool-max">/ @(Investigator.Sanity.Max ?? 0)</span></MudText>
+                <div class="pool-inputs">
+                    <MudNumericField T="int?"
+                                     @bind-Value="Investigator.Sanity.Current"
+                                     @bind-Value:after="PersistAsync"
+                                     Placeholder="Cur"
+                                     Variant="Variant.Outlined"
+                                     Margin="Margin.Dense"
+                                     HideSpinButtons="true"
+                                     Class="pool-input" />
+                    <span class="pool-sep">/</span>
+                    <MudNumericField T="int?"
+                                     @bind-Value="Investigator.Sanity.Max"
+                                     @bind-Value:after="PersistAsync"
+                                     Placeholder="Max"
+                                     Variant="Variant.Outlined"
+                                     Margin="Margin.Dense"
+                                     HideSpinButtons="true"
+                                     Class="pool-input" />
+                </div>
             </div>
             <div class="pool-item">
                 <MudText Typo="Typo.overline">Luck</MudText>
-                <MudText Typo="Typo.h6">@(Investigator.Luck.Current ?? 0)</MudText>
+                <MudNumericField T="int?"
+                                 @bind-Value="Investigator.Luck.Current"
+                                 @bind-Value:after="PersistAsync"
+                                 Placeholder="Current"
+                                 Variant="Variant.Outlined"
+                                 Margin="Margin.Dense"
+                                 HideSpinButtons="true" />
             </div>
         </div>
 
