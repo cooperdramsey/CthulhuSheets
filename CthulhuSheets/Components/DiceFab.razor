@@ -1,10 +1,10 @@
 @inject DiceRollService DiceRollService
 @implements IDisposable
 
-@if (_historyView.Count > 0)
+@if (DiceRollService.GroupHistory.Count > 0)
 {
     <div class="dice-stack" aria-live="polite" role="status">
-        @foreach (var group in _historyView)
+        @foreach (var group in DiceRollService.GroupHistory)
         {
             <div class="dice-chip">
                 <strong>@group.Total</strong>
@@ -38,13 +38,10 @@
 </div>
 
 @code {
-    private record DiceGroupView(int Total, string Expression);
-
     private static readonly int[] DiceSides = [2, 4, 6, 10, 12, 20, 100];
 
     private bool _menuOpen;
     private readonly Dictionary<int, int> _selectedCounts = [];
-    private readonly List<DiceGroupView> _historyView = [];
 
     protected override void OnInitialized()
     {
@@ -76,18 +73,7 @@
 
     private void RollSelection()
     {
-        var requests = _selectedCounts
-            .Select(kvp => (sides: kvp.Key, count: kvp.Value))
-            .ToList();
-
-        var results = DiceRollService.RollMany(requests);
-        var total = results.Sum(r => r.Result);
-        var expression = string.Join(" + ", requests.Select(r => $"{r.count}d{r.sides}"));
-
-        _historyView.Add(new DiceGroupView(total, expression));
-        if (_historyView.Count > 5)
-            _historyView.RemoveAt(0);
-
+        DiceRollService.RollMany(_selectedCounts.Select(kvp => (sides: kvp.Key, count: kvp.Value)));
         _selectedCounts.Clear();
         _menuOpen = false;
     }

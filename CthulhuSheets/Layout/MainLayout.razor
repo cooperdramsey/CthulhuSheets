@@ -1,7 +1,9 @@
 ﻿@inherits LayoutComponentBase
+@inject InvestigatorService InvestigatorService
+@inject ISnackbar Snackbar
 
 <NavBar OnCreateNewCharacter="HandleCreateNewCharacter"
-        OnFileUpload="HandleFileUpload"
+        OnFileSelected="HandleFileSelected"
         OnFileDownload="HandleFileDownload" />
 
 <MudMainContent Class="pt-16 px-4">
@@ -11,14 +13,37 @@
 <DiceFab />
 
 @code {
-private void HandleCreateNewCharacter()
+    private void HandleCreateNewCharacter()
     {
         // TODO: Navigate to character creation or open a dialog
     }
 
-    private void HandleFileUpload()
+    private async Task HandleFileSelected(IBrowserFile file)
     {
-        // TODO: Process the uploaded file
+        try
+        {
+            await using var stream = file.OpenReadStream(maxAllowedSize: 1_048_576);
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var investigator = await JsonSerializer.DeserializeAsync<Investigator>(stream, options);
+
+            if (investigator is not null)
+            {
+                InvestigatorService.Load(investigator);
+                Snackbar.Add($"Loaded {investigator.Name ?? "investigator"}", Severity.Success);
+            }
+            else
+            {
+                Snackbar.Add("File did not contain a valid investigator.", Severity.Warning);
+            }
+        }
+        catch (JsonException)
+        {
+            Snackbar.Add("Invalid JSON — could not parse character file.", Severity.Error);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to load character: {ex.Message}", Severity.Error);
+        }
     }
 
     private void HandleFileDownload()

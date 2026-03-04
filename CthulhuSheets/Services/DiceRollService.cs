@@ -1,43 +1,41 @@
 namespace CthulhuSheets.Services;
 
-public record DiceRoll(int Sides, int Result, DateTime RolledAt);
+public record DiceGroup(int Total, string Expression, DateTime RolledAt);
 
 public class DiceRollService
 {
-    private readonly List<DiceRoll> _history = [];
+    private const int MaxGroupHistory = 5;
+
+    private readonly List<DiceGroup> _groupHistory = [];
     private readonly Random _random = new();
 
-    public IReadOnlyList<DiceRoll> History => _history.AsReadOnly();
+    public IReadOnlyList<DiceGroup> GroupHistory => _groupHistory.AsReadOnly();
 
     public event Action? OnRollHistoryChanged;
 
-    public DiceRoll Roll(int sides)
+    public DiceGroup RollMany(IEnumerable<(int sides, int count)> requests)
     {
-        var roll = new DiceRoll(sides, _random.Next(1, sides + 1), DateTime.Now);
-        _history.Insert(0, roll);
-        OnRollHistoryChanged?.Invoke();
-        return roll;
-    }
+        var requestList = requests.ToList();
+        var total = 0;
 
-    public IReadOnlyList<DiceRoll> RollMany(IEnumerable<(int sides, int count)> requests)
-    {
-        var rolls = new List<DiceRoll>();
-        foreach (var (sides, count) in requests)
-        {
+        foreach (var (sides, count) in requestList)
             for (var i = 0; i < count; i++)
-            {
-                var roll = new DiceRoll(sides, _random.Next(1, sides + 1), DateTime.Now);
-                _history.Insert(0, roll);
-                rolls.Add(roll);
-            }
-        }
+                total += _random.Next(1, sides + 1);
+
+        var expression = string.Join(" + ", requestList.Select(r => $"{r.count}d{r.sides}"));
+        var group = new DiceGroup(total, expression, DateTime.Now);
+
+        _groupHistory.Add(group);
+        if (_groupHistory.Count > MaxGroupHistory)
+            _groupHistory.RemoveAt(0);
+
         OnRollHistoryChanged?.Invoke();
-        return rolls;
+        return group;
     }
 
     public void ClearHistory()
     {
-        _history.Clear();
+        _groupHistory.Clear();
         OnRollHistoryChanged?.Invoke();
     }
 }

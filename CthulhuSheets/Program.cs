@@ -12,5 +12,6 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 builder.Services.AddMudServices();
 builder.Services.AddScoped<DiceRollService>();
+builder.Services.AddScoped<InvestigatorService>();
 
 await builder.Build().RunAsync();
