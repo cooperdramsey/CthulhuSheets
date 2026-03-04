@@ -136,18 +136,45 @@
 
         <div class="sidebar-stats">
             <MudText Typo="Typo.overline">Other Stats</MudText>
-            <div class="stat-row">
-                <MudText Typo="Typo.caption" Color="Color.Secondary">Movement Rate</MudText>
-                <MudText Typo="Typo.body2">@(Investigator.MovementRate ?? 0)</MudText>
-            </div>
-            <div class="stat-row">
-                <MudText Typo="Typo.caption" Color="Color.Secondary">Build</MudText>
-                <MudText Typo="Typo.body2">@(Investigator.Build ?? 0)</MudText>
-            </div>
-            <div class="stat-row">
-                <MudText Typo="Typo.caption" Color="Color.Secondary">Damage Bonus</MudText>
-                <MudText Typo="Typo.body2">@(Investigator.DamageBonus ?? 0)</MudText>
-            </div>
+            @if (_statsEditMode)
+            {
+                <MudNumericField T="int?"
+                                 @bind-Value="Investigator.MovementRate"
+                                 @bind-Value:after="PersistAsync"
+                                 Label="Movement Rate"
+                                 Variant="Variant.Outlined"
+                                 Margin="Margin.Dense"
+                                 HideSpinButtons="true" />
+                <MudNumericField T="int?"
+                                 @bind-Value="Investigator.Build"
+                                 @bind-Value:after="PersistAsync"
+                                 Label="Build"
+                                 Variant="Variant.Outlined"
+                                 Margin="Margin.Dense"
+                                 HideSpinButtons="true" />
+                <MudNumericField T="int?"
+                                 @bind-Value="Investigator.DamageBonus"
+                                 @bind-Value:after="PersistAsync"
+                                 Label="Damage Bonus"
+                                 Variant="Variant.Outlined"
+                                 Margin="Margin.Dense"
+                                 HideSpinButtons="true" />
+            }
+            else
+            {
+                <div class="stat-row">
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">Movement Rate</MudText>
+                    <MudText Typo="Typo.body2">@(Investigator.MovementRate ?? 0)</MudText>
+                </div>
+                <div class="stat-row">
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">Build</MudText>
+                    <MudText Typo="Typo.body2">@(Investigator.Build ?? 0)</MudText>
+                </div>
+                <div class="stat-row">
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">Damage Bonus</MudText>
+                    <MudText Typo="Typo.body2">@(Investigator.DamageBonus ?? 0)</MudText>
+                </div>
+            }
         </div>
     </aside>
 
@@ -167,64 +194,112 @@
             @switch (_activeTab)
             {
                 case "Stats":
-                    <div class="char-grid">
-                        @foreach (var (label, stat) in CharacteristicList)
-                        {
-                            <MudCard Elevation="1" Class="char-card">
-                                <MudCardContent Class="char-card-content">
-                                    <div class="char-header">
-                                        <div class="char-title-row">
-                                            <div></div>
-                                            <MudText Typo="Typo.h4" Class="char-abbr">@stat.Name</MudText>
-                                            <div class="char-title-actions">
-                                                <MudTooltip Text="Roll d100">
-                                                    <MudIconButton Icon="@Icons.Material.Filled.Casino"
-                                                                   Size="Size.Small"
-                                                                   Color="Color.Primary"
-                                                                   OnClick="() => RollStat(stat)" />
-                                                </MudTooltip>
-                                                @if (_lastRolls.TryGetValue(stat.Name, out var lastRoll))
-                                                {
-                                                    <span class="char-roll-result">@lastRoll</span>
-                                                }
+                    <div class="stats-container">
+                        <div class="stats-toolbar">
+                            <MudTooltip Text="@(_statsEditMode ? "Done Editing" : "Edit Stats")">
+                                <MudIconButton Icon="@(_statsEditMode ? Icons.Material.Filled.EditOff : Icons.Material.Filled.Edit)"
+                                               Color="@(_statsEditMode ? Color.Primary : Color.Default)"
+                                               Size="Size.Small"
+                                               OnClick="() => _statsEditMode = !_statsEditMode" />
+                            </MudTooltip>
+                        </div>
+                        <div class="char-grid">
+                            @foreach (var (label, stat) in CharacteristicList)
+                            {
+                                <MudCard Elevation="1" Class="char-card">
+                                    <MudCardContent Class="char-card-content">
+                                        <div class="char-header">
+                                            <div class="char-title-row">
+                                                <div></div>
+                                                <MudText Typo="Typo.h4" Class="char-abbr">@stat.Name</MudText>
+                                                <div class="char-title-actions">
+                                                    @if (!_statsEditMode)
+                                                    {
+                                                        <MudTooltip Text="Roll d100">
+                                                            <MudIconButton Icon="@Icons.Material.Filled.Casino"
+                                                                           Size="Size.Small"
+                                                                           Color="Color.Primary"
+                                                                           OnClick="() => RollStat(stat)" />
+                                                        </MudTooltip>
+                                                        @if (_lastRolls.TryGetValue(stat.Name, out var lastRoll))
+                                                        {
+                                                            <span class="char-roll-result">@lastRoll</span>
+                                                        }
+                                                    }
+                                                </div>
                                             </div>
+                                            <MudText Typo="Typo.overline" Color="Color.Secondary">@label</MudText>
                                         </div>
-                                        <MudText Typo="Typo.overline" Color="Color.Secondary">@label</MudText>
-                                    </div>
-                                    <MudDivider Class="my-2" />
-                                    <div class="char-value-row">
-                                        <span class="char-value-label">Regular</span>
-                                        <span class="char-value-right">
-                                            <span class="char-value-num">@(stat.Regular?.ToString() ?? "—")</span>
-                                            @if (CheckIcon(stat.Name, stat.Regular) is { } regIcon)
-                                            {
-                                                <MudIcon Icon="@regIcon" Color="@CheckColor(stat.Name, stat.Regular)" Size="Size.Small" Class="char-check-icon" />
-                                            }
-                                        </span>
-                                    </div>
-                                    <div class="char-value-row">
-                                        <span class="char-value-label">Half</span>
-                                        <span class="char-value-right">
-                                            <span class="char-value-num">@(stat.Half?.ToString() ?? "—")</span>
-                                            @if (CheckIcon(stat.Name, stat.Half) is { } halfIcon)
-                                            {
-                                                <MudIcon Icon="@halfIcon" Color="@CheckColor(stat.Name, stat.Half)" Size="Size.Small" Class="char-check-icon" />
-                                            }
-                                        </span>
-                                    </div>
-                                    <div class="char-value-row">
-                                        <span class="char-value-label">Fifth</span>
-                                        <span class="char-value-right">
-                                            <span class="char-value-num">@(stat.Fifth?.ToString() ?? "—")</span>
-                                            @if (CheckIcon(stat.Name, stat.Fifth) is { } fifthIcon)
-                                            {
-                                                <MudIcon Icon="@fifthIcon" Color="@CheckColor(stat.Name, stat.Fifth)" Size="Size.Small" Class="char-check-icon" />
-                                            }
-                                        </span>
-                                    </div>
-                                </MudCardContent>
-                            </MudCard>
-                        }
+                                        <MudDivider Class="my-2" />
+                                        @if (_statsEditMode)
+                                        {
+                                            <MudNumericField T="int?"
+                                                             @bind-Value="stat.Regular"
+                                                             @bind-Value:after="PersistAsync"
+                                                             Label="Regular"
+                                                             Variant="Variant.Outlined"
+                                                             Margin="Margin.Dense"
+                                                             HideSpinButtons="true" />
+                                            <div class="char-edit-derived">
+                                                <div class="char-value-row">
+                                                    <span class="char-value-label">Half</span>
+                                                    <span class="char-value-num">@(stat.Half?.ToString() ?? "—")</span>
+                                                </div>
+                                                <div class="char-value-row">
+                                                    <span class="char-value-label">Fifth</span>
+                                                    <span class="char-value-num">@(stat.Fifth?.ToString() ?? "—")</span>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="char-value-row">
+                                                <span class="char-value-label">Regular</span>
+                                                <span class="char-value-right">
+                                                    <span class="char-value-num">@(stat.Regular?.ToString() ?? "—")</span>
+                                                    @if (CheckIcon(stat.Name, stat.Regular) is { } regIcon)
+                                                    {
+                                                        <MudIcon Icon="@regIcon" Color="@CheckColor(stat.Name, stat.Regular)" Size="Size.Small" Class="char-check-icon" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="char-check-placeholder"></span>
+                                                    }
+                                                </span>
+                                            </div>
+                                            <div class="char-value-row">
+                                                <span class="char-value-label">Half</span>
+                                                <span class="char-value-right">
+                                                    <span class="char-value-num">@(stat.Half?.ToString() ?? "—")</span>
+                                                    @if (CheckIcon(stat.Name, stat.Half) is { } halfIcon)
+                                                    {
+                                                        <MudIcon Icon="@halfIcon" Color="@CheckColor(stat.Name, stat.Half)" Size="Size.Small" Class="char-check-icon" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="char-check-placeholder"></span>
+                                                    }
+                                                </span>
+                                            </div>
+                                            <div class="char-value-row">
+                                                <span class="char-value-label">Fifth</span>
+                                                <span class="char-value-right">
+                                                    <span class="char-value-num">@(stat.Fifth?.ToString() ?? "—")</span>
+                                                    @if (CheckIcon(stat.Name, stat.Fifth) is { } fifthIcon)
+                                                    {
+                                                        <MudIcon Icon="@fifthIcon" Color="@CheckColor(stat.Name, stat.Fifth)" Size="Size.Small" Class="char-check-icon" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="char-check-placeholder"></span>
+                                                    }
+                                                </span>
+                                            </div>
+                                        }
+                                    </MudCardContent>
+                                </MudCard>
+                            }
+                        </div>
                     </div>
                     break;
                 case "Skills":

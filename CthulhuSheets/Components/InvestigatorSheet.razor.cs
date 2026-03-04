@@ -40,6 +40,7 @@ public partial class InvestigatorSheet
     private readonly Dictionary<string, int> _lastRolls = new();
     private string _skillFilter = string.Empty;
     private bool _skillsEditMode;
+    private bool _statsEditMode;
     private readonly Dictionary<Skill, int> _lastSkillRolls = new();
 
     private void RollStat(Characteristic stat)

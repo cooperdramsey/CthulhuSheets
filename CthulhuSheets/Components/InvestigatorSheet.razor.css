@@ -168,6 +168,24 @@
 
 /* ── Stats tab ───────────────────────────────────────── */
 
+.stats-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.stats-toolbar {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.char-edit-derived {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 6px;
+}
+
 .char-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -281,6 +299,14 @@
 .char-value-num {
     font-size: 0.95rem;
     font-weight: 600;
+    min-width: 2em;
+    text-align: right;
+}
+
+.char-check-placeholder {
+    display: block;
+    width: 1rem;
+    height: 1rem;
 }
 
 .tab-content {
