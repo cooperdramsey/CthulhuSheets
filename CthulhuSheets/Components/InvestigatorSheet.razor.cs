@@ -63,4 +63,16 @@ public partial class InvestigatorSheet
         if (!threshold.HasValue || !_lastRolls.TryGetValue(statName, out var roll)) return Color.Default;
         return roll <= threshold.Value ? Color.Success : Color.Error;
     }
+
+    private async Task AddFellowInvestigator()
+    {
+        Investigator.FellowInvestigators.Add(new FellowInvestigator());
+        await PersistAsync();
+    }
+
+    private async Task RemoveFellowInvestigator(FellowInvestigator fellow)
+    {
+        Investigator.FellowInvestigators.Remove(fellow);
+        await PersistAsync();
+    }
 }
