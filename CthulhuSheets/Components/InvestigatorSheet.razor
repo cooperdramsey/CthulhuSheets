@@ -231,10 +231,143 @@
                     <MudText Color="Color.Secondary">Skills content coming soon.</MudText>
                     break;
                 case "Combat":
-                    <MudText Color="Color.Secondary">Combat content coming soon.</MudText>
+                    <div class="combat-container">
+                        <div class="combat-stats-bar">
+                            <div class="combat-stat-chip">
+                                <MudText Typo="Typo.caption" Color="Color.Secondary">Build</MudText>
+                                <MudText Typo="Typo.h5" Class="combat-stat-value">@(Investigator.Build?.ToString() ?? "—")</MudText>
+                            </div>
+                            <div class="combat-stat-chip">
+                                <MudText Typo="Typo.caption" Color="Color.Secondary">Damage Bonus</MudText>
+                                <MudText Typo="Typo.h5" Class="combat-stat-value">@(Investigator.DamageBonus?.ToString() ?? "—")</MudText>
+                            </div>
+                            <div class="combat-stat-chip">
+                                <MudText Typo="Typo.caption" Color="Color.Secondary">Move</MudText>
+                                <MudText Typo="Typo.h5" Class="combat-stat-value">@(Investigator.MovementRate?.ToString() ?? "—")</MudText>
+                            </div>
+                            <div class="combat-stat-chip combat-stat-chip--dodge">
+                                <MudText Typo="Typo.caption" Color="Color.Secondary">Dodge</MudText>
+                                <div class="combat-dodge-row">
+                                    <div class="combat-dodge-tier">
+                                        <span class="combat-dodge-num">@(DodgeRegular?.ToString() ?? "—")</span>
+                                        <span class="combat-dodge-label">Reg</span>
+                                    </div>
+                                    <span class="combat-dodge-sep">/</span>
+                                    <div class="combat-dodge-tier">
+                                        <span class="combat-dodge-num">@(DodgeHard?.ToString() ?? "—")</span>
+                                        <span class="combat-dodge-label">Hard</span>
+                                    </div>
+                                    <span class="combat-dodge-sep">/</span>
+                                    <div class="combat-dodge-tier">
+                                        <span class="combat-dodge-num">@(DodgeExtreme?.ToString() ?? "—")</span>
+                                        <span class="combat-dodge-label">Ext</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="combat-weapons-section">
+                            <div class="combat-weapons-header">
+                                <MudText Typo="Typo.h6">Weapons</MudText>
+                                <MudIconButton Icon="@Icons.Material.Filled.Add"
+                                               Color="Color.Primary"
+                                               Size="Size.Small"
+                                               OnClick="AddWeapon" />
+                            </div>
+                            @if (Investigator.Weapons.Count > 0)
+                            {
+                                <div class="weapon-grid">
+                                    <span class="weapon-col-header">Name</span>
+                                    <span class="weapon-col-header">Damage</span>
+                                    <span class="weapon-col-header">Atk/Rnd</span>
+                                    <span class="weapon-col-header">Range</span>
+                                    <span class="weapon-col-header">Ammo</span>
+                                    <span class="weapon-col-header">Malf</span>
+                                    <span></span>
+                                    @foreach (var weapon in Investigator.Weapons)
+                                    {
+                                        <MudTextField @bind-Value="weapon.Name"
+                                                      @bind-Value:after="PersistAsync"
+                                                      Variant="Variant.Outlined"
+                                                      Margin="Margin.Dense"
+                                                      Placeholder="Name" />
+                                        <MudTextField @bind-Value="weapon.Damage"
+                                                      @bind-Value:after="PersistAsync"
+                                                      Variant="Variant.Outlined"
+                                                      Margin="Margin.Dense"
+                                                      Placeholder="e.g. 1d6+db" />
+                                        <MudNumericField T="int?"
+                                                         @bind-Value="weapon.NumberOfAttacks"
+                                                         @bind-Value:after="PersistAsync"
+                                                         Variant="Variant.Outlined"
+                                                         Margin="Margin.Dense"
+                                                         HideSpinButtons="true" />
+                                        <MudTextField @bind-Value="weapon.Range"
+                                                      @bind-Value:after="PersistAsync"
+                                                      Variant="Variant.Outlined"
+                                                      Margin="Margin.Dense"
+                                                      Placeholder="e.g. Touch" />
+                                        <MudNumericField T="int?"
+                                                         @bind-Value="weapon.Ammo"
+                                                         @bind-Value:after="PersistAsync"
+                                                         Variant="Variant.Outlined"
+                                                         Margin="Margin.Dense"
+                                                         HideSpinButtons="true" />
+                                        <MudNumericField T="int?"
+                                                         @bind-Value="weapon.Malfunction"
+                                                         @bind-Value:after="PersistAsync"
+                                                         Variant="Variant.Outlined"
+                                                         Margin="Margin.Dense"
+                                                         HideSpinButtons="true" />
+                                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                                       Color="Color.Error"
+                                                       Size="Size.Small"
+                                                       OnClick="() => RemoveWeapon(weapon)" />
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
                     break;
                 case "Items":
-                    <MudText Color="Color.Secondary">Items content coming soon.</MudText>
+                    <div class="items-container">
+                        <div class="items-text-fields">
+                            <MudTextField @bind-Value="Investigator.TreasuredPossessions"
+                                          @bind-Value:after="PersistAsync"
+                                          Label="Treasured Possessions"
+                                          Variant="Variant.Outlined"
+                                          Lines="4" />
+                            <MudTextField @bind-Value="Investigator.ArcaneTomesSpells"
+                                          @bind-Value:after="PersistAsync"
+                                          Label="Arcane Tomes & Spells"
+                                          Variant="Variant.Outlined"
+                                          Lines="4" />
+                        </div>
+                        <div class="items-gear-section">
+                            <div class="items-gear-header">
+                                <MudText Typo="Typo.h6">Gear & Possessions</MudText>
+                                <MudIconButton Icon="@Icons.Material.Filled.Add"
+                                               Color="Color.Primary"
+                                               Size="Size.Small"
+                                               OnClick="AddGearItem" />
+                            </div>
+                            @for (int i = 0; i < Investigator.GearAndPossessions.Count; i++)
+                            {
+                                var index = i;
+                                <div class="asset-row">
+                                    <MudTextField Value="Investigator.GearAndPossessions[index]"
+                                                  ValueChanged="async (string v) => { Investigator.GearAndPossessions[index] = v; await PersistAsync(); }"
+                                                  Variant="Variant.Outlined"
+                                                  Margin="Margin.Dense"
+                                                  Placeholder="Item"
+                                                  Class="asset-field" />
+                                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                                   Color="Color.Error"
+                                                   Size="Size.Small"
+                                                   OnClick="() => RemoveGearItem(index)" />
+                                </div>
+                            }
+                        </div>
+                    </div>
                     break;
                 case "Wealth":
                     <div class="wealth-container">

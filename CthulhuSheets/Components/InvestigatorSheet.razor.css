@@ -328,3 +328,125 @@
 .asset-field {
     flex: 1;
 }
+
+/* ── Items tab ───────────────────────────────────────── */
+
+.items-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.items-text-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.items-gear-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.items-gear-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ── Combat tab ─────────────────────────────────────── */
+
+.combat-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.combat-stats-bar {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.combat-stat-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 12px 20px;
+    background: var(--mud-palette-surface);
+    border: 1px solid var(--mud-palette-divider);
+    border-radius: 8px;
+    min-width: 80px;
+}
+
+.combat-stat-value {
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+}
+
+.combat-stat-chip--dodge {
+    min-width: 160px;
+}
+
+.combat-dodge-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.combat-dodge-tier {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+
+.combat-dodge-num {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.combat-dodge-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mud-palette-text-secondary);
+}
+
+.combat-dodge-sep {
+    font-size: 1rem;
+    opacity: 0.4;
+    margin-top: -4px;
+}
+
+.combat-weapons-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.combat-weapons-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.weapon-grid {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr 80px 1.2fr 70px 70px auto;
+    gap: 4px 8px;
+    align-items: center;
+}
+
+.weapon-col-header {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--mud-palette-text-secondary);
+    padding: 0 4px 4px;
+}

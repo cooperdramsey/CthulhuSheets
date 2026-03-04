@@ -87,4 +87,32 @@ public partial class InvestigatorSheet
         Investigator.Wealth.Assets.RemoveAt(index);
         await PersistAsync();
     }
+
+    private async Task AddGearItem()
+    {
+        Investigator.GearAndPossessions.Add(string.Empty);
+        await PersistAsync();
+    }
+
+    private async Task RemoveGearItem(int index)
+    {
+        Investigator.GearAndPossessions.RemoveAt(index);
+        await PersistAsync();
+    }
+
+    private int? DodgeRegular => Investigator.Dexterity.Half;
+    private int? DodgeHard => Investigator.Dexterity.Half / 2;
+    private int? DodgeExtreme => Investigator.Dexterity.Half / 5;
+
+    private async Task AddWeapon()
+    {
+        Investigator.Weapons.Add(new Weapon());
+        await PersistAsync();
+    }
+
+    private async Task RemoveWeapon(Weapon weapon)
+    {
+        Investigator.Weapons.Remove(weapon);
+        await PersistAsync();
+    }
 }
