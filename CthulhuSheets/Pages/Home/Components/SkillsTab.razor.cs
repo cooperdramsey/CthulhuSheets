@@ -1,4 +1,4 @@
-namespace CthulhuSheets.Components;
+namespace CthulhuSheets.Pages.Home.Components;
 
 public partial class SkillsTab
 {

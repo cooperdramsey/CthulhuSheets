@@ -1,6 +1,6 @@
-namespace CthulhuSheets.Components;
+namespace CthulhuSheets.Pages.Home.Components;
 
-public partial class WealthTab
+public partial class InfoTab
 {
     [Parameter, EditorRequired]
     public Investigator Investigator { get; set; } = default!;
@@ -9,15 +9,15 @@ public partial class WealthTab
 
     private Task PersistAsync() => InvestigatorService.PersistAsync();
 
-    private async Task AddAsset()
+    private async Task AddFellowInvestigator()
     {
-        Investigator.Wealth.Assets.Add(string.Empty);
+        Investigator.FellowInvestigators.Add(new FellowInvestigator());
         await PersistAsync();
     }
 
-    private async Task RemoveAsset(int index)
+    private async Task RemoveFellowInvestigator(FellowInvestigator fellow)
     {
-        Investigator.Wealth.Assets.RemoveAt(index);
+        Investigator.FellowInvestigators.Remove(fellow);
         await PersistAsync();
     }
 }

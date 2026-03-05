@@ -1,4 +1,4 @@
-namespace CthulhuSheets.Pages;
+namespace CthulhuSheets.Pages.Home;
 
 public partial class Home : IDisposable
 {

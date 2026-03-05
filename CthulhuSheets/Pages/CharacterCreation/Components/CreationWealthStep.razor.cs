@@ -1,6 +1,6 @@
-namespace CthulhuSheets.Components;
+namespace CthulhuSheets.Pages.CharacterCreation.Components;
 
-public partial class CreationProfileStep
+public partial class CreationWealthStep
 {
     [Parameter, EditorRequired]
     public Investigator Investigator { get; set; } = default!;

@@ -1,4 +1,4 @@
-namespace CthulhuSheets.Pages;
+namespace CthulhuSheets.Pages.CharacterCreation;
 
 public partial class CharacterCreation
 {

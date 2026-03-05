@@ -1,4 +1,4 @@
-namespace CthulhuSheets.Components;
+namespace CthulhuSheets.Pages.CharacterCreation.Components;
 
 public partial class CreationCharacteristicsStep
 {
