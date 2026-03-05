@@ -2,9 +2,82 @@
 
 <PageTitle>Create Investigator</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Medium" Class="py-8">
-    <MudText Typo="Typo.h4" GutterBottom="true">Create New Investigator</MudText>
-    <MudText Typo="Typo.body1" Color="Color.Secondary">
-        Character creation steps will go here.
-    </MudText>
-</MudContainer>
+<div class="creation-layout">
+
+    <div class="creation-stepper-header">
+        @for (int i = 0; i < _steps.Length; i++)
+        {
+            var idx = i;
+            var state = idx < _currentStep ? "completed" : idx == _currentStep ? "active" : "upcoming";
+            @if (idx > 0)
+            {
+                <div class="stepper-connector @(idx <= _currentStep ? "done" : "")"></div>
+            }
+            <div class="stepper-node">
+                <div class="stepper-bubble @state">
+                    @if (idx < _currentStep)
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" />
+                    }
+                    else
+                    {
+                        <span>@(idx + 1)</span>
+                    }
+                </div>
+                <span class="stepper-label @state">@_steps[idx]</span>
+            </div>
+        }
+    </div>
+
+    <div class="creation-content">
+        @switch (_currentStep)
+        {
+            case 0:
+                <CreationProfileStep Investigator="@_draft" />
+                break;
+            case 1:
+                <CreationCharacteristicsStep Investigator="@_draft" />
+                break;
+            case 2:
+                <CreationOccupationSkillsStep Investigator="@_draft" />
+                break;
+            case 3:
+                <CreationBackstoryStep Investigator="@_draft" />
+                break;
+            case 4:
+                <CreationWealthStep Investigator="@_draft" />
+                break;
+            case 5:
+                <CreationEquipmentStep Investigator="@_draft" />
+                break;
+        }
+    </div>
+
+    <div class="creation-actions">
+        <MudButton Variant="Variant.Outlined"
+                   StartIcon="@Icons.Material.Filled.ArrowBack"
+                   Disabled="@(_currentStep == 0)"
+                   OnClick="GoBack">
+            Go Back
+        </MudButton>
+        @if (_currentStep < _steps.Length - 1)
+        {
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       EndIcon="@Icons.Material.Filled.ArrowForward"
+                       OnClick="GoNext">
+                Next
+            </MudButton>
+        }
+        else
+        {
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Success"
+                       StartIcon="@Icons.Material.Filled.Save"
+                       OnClick="SaveAsync">
+                Create Investigator
+            </MudButton>
+        }
+    </div>
+
+</div>
