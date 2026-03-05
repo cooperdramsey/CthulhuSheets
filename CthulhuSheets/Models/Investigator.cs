@@ -3,10 +3,14 @@ namespace CthulhuSheets.Models;
 public class Investigator
 {
     // Basic Info
+    [Required(ErrorMessage = "Name is required")]
     public string? Name { get; set; }
+    [Required(ErrorMessage = "Birthplace is required")]
     public string? Birthplace { get; set; }
+    [Required(ErrorMessage = "Pronouns are required")]
     public string? Pronouns { get; set; }
     public string? Occupation { get; set; }
+    [Required(ErrorMessage = "Residence is required")]
     public string? Residence { get; set; }
     public int? Age { get; set; }
     public string? PortraitDataUrl { get; set; }

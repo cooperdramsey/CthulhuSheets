@@ -16,11 +16,7 @@ public partial class SheetSidebar
 
     private async Task HandlePortraitUpload(InputFileChangeEventArgs e)
     {
-        var file = e.File;
-        using var stream = file.OpenReadStream(maxAllowedSize: 5 * 1024 * 1024);
-        using var ms = new MemoryStream();
-        await stream.CopyToAsync(ms);
-        Investigator.PortraitDataUrl = $"data:{file.ContentType};base64,{Convert.ToBase64String(ms.ToArray())}";
+        await InvestigatorService.SetPortraitFromFileAsync(Investigator, e.File);
         await InvestigatorService.PersistAsync();
     }
 }

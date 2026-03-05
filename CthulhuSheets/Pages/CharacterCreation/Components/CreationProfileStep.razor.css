@@ -1,0 +1,84 @@
+.profile-step {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    max-width: 720px;
+}
+
+/* ── Body: portrait + fields side by side ─────────── */
+
+.profile-body {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+/* ── Portrait ─────────────────────────────────────── */
+
+.profile-portrait-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.profile-portrait-box {
+    width: 180px;
+    height: 180px;
+    border-radius: 12px;
+    border: 2px dashed var(--mud-palette-divider);
+    background: color-mix(in oklab, CanvasText 4%, Canvas 96%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border-color 150ms ease, background 150ms ease;
+}
+
+.profile-portrait-box:hover {
+    border-color: var(--mud-palette-primary);
+    background: color-mix(in oklab, var(--mud-palette-primary) 6%, Canvas 94%);
+}
+
+.profile-portrait-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.profile-portrait-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+}
+
+.profile-portrait-icon {
+    font-size: 2.5rem !important;
+    opacity: 0.3;
+}
+
+.profile-portrait-hint {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mud-palette-text-secondary);
+}
+
+/* ── Fields ───────────────────────────────────────── */
+
+.profile-fields {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    align-content: start;
+}
+
+.profile-field-full {
+    grid-column: 1 / -1;
+}

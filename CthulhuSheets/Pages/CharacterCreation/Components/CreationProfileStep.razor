@@ -1,6 +1,64 @@
-<div>
-    <MudText Typo="Typo.h5" GutterBottom="true">Profile</MudText>
-    <MudText Typo="Typo.body2" Color="Color.Secondary">
-        Basic identity information for your investigator.
-    </MudText>
-</div>
+<EditForm EditContext="_editContext">
+    <DataAnnotationsValidator />
+
+    <div class="profile-step">
+        <div>
+            <MudText Typo="Typo.h5">Profile</MudText>
+            <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-1">
+                Basic identity information for your investigator.
+            </MudText>
+        </div>
+
+        <div class="profile-body">
+            <div class="profile-portrait-section">
+                <label for="@_portraitInputId" class="profile-portrait-box">
+                    @if (!string.IsNullOrEmpty(Investigator.PortraitDataUrl))
+                    {
+                        <img src="@Investigator.PortraitDataUrl" class="profile-portrait-img" alt="Portrait" />
+                    }
+                    else
+                    {
+                        <div class="profile-portrait-placeholder">
+                            <MudIcon Icon="@Icons.Material.Filled.AddAPhoto" Class="profile-portrait-icon" />
+                            <span class="profile-portrait-hint">Upload portrait</span>
+                        </div>
+                    }
+                    <InputFile id="@_portraitInputId" OnChange="HandlePortraitUpload" accept="image/*" style="display:none" />
+                </label>
+                @if (!string.IsNullOrEmpty(Investigator.PortraitDataUrl))
+                {
+                    <MudButton Variant="Variant.Text"
+                               Color="Color.Error"
+                               Size="Size.Small"
+                               StartIcon="@Icons.Material.Filled.Delete"
+                               OnClick="RemovePortrait"
+                               Class="mt-1">
+                        Remove
+                    </MudButton>
+                }
+            </div>
+
+            <div class="profile-fields">
+                <MudTextField @bind-Value="Investigator.Name"
+                              For="@(() => Investigator.Name)"
+                              Label="Name"
+                              Variant="Variant.Outlined"
+                              Class="profile-field-full" />
+                <MudTextField @bind-Value="Investigator.Pronouns"
+                              For="@(() => Investigator.Pronouns)"
+                              Label="Pronouns"
+                              Variant="Variant.Outlined" />
+                <MudTextField @bind-Value="Investigator.Birthplace"
+                              For="@(() => Investigator.Birthplace)"
+                              Label="Birthplace"
+                              Variant="Variant.Outlined" />
+                <MudTextField @bind-Value="Investigator.Residence"
+                              For="@(() => Investigator.Residence)"
+                              Label="Residence"
+                              Variant="Variant.Outlined"
+                              Class="profile-field-full" />
+            </div>
+        </div>
+    </div>
+
+</EditForm>

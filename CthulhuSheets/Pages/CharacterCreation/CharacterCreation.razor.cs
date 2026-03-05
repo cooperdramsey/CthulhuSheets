@@ -1,3 +1,5 @@
+using CthulhuSheets.Pages.CharacterCreation.Components;
+
 namespace CthulhuSheets.Pages.CharacterCreation;
 
 public partial class CharacterCreation
@@ -12,6 +14,8 @@ public partial class CharacterCreation
     private int _currentStep;
     private readonly Investigator _draft = new();
 
+    private CreationProfileStep? _profileStep;
+
     private void GoBack()
     {
         if (_currentStep > 0) _currentStep--;
@@ -19,6 +23,9 @@ public partial class CharacterCreation
 
     private void GoNext()
     {
+        if (_currentStep == 0 && !(_profileStep?.Validate() ?? false))
+            return;
+
         if (_currentStep < _steps.Length - 1) _currentStep++;
     }
 
