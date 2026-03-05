@@ -1,0 +1,96 @@
+<div class="combat-container">
+    <div class="combat-stats-bar">
+        <div class="combat-stat-chip">
+            <MudText Typo="Typo.caption" Color="Color.Secondary">Build</MudText>
+            <MudText Typo="Typo.h5" Class="combat-stat-value">@(Investigator.Build?.ToString() ?? "—")</MudText>
+        </div>
+        <div class="combat-stat-chip">
+            <MudText Typo="Typo.caption" Color="Color.Secondary">Damage Bonus</MudText>
+            <MudText Typo="Typo.h5" Class="combat-stat-value">@(Investigator.DamageBonus?.ToString() ?? "—")</MudText>
+        </div>
+        <div class="combat-stat-chip">
+            <MudText Typo="Typo.caption" Color="Color.Secondary">Move</MudText>
+            <MudText Typo="Typo.h5" Class="combat-stat-value">@(Investigator.MovementRate?.ToString() ?? "—")</MudText>
+        </div>
+        <div class="combat-stat-chip combat-stat-chip--dodge">
+            <MudText Typo="Typo.caption" Color="Color.Secondary">Dodge</MudText>
+            <div class="combat-dodge-row">
+                <div class="combat-dodge-tier">
+                    <span class="combat-dodge-num">@(DodgeRegular?.ToString() ?? "—")</span>
+                    <span class="combat-dodge-label">Reg</span>
+                </div>
+                <span class="combat-dodge-sep">/</span>
+                <div class="combat-dodge-tier">
+                    <span class="combat-dodge-num">@(DodgeHard?.ToString() ?? "—")</span>
+                    <span class="combat-dodge-label">Hard</span>
+                </div>
+                <span class="combat-dodge-sep">/</span>
+                <div class="combat-dodge-tier">
+                    <span class="combat-dodge-num">@(DodgeExtreme?.ToString() ?? "—")</span>
+                    <span class="combat-dodge-label">Ext</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="combat-weapons-section">
+        <div class="combat-weapons-header">
+            <MudText Typo="Typo.h6">Weapons</MudText>
+            <MudIconButton Icon="@Icons.Material.Filled.Add"
+                           Color="Color.Primary"
+                           Size="Size.Small"
+                           OnClick="AddWeapon" />
+        </div>
+        @if (Investigator.Weapons.Count > 0)
+        {
+            <div class="weapon-grid">
+                <span class="weapon-col-header">Name</span>
+                <span class="weapon-col-header">Damage</span>
+                <span class="weapon-col-header">Atk/Rnd</span>
+                <span class="weapon-col-header">Range</span>
+                <span class="weapon-col-header">Ammo</span>
+                <span class="weapon-col-header">Malf</span>
+                <span></span>
+                @foreach (var weapon in Investigator.Weapons)
+                {
+                    <MudTextField @bind-Value="weapon.Name"
+                                  @bind-Value:after="PersistAsync"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense"
+                                  Placeholder="Name" />
+                    <MudTextField @bind-Value="weapon.Damage"
+                                  @bind-Value:after="PersistAsync"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense"
+                                  Placeholder="e.g. 1d6+db" />
+                    <MudNumericField T="int?"
+                                     @bind-Value="weapon.NumberOfAttacks"
+                                     @bind-Value:after="PersistAsync"
+                                     Variant="Variant.Outlined"
+                                     Margin="Margin.Dense"
+                                     HideSpinButtons="true" />
+                    <MudTextField @bind-Value="weapon.Range"
+                                  @bind-Value:after="PersistAsync"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense"
+                                  Placeholder="e.g. Touch" />
+                    <MudNumericField T="int?"
+                                     @bind-Value="weapon.Ammo"
+                                     @bind-Value:after="PersistAsync"
+                                     Variant="Variant.Outlined"
+                                     Margin="Margin.Dense"
+                                     HideSpinButtons="true" />
+                    <MudNumericField T="int?"
+                                     @bind-Value="weapon.Malfunction"
+                                     @bind-Value:after="PersistAsync"
+                                     Variant="Variant.Outlined"
+                                     Margin="Margin.Dense"
+                                     HideSpinButtons="true" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                   Color="Color.Error"
+                                   Size="Size.Small"
+                                   OnClick="() => RemoveWeapon(weapon)" />
+                }
+            </div>
+        }
+    </div>
+</div>

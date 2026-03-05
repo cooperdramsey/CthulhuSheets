@@ -1,0 +1,35 @@
+/* ── Items tab ───────────────────────────────────────── */
+
+.items-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.items-text-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.items-gear-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.items-gear-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.asset-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.asset-field {
+    flex: 1;
+}

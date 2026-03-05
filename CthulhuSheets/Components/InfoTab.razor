@@ -1,0 +1,87 @@
+<div class="info-grid">
+    <MudTextField @bind-Value="Investigator.MyStory"
+                  @bind-Value:after="PersistAsync"
+                  Label="My Story"
+                  Variant="Variant.Outlined"
+                  Lines="4" />
+    <MudTextField @bind-Value="Investigator.PersonalDescription"
+                  @bind-Value:after="PersistAsync"
+                  Label="Personal Description"
+                  Variant="Variant.Outlined"
+                  Lines="4" />
+    <MudTextField @bind-Value="Investigator.IdeologyBeliefs"
+                  @bind-Value:after="PersistAsync"
+                  Label="Ideology & Beliefs"
+                  Variant="Variant.Outlined"
+                  Lines="4" />
+    <MudTextField @bind-Value="Investigator.SignificantPeople"
+                  @bind-Value:after="PersistAsync"
+                  Label="Significant People"
+                  Variant="Variant.Outlined"
+                  Lines="4" />
+    <MudTextField @bind-Value="Investigator.MeaningfulLocations"
+                  @bind-Value:after="PersistAsync"
+                  Label="Meaningful Locations"
+                  Variant="Variant.Outlined"
+                  Lines="4" />
+    <MudTextField @bind-Value="Investigator.Traits"
+                  @bind-Value:after="PersistAsync"
+                  Label="Traits"
+                  Variant="Variant.Outlined"
+                  Lines="4" />
+    <MudTextField @bind-Value="Investigator.InjuriesScars"
+                  @bind-Value:after="PersistAsync"
+                  Label="Injuries & Scars"
+                  Variant="Variant.Outlined"
+                  Lines="4" />
+    <MudTextField @bind-Value="Investigator.PhobiasManias"
+                  @bind-Value:after="PersistAsync"
+                  Label="Phobias & Manias"
+                  Variant="Variant.Outlined"
+                  Lines="4" />
+    <MudTextField @bind-Value="Investigator.EncountersWithTheMythos"
+                  @bind-Value:after="PersistAsync"
+                  Label="Encounters with the Mythos"
+                  Variant="Variant.Outlined"
+                  Lines="4"
+                  Class="info-full-width" />
+</div>
+<div class="fellow-investigators-section">
+    <div class="fellow-header">
+        <MudText Typo="Typo.h6">Fellow Investigators</MudText>
+        <MudIconButton Icon="@Icons.Material.Filled.PersonAdd"
+                       Color="Color.Primary"
+                       Size="Size.Small"
+                       OnClick="AddFellowInvestigator" />
+    </div>
+    @foreach (var fellow in Investigator.FellowInvestigators)
+    {
+        <MudCard Elevation="1">
+            <MudCardContent Class="fellow-card-content">
+                <div class="fellow-fields">
+                    <MudTextField @bind-Value="fellow.CharacterName"
+                                  @bind-Value:after="PersistAsync"
+                                  Label="Character Name"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense" />
+                    <MudTextField @bind-Value="fellow.PlayerName"
+                                  @bind-Value:after="PersistAsync"
+                                  Label="Player Name"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                   Color="Color.Error"
+                                   Size="Size.Small"
+                                   OnClick="() => RemoveFellowInvestigator(fellow)" />
+                    <MudTextField @bind-Value="fellow.Notes"
+                                  @bind-Value:after="PersistAsync"
+                                  Label="Notes"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense"
+                                  Lines="2"
+                                  Class="fellow-notes" />
+                </div>
+            </MudCardContent>
+        </MudCard>
+    }
+</div>

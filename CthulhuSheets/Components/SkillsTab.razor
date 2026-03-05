@@ -1,0 +1,130 @@
+<div class="skills-container">
+    <div class="skills-toolbar">
+        <MudTextField @bind-Value="_skillFilter"
+                      Placeholder="Filter skills..."
+                      Variant="Variant.Outlined"
+                      Margin="Margin.Dense"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Search"
+                      Class="skills-filter"
+                      Immediate="true"
+                      Clearable="true" />
+        @if (_skillsEditMode)
+        {
+            <MudButton Variant="Variant.Outlined"
+                       Size="Size.Small"
+                       StartIcon="@Icons.Material.Filled.FormatListBulleted"
+                       OnClick="LoadDefaultSkills">
+                Load Defaults
+            </MudButton>
+            <MudIconButton Icon="@Icons.Material.Filled.Add"
+                           Color="Color.Primary"
+                           Size="Size.Small"
+                           OnClick="AddSkill" />
+        }
+        <MudTooltip Text="@(_skillsEditMode ? "Done Editing" : "Edit Skills")">
+            <MudIconButton Icon="@(_skillsEditMode ? Icons.Material.Filled.EditOff : Icons.Material.Filled.Edit)"
+                           Color="@(_skillsEditMode ? Color.Primary : Color.Default)"
+                           Size="Size.Small"
+                           OnClick="() => _skillsEditMode = !_skillsEditMode" />
+        </MudTooltip>
+    </div>
+    @{
+        var skillList = VisibleSkills.ToList();
+        var half = (skillList.Count + 1) / 2;
+        var leftSkills = skillList.Take(half).ToList();
+        var rightSkills = skillList.Skip(half).ToList();
+    }
+    @if (skillList.Count > 0)
+    {
+        <div class="skill-columns">
+            @foreach (var columnSkills in new[] { leftSkills, rightSkills })
+            {
+                <div class="skill-grid @(_skillsEditMode ? "skill-grid--edit" : "")">
+                    <span class="skill-col-header">Skill</span>
+                    <span class="skill-col-header skill-col-center">Base</span>
+                    <span class="skill-col-header skill-col-center">Regular</span>
+                    <span class="skill-col-header skill-col-center">Half</span>
+                    <span class="skill-col-header skill-col-center">Fifth</span>
+                    <span></span>
+                    @foreach (var skill in columnSkills)
+                    {
+                        var hasSkillRoll = _lastSkillRolls.TryGetValue(skill, out var skillRoll);
+                        @if (_skillsEditMode)
+                        {
+                            <MudTextField @bind-Value="skill.Name"
+                                          @bind-Value:after="PersistAsync"
+                                          Variant="Variant.Outlined"
+                                          Margin="Margin.Dense" />
+                            <MudNumericField T="int"
+                                             @bind-Value="skill.BaseValue"
+                                             @bind-Value:after="PersistAsync"
+                                             Variant="Variant.Outlined"
+                                             Margin="Margin.Dense"
+                                             HideSpinButtons="true" />
+                            <MudNumericField T="int?"
+                                             @bind-Value="skill.Regular"
+                                             @bind-Value:after="PersistAsync"
+                                             Variant="Variant.Outlined"
+                                             Margin="Margin.Dense"
+                                             HideSpinButtons="true" />
+                            <div class="skill-derived-val">@(skill.Half?.ToString() ?? "—")</div>
+                            <div class="skill-derived-val">@(skill.Fifth?.ToString() ?? "—")</div>
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                           Color="Color.Error"
+                                           Size="Size.Small"
+                                           OnClick="() => RemoveSkill(skill)" />
+                        }
+                        else
+                        {
+                            <div class="skill-name-val">@(string.IsNullOrWhiteSpace(skill.Name) ? "—" : skill.Name)</div>
+                            <div class="skill-val">@skill.BaseValue</div>
+                            <div class="skill-val-cell">
+                                <span class="skill-val skill-val--regular">@(skill.Regular?.ToString() ?? "—")</span>
+                                @if (hasSkillRoll && skill.Regular.HasValue)
+                                {
+                                    <MudIcon Icon="@(skillRoll <= skill.Regular.Value ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
+                                             Color="@(skillRoll <= skill.Regular.Value ? Color.Success : Color.Error)"
+                                             Size="Size.Small"
+                                             Class="char-check-icon" />
+                                }
+                                else { <span class="skill-roll-icon-placeholder"></span> }
+                            </div>
+                            <div class="skill-val-cell">
+                                <span class="skill-derived-val">@(skill.Half?.ToString() ?? "—")</span>
+                                @if (hasSkillRoll && skill.Half.HasValue)
+                                {
+                                    <MudIcon Icon="@(skillRoll <= skill.Half.Value ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
+                                             Color="@(skillRoll <= skill.Half.Value ? Color.Success : Color.Error)"
+                                             Size="Size.Small"
+                                             Class="char-check-icon" />
+                                }
+                                else { <span class="skill-roll-icon-placeholder"></span> }
+                            </div>
+                            <div class="skill-val-cell">
+                                <span class="skill-derived-val">@(skill.Fifth?.ToString() ?? "—")</span>
+                                @if (hasSkillRoll && skill.Fifth.HasValue)
+                                {
+                                    <MudIcon Icon="@(skillRoll <= skill.Fifth.Value ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
+                                             Color="@(skillRoll <= skill.Fifth.Value ? Color.Success : Color.Error)"
+                                             Size="Size.Small"
+                                             Class="char-check-icon" />
+                                }
+                                else { <span class="skill-roll-icon-placeholder"></span> }
+                            </div>
+                            <div class="skill-roll-cell">
+                                <MudTooltip Text="Roll d100">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Casino"
+                                                   Size="Size.Small"
+                                                   Color="Color.Primary"
+                                                   OnClick="() => RollSkill(skill)" />
+                                </MudTooltip>
+                                <span class="skill-roll-result">@(hasSkillRoll ? skillRoll.ToString() : "")</span>
+                            </div>
+                        }
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>

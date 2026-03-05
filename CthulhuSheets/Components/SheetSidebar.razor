@@ -1,0 +1,178 @@
+<aside class="sheet-sidebar">
+    <div class="sidebar-identity">
+        <MudText Typo="Typo.h6">@Investigator.Name</MudText>
+        @if (!string.IsNullOrWhiteSpace(Investigator.Occupation))
+        {
+            <MudText Typo="Typo.caption" Color="Color.Secondary">@Investigator.Occupation</MudText>
+        }
+    </div>
+
+    <label for="@_portraitInputId" class="portrait-box">
+        @if (!string.IsNullOrEmpty(Investigator.PortraitDataUrl))
+        {
+            <img src="@Investigator.PortraitDataUrl" class="portrait-image" alt="Portrait" />
+        }
+        else
+        {
+            <MudIcon Icon="@Icons.Material.Filled.Person" Class="portrait-icon" />
+        }
+        <InputFile id="@_portraitInputId" OnChange="HandlePortraitUpload" accept="image/*" style="display:none" />
+    </label>
+
+    <div class="sidebar-pools">
+        <div class="pool-item">
+            <MudText Typo="Typo.overline">Hit Points</MudText>
+            <div class="pool-inputs">
+                <MudNumericField T="int?"
+                                 @bind-Value="Investigator.HitPoints.Current"
+                                 @bind-Value:after="PersistAsync"
+                                 Placeholder="Cur"
+                                 Variant="Variant.Outlined"
+                                 Margin="Margin.Dense"
+                                 HideSpinButtons="true"
+                                 Class="pool-input" />
+                <span class="pool-sep">/</span>
+                <MudNumericField T="int?"
+                                 @bind-Value="Investigator.HitPoints.Max"
+                                 @bind-Value:after="PersistAsync"
+                                 Placeholder="Max"
+                                 Variant="Variant.Outlined"
+                                 Margin="Margin.Dense"
+                                 HideSpinButtons="true"
+                                 Class="pool-input" />
+            </div>
+        </div>
+        <div class="pool-item">
+            <MudText Typo="Typo.overline">Magic Points</MudText>
+            <div class="pool-inputs">
+                <MudNumericField T="int?"
+                                 @bind-Value="Investigator.MagicPoints.Current"
+                                 @bind-Value:after="PersistAsync"
+                                 Placeholder="Cur"
+                                 Variant="Variant.Outlined"
+                                 Margin="Margin.Dense"
+                                 HideSpinButtons="true"
+                                 Class="pool-input" />
+                <span class="pool-sep">/</span>
+                <MudNumericField T="int?"
+                                 @bind-Value="Investigator.MagicPoints.Max"
+                                 @bind-Value:after="PersistAsync"
+                                 Placeholder="Max"
+                                 Variant="Variant.Outlined"
+                                 Margin="Margin.Dense"
+                                 HideSpinButtons="true"
+                                 Class="pool-input" />
+            </div>
+        </div>
+        <div class="pool-item">
+            <MudText Typo="Typo.overline">Sanity</MudText>
+            <div class="pool-inputs">
+                <MudNumericField T="int?"
+                                 @bind-Value="Investigator.Sanity.Current"
+                                 @bind-Value:after="PersistAsync"
+                                 Placeholder="Cur"
+                                 Variant="Variant.Outlined"
+                                 Margin="Margin.Dense"
+                                 HideSpinButtons="true"
+                                 Class="pool-input" />
+                <span class="pool-sep">/</span>
+                <MudNumericField T="int?"
+                                 @bind-Value="Investigator.Sanity.Max"
+                                 @bind-Value:after="PersistAsync"
+                                 Placeholder="Max"
+                                 Variant="Variant.Outlined"
+                                 Margin="Margin.Dense"
+                                 HideSpinButtons="true"
+                                 Class="pool-input" />
+            </div>
+        </div>
+        <div class="pool-item">
+            <MudText Typo="Typo.overline">Luck</MudText>
+            <MudNumericField T="int?"
+                             @bind-Value="Investigator.Luck.Current"
+                             @bind-Value:after="PersistAsync"
+                             Placeholder="Current"
+                             Variant="Variant.Outlined"
+                             Margin="Margin.Dense"
+                             HideSpinButtons="true" />
+        </div>
+    </div>
+
+    <MudDivider />
+
+    <div class="sidebar-conditions">
+        <MudText Typo="Typo.overline">Conditions</MudText>
+        <div class="condition-list">
+            <MudCheckBox @bind-Value="Investigator.TemporaryInsanity"
+                         @bind-Value:after="PersistAsync"
+                         Label="Temp. Insanity"
+                         Color="Color.Error"
+                         Size="Size.Small" />
+            <MudCheckBox @bind-Value="Investigator.IndefiniteInsanity"
+                         @bind-Value:after="PersistAsync"
+                         Label="Indef. Insanity"
+                         Color="Color.Error"
+                         Size="Size.Small" />
+            <MudCheckBox @bind-Value="Investigator.MajorWound"
+                         @bind-Value:after="PersistAsync"
+                         Label="Major Wound"
+                         Color="Color.Error"
+                         Size="Size.Small" />
+            <MudCheckBox @bind-Value="Investigator.Unconscious"
+                         @bind-Value:after="PersistAsync"
+                         Label="Unconscious"
+                         Color="Color.Error"
+                         Size="Size.Small" />
+            <MudCheckBox @bind-Value="Investigator.Dying"
+                         @bind-Value:after="PersistAsync"
+                         Label="Dying"
+                         Color="Color.Error"
+                         Size="Size.Small" />
+        </div>
+    </div>
+
+    <MudDivider />
+
+    <div class="sidebar-stats">
+        <MudText Typo="Typo.overline">Other Stats</MudText>
+        @if (StatsEditMode)
+        {
+            <MudNumericField T="int?"
+                             @bind-Value="Investigator.MovementRate"
+                             @bind-Value:after="PersistAsync"
+                             Label="Movement Rate"
+                             Variant="Variant.Outlined"
+                             Margin="Margin.Dense"
+                             HideSpinButtons="true" />
+            <MudNumericField T="int?"
+                             @bind-Value="Investigator.Build"
+                             @bind-Value:after="PersistAsync"
+                             Label="Build"
+                             Variant="Variant.Outlined"
+                             Margin="Margin.Dense"
+                             HideSpinButtons="true" />
+            <MudNumericField T="int?"
+                             @bind-Value="Investigator.DamageBonus"
+                             @bind-Value:after="PersistAsync"
+                             Label="Damage Bonus"
+                             Variant="Variant.Outlined"
+                             Margin="Margin.Dense"
+                             HideSpinButtons="true" />
+        }
+        else
+        {
+            <div class="stat-row">
+                <MudText Typo="Typo.caption" Color="Color.Secondary">Movement Rate</MudText>
+                <MudText Typo="Typo.body2">@(Investigator.MovementRate ?? 0)</MudText>
+            </div>
+            <div class="stat-row">
+                <MudText Typo="Typo.caption" Color="Color.Secondary">Build</MudText>
+                <MudText Typo="Typo.body2">@(Investigator.Build ?? 0)</MudText>
+            </div>
+            <div class="stat-row">
+                <MudText Typo="Typo.caption" Color="Color.Secondary">Damage Bonus</MudText>
+                <MudText Typo="Typo.body2">@(Investigator.DamageBonus ?? 0)</MudText>
+            </div>
+        }
+    </div>
+</aside>

@@ -1,0 +1,39 @@
+/* ── Info tab ───────────────────────────────────────── */
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.info-full-width {
+    grid-column: 1 / -1;
+}
+
+.fellow-investigators-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.fellow-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.fellow-card-content {
+    padding: 12px !important;
+}
+
+.fellow-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 8px 12px;
+    align-items: center;
+}
+
+.fellow-notes {
+    grid-column: 1 / -1;
+}

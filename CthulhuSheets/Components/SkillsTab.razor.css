@@ -1,0 +1,121 @@
+/* ── Skills tab ─────────────────────────────────────── */
+
+.skills-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.skills-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.skills-filter {
+    flex: 1;
+    max-width: 280px;
+}
+
+.skill-grid {
+    display: grid;
+    grid-template-columns: 2fr 40px 50px 46px 46px auto;
+    gap: 2px 8px;
+    align-items: center;
+}
+
+.skill-grid--edit {
+    grid-template-columns: 2fr 55px 85px 55px 55px auto;
+    gap: 4px 8px;
+}
+
+.skill-val-cell {
+    display: grid;
+    grid-template-columns: 1fr 1rem;
+    align-items: center;
+    gap: 2px;
+}
+
+.skill-val-cell .skill-val,
+.skill-val-cell .skill-val--regular,
+.skill-val-cell .skill-derived-val {
+    text-align: right;
+    padding: 0;
+}
+
+.skill-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    align-items: start;
+}
+
+.skill-name-val {
+    font-size: 0.82rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 4px 4px;
+    line-height: 1.4;
+}
+
+.skill-val {
+    font-size: 0.82rem;
+    font-weight: 500;
+    text-align: center;
+    color: var(--mud-palette-text-secondary);
+}
+
+.skill-val--regular {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--mud-palette-text-primary);
+}
+
+.skill-col-header {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--mud-palette-text-secondary);
+    padding: 0 4px 4px;
+}
+
+.skill-col-center {
+    text-align: center;
+}
+
+.skill-derived-val {
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--mud-palette-text-secondary);
+    padding: 0 4px;
+}
+
+.skill-roll-cell {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.skill-roll-result {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--mud-palette-text-primary);
+    padding-left: 2px;
+    min-width: 2em;
+    display: inline-block;
+    text-align: center;
+}
+
+.skill-roll-icon-placeholder {
+    display: block;
+    width: 1rem;
+    height: 1rem;
+}
+
+.char-check-icon {
+    font-size: 1rem !important;
+}
