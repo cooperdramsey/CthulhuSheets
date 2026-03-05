@@ -5,15 +5,17 @@ public partial class MainLayout
     [Inject] private InvestigatorService InvestigatorService { get; set; } = default!;
     [Inject] private ISnackbar Snackbar { get; set; } = default!;
     [Inject] private IJSRuntime JS { get; set; } = default!;
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
 
     protected override async Task OnInitializedAsync()
     {
         await InvestigatorService.TryRestoreAsync();
     }
 
-    private async Task HandleCreateNewCharacter()
+    private Task HandleCreateNewCharacter()
     {
-        // TODO character creation screen
+        Navigation.NavigateTo("/create");
+        return Task.CompletedTask;
     }
 
     private async Task HandleFileSelected(IBrowserFile file)

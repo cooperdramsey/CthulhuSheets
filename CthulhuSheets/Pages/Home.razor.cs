@@ -4,6 +4,7 @@ public partial class Home : IDisposable
 {
     [Inject] private InvestigatorService InvestigatorService { get; set; } = default!;
     [Inject] private HttpClient Http { get; set; } = default!;
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -15,6 +16,8 @@ public partial class Home : IDisposable
     {
         InvestigatorService.OnChanged += StateHasChanged;
     }
+
+    private void NavigateToCreate() => Navigation.NavigateTo("/create");
 
     private async Task LoadSampleAsync()
     {

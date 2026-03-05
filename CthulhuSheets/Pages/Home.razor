@@ -8,9 +8,17 @@
         <MudText Typo="Typo.body1" Color="Color.Secondary">
             No investigator loaded. Use the upload button in the toolbar to load a character file.
         </MudText>
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-3" OnClick="LoadSampleAsync">
-            Load Sample Investigator
-        </MudButton>
+        <MudStack Row="true" Spacing="2" Class="mt-3">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.Add"
+                       OnClick="NavigateToCreate">
+                Create New Investigator
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Secondary"
+                       OnClick="LoadSampleAsync">
+                Load Sample Investigator
+            </MudButton>
+        </MudStack>
     </div>
 }
 else
