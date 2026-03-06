@@ -10,6 +10,7 @@
         <MudButton Variant="Variant.Filled"
                    Color="Color.Primary"
                    StartIcon="@Icons.Material.Filled.Casino"
+                   Disabled="_ageApplied"
                    OnClick="RollAll">
             Roll All
         </MudButton>
@@ -41,8 +42,145 @@
                 <MudIconButton Icon="@Icons.Material.Filled.Casino"
                                Size="Size.Small"
                                Color="Color.Primary"
+                               Disabled="_ageApplied"
                                OnClick="@(() => RollSingle(def))"
                                Title="@($"Roll {stat.Name}")" />
+            </div>
+        }
+
+        @* ── Luck card ─────────────────────────────────── *@
+        <div class="char-card">
+            <div class="char-card-top">
+                <span class="char-abbr">Luck</span>
+                <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Class="char-formula-chip">3D6 × 5</MudChip>
+            </div>
+            <div class="char-value">
+                @(Investigator.Luck.Current.HasValue ? Investigator.Luck.Current.Value.ToString() : "—")
+            </div>
+            <div class="char-derived-placeholder"></div>
+        </div>
+    </div>
+
+    @* ── Age Section ────────────────────────────────── *@
+    <div class="age-section">
+        <MudText Typo="Typo.h6">Age</MudText>
+
+        <div class="age-input-row">
+            <MudNumericField T="int?"
+                             Value="_selectedAge"
+                             ValueChanged="OnAgeChanged"
+                             Label="Investigator Age"
+                             Min="15" Max="90"
+                             Variant="Variant.Outlined"
+                             Disabled="_ageApplied"
+                             HideSpinButtons="true"
+                             Class="age-input" />
+            @if (_currentBracket is not null && !_ageApplied && AllStatsRolled)
+            {
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           StartIcon="@Icons.Material.Filled.PlayArrow"
+                           OnClick="ApplyAgeModifiers">
+                    Apply
+                </MudButton>
+            }
+            @if (_ageApplied && !_deductionsPending)
+            {
+                <MudButton Variant="Variant.Outlined"
+                           Color="Color.Warning"
+                           StartIcon="@Icons.Material.Filled.Undo"
+                           OnClick="ResetAgeModifiers">
+                    Reset
+                </MudButton>
+            }
+        </div>
+
+        @if (!AllStatsRolled && _selectedAge.HasValue)
+        {
+            <MudText Typo="Typo.caption" Color="Color.Warning" Class="mt-1">
+                Roll all characteristics before applying age modifiers.
+            </MudText>
+        }
+
+        @if (_currentBracket is not null && !_ageApplied)
+        {
+            <div class="age-effects">
+                <MudText Typo="Typo.subtitle2" Color="Color.Secondary">
+                    Age bracket @_currentBracket.Label effects:
+                </MudText>
+                <ul class="age-effects-list">
+                    @if (_currentBracket.EduFlat != 0)
+                    {
+                        <li>Deduct @Math.Abs(_currentBracket.EduFlat) from EDU</li>
+                    }
+                    @if (_currentBracket.EduChecks > 0)
+                    {
+                        <li>@_currentBracket.EduChecks EDU improvement check@(_currentBracket.EduChecks > 1 ? "s" : "")</li>
+                    }
+                    @if (_currentBracket.PhysicalDeduction > 0)
+                    {
+                        <li>Deduct @_currentBracket.PhysicalDeduction points among @string.Join(", ", _currentBracket.PhysicalTargets)</li>
+                    }
+                    @if (_currentBracket.AppReduction > 0)
+                    {
+                        <li>Reduce APP by @_currentBracket.AppReduction</li>
+                    }
+                    @if (_currentBracket.DoubleLuck)
+                    {
+                        <li>Roll Luck twice, use higher value</li>
+                    }
+                </ul>
+            </div>
+        }
+
+        @if (_deductionsPending)
+        {
+            <div class="age-deductions">
+                <div class="deduction-header">
+                    <MudText Typo="Typo.subtitle2">
+                        Distribute @_deductionPool points of deductions
+                    </MudText>
+                    <MudChip T="string"
+                             Size="Size.Small"
+                             Color="@(DeductionsRemaining == 0 ? Color.Success : DeductionsRemaining < 0 ? Color.Error : Color.Warning)">
+                        @DeductionsRemaining remaining
+                    </MudChip>
+                </div>
+                <div class="deduction-inputs">
+                    @foreach (var target in _deductionTargets)
+                    {
+                        var t = target;
+                        var stat = GetCharacteristicByName(t);
+                        <MudNumericField T="int"
+                                         Value="_deductions[t]"
+                                         ValueChanged="@(v => OnDeductionChanged(t, v))"
+                                         Label="@t"
+                                         Adornment="Adornment.End"
+                                         AdornmentText="@($"/ {stat.Regular}")"
+                                         Min="0"
+                                         Max="@(stat.Regular ?? 0)"
+                                         Variant="Variant.Outlined"
+                                         Margin="Margin.Dense"
+                                         HideSpinButtons="true" />
+                    }
+                </div>
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           Disabled="@(DeductionsRemaining != 0)"
+                           OnClick="ConfirmDeductions">
+                    Confirm Deductions
+                </MudButton>
+            </div>
+        }
+
+        @if (_ageLog.Count > 0)
+        {
+            <div class="age-log">
+                <MudText Typo="Typo.subtitle2" Class="mb-1">Results</MudText>
+                @foreach (var entry in _ageLog)
+                {
+                    <MudText Typo="Typo.body2" Color="Color.Secondary">• @entry</MudText>
+                }
             </div>
         }
     </div>

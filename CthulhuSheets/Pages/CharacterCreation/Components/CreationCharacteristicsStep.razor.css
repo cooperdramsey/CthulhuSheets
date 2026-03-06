@@ -82,3 +82,73 @@
 .char-derived-placeholder {
     min-height: 1.1rem;
 }
+
+/* ── Age Section ──────────────────────────────────── */
+
+.age-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border: 1px solid var(--mud-palette-divider);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.age-input-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.age-input {
+    max-width: 160px;
+}
+
+.age-effects {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.age-effects-list {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 0.875rem;
+    color: var(--mud-palette-text-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* ── Deductions ───────────────────────────────────── */
+
+.age-deductions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    border: 1px dashed var(--mud-palette-divider);
+    border-radius: 8px;
+}
+
+.deduction-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.deduction-inputs {
+    display: flex;
+    gap: 12px;
+}
+
+/* ── Results log ──────────────────────────────────── */
+
+.age-log {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+}

@@ -20,7 +20,7 @@ public class DiceRollService
 
         foreach (var (sides, count) in requestList)
             for (var i = 0; i < count; i++)
-                total += _random.Next(1, sides + 1);
+                total += Roll(sides);
 
         var expression = string.Join(" + ", requestList.Select(r => $"{r.count}d{r.sides}"));
         var group = new DiceGroup(total, expression, DateTime.Now);
@@ -32,6 +32,8 @@ public class DiceRollService
         OnRollHistoryChanged?.Invoke();
         return group;
     }
+
+    public int Roll(int sides) => _random.Next(1, sides + 1);
 
     public void ClearHistory()
     {
