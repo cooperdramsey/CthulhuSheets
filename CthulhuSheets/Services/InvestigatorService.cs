@@ -52,12 +52,4 @@ public class InvestigatorService(IJSRuntime js)
         await js.InvokeVoidAsync("sessionStorage.removeItem", SessionKey);
         OnChanged?.Invoke();
     }
-
-    public async Task SetPortraitFromFileAsync(Investigator investigator, IBrowserFile file)
-    {
-        using var stream = file.OpenReadStream(maxAllowedSize: 5 * 1024 * 1024);
-        using var ms = new MemoryStream();
-        await stream.CopyToAsync(ms);
-        investigator.PortraitDataUrl = $"data:{file.ContentType};base64,{Convert.ToBase64String(ms.ToArray())}";
-    }
 }

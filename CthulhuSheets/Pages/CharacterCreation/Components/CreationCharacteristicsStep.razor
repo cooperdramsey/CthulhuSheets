@@ -1,6 +1,50 @@
-<div>
-    <MudText Typo="Typo.h5" GutterBottom="true">Characteristics</MudText>
-    <MudText Typo="Typo.body2" Color="Color.Secondary">
-        Roll or assign values for your investigator's core characteristics.
-    </MudText>
+<div class="characteristics-step">
+
+    <div class="characteristics-header">
+        <div>
+            <MudText Typo="Typo.h5">Characteristics</MudText>
+            <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-1">
+                Roll or assign values for your investigator's core characteristics.
+            </MudText>
+        </div>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.Casino"
+                   OnClick="RollAll">
+            Roll All
+        </MudButton>
+    </div>
+
+    <div class="characteristics-grid">
+        @foreach (var def in _characteristicDefs)
+        {
+            var stat = def.Stat;
+            <div class="char-card">
+                <div class="char-card-top">
+                    <span class="char-abbr">@stat.Name</span>
+                    <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Class="char-formula-chip">@def.Formula</MudChip>
+                </div>
+                <div class="char-value">
+                    @(stat.Regular.HasValue ? stat.Regular.Value.ToString() : "—")
+                </div>
+                @if (stat.Regular.HasValue)
+                {
+                    <div class="char-derived">
+                        <span>½&nbsp;@stat.Half</span>
+                        <span>⅕&nbsp;@stat.Fifth</span>
+                    </div>
+                }
+                else
+                {
+                    <div class="char-derived-placeholder"></div>
+                }
+                <MudIconButton Icon="@Icons.Material.Filled.Casino"
+                               Size="Size.Small"
+                               Color="Color.Primary"
+                               OnClick="@(() => RollSingle(def))"
+                               Title="@($"Roll {stat.Name}")" />
+            </div>
+        }
+    </div>
+
 </div>

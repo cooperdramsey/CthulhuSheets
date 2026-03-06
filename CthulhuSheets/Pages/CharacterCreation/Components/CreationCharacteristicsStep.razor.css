@@ -1,0 +1,84 @@
+.characteristics-step {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    max-width: 720px;
+}
+
+/* ── Header ───────────────────────────────────────── */
+
+.characteristics-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+/* ── Grid ─────────────────────────────────────────── */
+
+.characteristics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+}
+
+/* ── Card ─────────────────────────────────────────── */
+
+.char-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 12px;
+    border: 1px solid var(--mud-palette-divider);
+    border-radius: 12px;
+    background: transparent;
+    transition: border-color 150ms ease, background 150ms ease;
+}
+
+.char-card:hover {
+    border-color: var(--mud-palette-primary);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.char-card-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+}
+
+.char-abbr {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+}
+
+.char-formula-chip {
+    font-size: 0.65rem !important;
+    height: 20px !important;
+}
+
+/* ── Value & derived ──────────────────────────────── */
+
+.char-value {
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--mud-palette-primary);
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+}
+
+.char-derived {
+    display: flex;
+    gap: 14px;
+    font-size: 0.75rem;
+    color: var(--mud-palette-text-secondary);
+    min-height: 1.1rem;
+}
+
+.char-derived-placeholder {
+    min-height: 1.1rem;
+}

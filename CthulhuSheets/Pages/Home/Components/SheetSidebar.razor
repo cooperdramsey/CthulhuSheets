@@ -7,17 +7,12 @@
         }
     </div>
 
-    <label for="@_portraitInputId" class="portrait-box">
-        @if (!string.IsNullOrEmpty(Investigator.PortraitDataUrl))
-        {
-            <img src="@Investigator.PortraitDataUrl" class="portrait-image" alt="Portrait" />
-        }
-        else
-        {
-            <MudIcon Icon="@Icons.Material.Filled.Person" Class="portrait-icon" />
-        }
-        <InputFile id="@_portraitInputId" OnChange="HandlePortraitUpload" accept="image/*" style="display:none" />
-    </label>
+    <PortraitUpload @bind-PortraitDataUrl="Investigator.PortraitDataUrl"
+                    PortraitSize="128"
+                    ShowRemoveButton="false"
+                    PlaceholderIcon="@Icons.Material.Filled.Person"
+                    PlaceholderText=""
+                    OnChanged="PersistAsync" />
 
     <div class="sidebar-pools">
         <div class="pool-item">

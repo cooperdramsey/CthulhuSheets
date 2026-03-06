@@ -1,0 +1,30 @@
+<div class="portrait-upload">
+    <label for="@_inputId" class="portrait-upload-box" style="width: @(PortraitSize)px; height: @(PortraitSize)px;">
+        @if (!string.IsNullOrEmpty(PortraitDataUrl))
+        {
+            <img src="@PortraitDataUrl" class="portrait-upload-img" alt="Portrait" />
+        }
+        else
+        {
+            <div class="portrait-upload-placeholder">
+                <MudIcon Icon="@PlaceholderIcon" Class="portrait-upload-icon" />
+                @if (!string.IsNullOrEmpty(PlaceholderText))
+                {
+                    <span class="portrait-upload-hint">@PlaceholderText</span>
+                }
+            </div>
+        }
+        <InputFile id="@_inputId" OnChange="HandleFileUpload" accept="image/*" style="display:none" />
+    </label>
+    @if (ShowRemoveButton && !string.IsNullOrEmpty(PortraitDataUrl))
+    {
+        <MudButton Variant="Variant.Text"
+                   Color="Color.Error"
+                   Size="MudBlazor.Size.Small"
+                   StartIcon="@Icons.Material.Filled.Delete"
+                   OnClick="RemovePortrait"
+                   Class="mt-1">
+            Remove
+        </MudButton>
+    }
+</div>
