@@ -1,6 +1,63 @@
 <div>
     <MudText Typo="Typo.h5" GutterBottom="true">Backstory &amp; Connections</MudText>
-    <MudText Typo="Typo.body2" Color="Color.Secondary">
+    <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mb-4">
         Define your investigator's history, beliefs, and the people who matter to them.
     </MudText>
+</div>
+
+<div class="backstory-grid">
+    <MudCard Outlined="true">
+        <MudCardContent>
+            <MudText Typo="Typo.subtitle1" GutterBottom="true">Personal Description</MudText>
+            <MudTextField @bind-Value="Investigator.PersonalDescription"
+                          Placeholder="Describe your investigator's physical appearance and demeanour…"
+                          Variant="Variant.Outlined"
+                          Lines="3" />
+        </MudCardContent>
+    </MudCard>
+    <MudCard Outlined="true">
+        <MudCardContent>
+            <MudText Typo="Typo.subtitle1" GutterBottom="true">Ideology &amp; Beliefs</MudText>
+            <MudTextField @bind-Value="Investigator.IdeologyBeliefs"
+                          Placeholder="What does your investigator believe in?"
+                          Variant="Variant.Outlined"
+                          Lines="3" />
+        </MudCardContent>
+    </MudCard>
+    <MudCard Outlined="true">
+        <MudCardContent>
+            <MudText Typo="Typo.subtitle1" GutterBottom="true">Significant People</MudText>
+            <MudTextField @bind-Value="Investigator.SignificantPeople"
+                          Placeholder="Who matters most to your investigator and why?"
+                          Variant="Variant.Outlined"
+                          Lines="3" />
+        </MudCardContent>
+    </MudCard>
+    <MudCard Outlined="true">
+        <MudCardContent>
+            <MudText Typo="Typo.subtitle1" GutterBottom="true">Meaningful Locations</MudText>
+            <MudTextField @bind-Value="Investigator.MeaningfulLocations"
+                          Placeholder="A place that holds deep meaning for your investigator…"
+                          Variant="Variant.Outlined"
+                          Lines="3" />
+        </MudCardContent>
+    </MudCard>
+    <MudCard Outlined="true">
+        <MudCardContent>
+            <MudText Typo="Typo.subtitle1" GutterBottom="true">Treasured Possessions</MudText>
+            <MudTextField @bind-Value="Investigator.TreasuredPossessions"
+                          Placeholder="An item your investigator would never willingly part with…"
+                          Variant="Variant.Outlined"
+                          Lines="3" />
+        </MudCardContent>
+    </MudCard>
+    <MudCard Outlined="true">
+        <MudCardContent>
+            <MudText Typo="Typo.subtitle1" GutterBottom="true">Traits</MudText>
+            <MudTextField @bind-Value="Investigator.Traits"
+                          Placeholder="Personality quirks, habits, or mannerisms…"
+                          Variant="Variant.Outlined"
+                          Lines="3" />
+        </MudCardContent>
+    </MudCard>
 </div>

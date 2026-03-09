@@ -24,6 +24,11 @@
                   Label="Meaningful Locations"
                   Variant="Variant.Outlined"
                   Lines="4" />
+    <MudTextField @bind-Value="Investigator.TreasuredPossessions"
+                  @bind-Value:after="PersistAsync"
+                  Label="Treasured Possessions"
+                  Variant="Variant.Outlined"
+                  Lines="4" />
     <MudTextField @bind-Value="Investigator.Traits"
                   @bind-Value:after="PersistAsync"
                   Label="Traits"
