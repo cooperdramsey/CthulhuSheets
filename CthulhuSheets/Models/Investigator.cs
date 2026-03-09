@@ -41,7 +41,7 @@ public class Investigator
     // Other Stats
     public int? MovementRate { get; set; }
     public int? Build { get; set; }
-    public int? DamageBonus { get; set; }
+    public string? DamageBonus { get; set; }
 
     // Skills
     public List<Skill> Skills { get; set; } = [];

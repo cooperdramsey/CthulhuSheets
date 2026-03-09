@@ -62,7 +62,7 @@
   "dying": false,
   "movementRate": 8,
   "build": 0,
-  "damageBonus": 0,
+  "damageBonus": "0",
   "skills": [
     {
       "name": "Anthropology",

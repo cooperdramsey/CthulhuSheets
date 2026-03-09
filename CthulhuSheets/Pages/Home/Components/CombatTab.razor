@@ -1,15 +1,24 @@
 <div class="combat-container">
     <div class="combat-stats-bar">
         <div class="combat-stat-chip">
-            <MudText Typo="Typo.caption" Color="Color.Secondary">Build</MudText>
+            <div class="combat-stat-label">
+                <MudIcon Icon="@Icons.Material.Filled.Shield" Size="Size.Small" Color="Color.Primary" />
+                <MudText Typo="Typo.caption" Color="Color.Secondary">Build</MudText>
+            </div>
             <MudText Typo="Typo.h5" Class="combat-stat-value">@(Investigator.Build?.ToString() ?? "—")</MudText>
         </div>
         <div class="combat-stat-chip">
-            <MudText Typo="Typo.caption" Color="Color.Secondary">Damage Bonus</MudText>
-            <MudText Typo="Typo.h5" Class="combat-stat-value">@(Investigator.DamageBonus?.ToString() ?? "—")</MudText>
+            <div class="combat-stat-label">
+                <MudIcon Icon="@Icons.Material.Filled.FitnessCenter" Size="Size.Small" Color="Color.Tertiary" />
+                <MudText Typo="Typo.caption" Color="Color.Secondary">Damage Bonus</MudText>
+            </div>
+            <MudText Typo="Typo.h5" Class="combat-stat-value">@(Investigator.DamageBonus ?? "—")</MudText>
         </div>
         <div class="combat-stat-chip">
-            <MudText Typo="Typo.caption" Color="Color.Secondary">Move</MudText>
+            <div class="combat-stat-label">
+                <MudIcon Icon="@Icons.Material.Filled.DirectionsRun" Size="Size.Small" Color="Color.Warning" />
+                <MudText Typo="Typo.caption" Color="Color.Secondary">Move</MudText>
+            </div>
             <MudText Typo="Typo.h5" Class="combat-stat-value">@(Investigator.MovementRate?.ToString() ?? "—")</MudText>
         </div>
         <div class="combat-stat-chip combat-stat-chip--dodge">

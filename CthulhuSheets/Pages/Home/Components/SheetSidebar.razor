@@ -177,13 +177,12 @@
                              Variant="Variant.Outlined"
                              Margin="Margin.Dense"
                              HideSpinButtons="true" />
-            <MudNumericField T="int?"
-                             @bind-Value="Investigator.DamageBonus"
-                             @bind-Value:after="PersistAsync"
-                             Label="Damage Bonus"
-                             Variant="Variant.Outlined"
-                             Margin="Margin.Dense"
-                             HideSpinButtons="true" />
+            <MudTextField T="string"
+                          @bind-Value="Investigator.DamageBonus"
+                          @bind-Value:after="PersistAsync"
+                          Label="Damage Bonus"
+                          Variant="Variant.Outlined"
+                          Margin="Margin.Dense" />
         }
         else
         {
@@ -195,12 +194,18 @@
                 <MudText Typo="Typo.body2">@(Investigator.MovementRate ?? 0)</MudText>
             </div>
             <div class="stat-row">
-                <MudText Typo="Typo.caption" Color="Color.Secondary">Build</MudText>
+                <span class="stat-label-icon">
+                    <MudIcon Icon="@Icons.Material.Filled.Shield" Size="Size.Small" Color="Color.Primary" />
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">Build</MudText>
+                </span>
                 <MudText Typo="Typo.body2">@(Investigator.Build ?? 0)</MudText>
             </div>
             <div class="stat-row">
-                <MudText Typo="Typo.caption" Color="Color.Secondary">Damage Bonus</MudText>
-                <MudText Typo="Typo.body2">@(Investigator.DamageBonus ?? 0)</MudText>
+                <span class="stat-label-icon">
+                    <MudIcon Icon="@Icons.Material.Filled.FitnessCenter" Size="Size.Small" Color="Color.Tertiary" />
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">Damage Bonus</MudText>
+                </span>
+                <MudText Typo="Typo.body2">@(Investigator.DamageBonus ?? "—")</MudText>
             </div>
         }
     </div>

@@ -225,6 +225,8 @@ public partial class CreationCharacteristicsStep
         Investigator.MagicPoints = new MagicPoints();
         Investigator.HitPoints = new HitPoints();
         Investigator.MovementRate = null;
+        Investigator.Build = null;
+        Investigator.DamageBonus = null;
         _ageApplied = false;
         _deductionsPending = false;
         _ageLog.Clear();
@@ -289,6 +291,23 @@ public partial class CreationCharacteristicsStep
             };
 
             Investigator.MovementRate = mov;
+        }
+
+        if (str.HasValue && siz.HasValue)
+        {
+            var total = str.Value + siz.Value;
+            (Investigator.DamageBonus, Investigator.Build) = total switch
+            {
+                <= 64 => ("-2", -2),
+                <= 84 => ("-1", -1),
+                <= 124 => ("0", 0),
+                <= 164 => ("1d4", 1),
+                <= 204 => ("1d6", 2),
+                <= 284 => ("2d6", 3),
+                <= 364 => ("3d6", 4),
+                <= 444 => ("4d6", 5),
+                _ => ("5d6", 6)
+            };
         }
     }
 }
