@@ -1,6 +1,76 @@
-<div>
-    <MudText Typo="Typo.h5" GutterBottom="true">Occupation &amp; Skills</MudText>
-    <MudText Typo="Typo.body2" Color="Color.Secondary">
-        Choose your investigator's occupation and allocate skill points.
-    </MudText>
+<div class="skills-step">
+
+    <div class="skills-step-header">
+        <div>
+            <MudText Typo="Typo.h5">Occupation &amp; Skills</MudText>
+            <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-1">
+                Choose your investigator's occupation and allocate skill points.
+            </MudText>
+        </div>
+    </div>
+
+    <div class="skills-step-toolbar">
+        <MudTextField @bind-Value="_skillFilter"
+                      Placeholder="Filter skills..."
+                      Variant="Variant.Outlined"
+                      Margin="Margin.Dense"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Search"
+                      Class="skills-step-filter"
+                      Immediate="true"
+                      Clearable="true" />
+        <MudButton Variant="Variant.Outlined"
+                   Size="Size.Small"
+                   StartIcon="@Icons.Material.Filled.FormatListBulleted"
+                   OnClick="LoadDefaultSkills">
+            Load Defaults
+        </MudButton>
+        <MudIconButton Icon="@Icons.Material.Filled.Add"
+                       Color="Color.Primary"
+                       Size="Size.Small"
+                       OnClick="AddSkill" />
+    </div>
+
+    @{
+        var skillList = FilteredSkills.ToList();
+        var half = (skillList.Count + 1) / 2;
+        var leftSkills = skillList.Take(half).ToList();
+        var rightSkills = skillList.Skip(half).ToList();
+    }
+
+    @if (skillList.Count > 0)
+    {
+        <div class="skill-step-columns">
+            @foreach (var columnSkills in new[] { leftSkills, rightSkills })
+            {
+                <div class="skill-step-grid">
+                    <span class="skill-step-col-header">Skill</span>
+                    <span class="skill-step-col-header skill-step-col-center">Base</span>
+                    <span></span>
+                    @foreach (var skill in columnSkills)
+                    {
+                        <MudTextField @bind-Value="skill.Name"
+                                      Variant="Variant.Outlined"
+                                      Margin="Margin.Dense" />
+                        <MudNumericField T="int"
+                                         @bind-Value="skill.BaseValue"
+                                         Variant="Variant.Outlined"
+                                         Margin="Margin.Dense"
+                                         HideSpinButtons="true" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                       Color="Color.Error"
+                                       Size="Size.Small"
+                                       OnClick="() => RemoveSkill(skill)" />
+                    }
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <MudText Typo="Typo.body2" Color="Color.Secondary" Align="Align.Center" Class="mt-4">
+            No skills yet. Click <strong>Load Defaults</strong> or <strong>+</strong> to add skills.
+        </MudText>
+    }
+
 </div>

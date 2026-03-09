@@ -1,0 +1,58 @@
+/* ── Skills creation step ─────────────────────────── */
+
+.skills-step {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 720px;
+}
+
+/* ── Header ───────────────────────────────────────── */
+
+.skills-step-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+/* ── Toolbar ──────────────────────────────────────── */
+
+.skills-step-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.skills-step-filter {
+    flex: 1;
+    max-width: 280px;
+}
+
+/* ── Grid ─────────────────────────────────────────── */
+
+.skill-step-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    align-items: start;
+}
+
+.skill-step-grid {
+    display: grid;
+    grid-template-columns: 2fr 55px auto;
+    gap: 4px 8px;
+    align-items: center;
+}
+
+.skill-step-col-header {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--mud-palette-text-secondary);
+    padding: 0 4px 4px;
+}
+
+.skill-step-col-center {
+    text-align: center;
+}
