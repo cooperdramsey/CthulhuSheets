@@ -35,6 +35,7 @@ public partial class CreationCharacteristicsStep
     private Dictionary<string, int?> _baseValues = new();
 
     private bool AllStatsRolled => _characteristicDefs.All(d => d.Stat.Regular.HasValue);
+    private bool DerivedReady => _ageApplied && !_deductionsPending;
     private int DeductionsRemaining => _deductionPool - _deductions.Values.Sum();
 
     protected override void OnParametersSet()
@@ -185,6 +186,10 @@ public partial class CreationCharacteristicsStep
             _deductions = bracket.PhysicalTargets.ToDictionary(t => t, _ => 0);
             _deductionsPending = true;
         }
+        else
+        {
+            ComputeDerivedAttributes();
+        }
     }
 
     // ── Deductions ───────────────────────────────────
@@ -208,6 +213,7 @@ public partial class CreationCharacteristicsStep
         }
 
         _deductionsPending = false;
+        ComputeDerivedAttributes();
     }
 
     private void ResetAgeModifiers()
@@ -215,9 +221,47 @@ public partial class CreationCharacteristicsStep
         RestoreBaseValues();
         Investigator.Age = null;
         Investigator.Luck = new Luck();
+        Investigator.Sanity = new Sanity();
+        Investigator.MagicPoints = new MagicPoints();
+        Investigator.HitPoints = new HitPoints();
         _ageApplied = false;
         _deductionsPending = false;
         _ageLog.Clear();
         _currentBracket = _selectedAge.HasValue ? GetBracket(_selectedAge.Value) : null;
+    }
+
+    // ── Derived attributes ────────────────────────────
+
+    private void ComputeDerivedAttributes()
+    {
+        var pow = Investigator.Power.Regular;
+        var siz = Investigator.Size.Regular;
+        var con = Investigator.Constitution.Regular;
+
+        if (pow.HasValue)
+        {
+            Investigator.Sanity = new Sanity
+            {
+                Starting = pow.Value,
+                Current = pow.Value,
+                Max = 99
+            };
+
+            Investigator.MagicPoints = new MagicPoints
+            {
+                Current = pow.Value / 5,
+                Max = pow.Value / 5
+            };
+        }
+
+        if (siz.HasValue && con.HasValue)
+        {
+            var hp = (siz.Value + con.Value) / 10;
+            Investigator.HitPoints = new HitPoints
+            {
+                Current = hp,
+                Max = hp
+            };
+        }
     }
 }

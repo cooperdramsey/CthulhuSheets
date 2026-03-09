@@ -152,3 +152,56 @@
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.03);
 }
+
+/* ── Derived Attributes ──────────────────────────── */
+
+.derived-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border: 1px solid var(--mud-palette-divider);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.derived-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+}
+
+.derived-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 12px;
+    border: 1px solid var(--mud-palette-divider);
+    border-radius: 12px;
+    background: transparent;
+    transition: border-color 150ms ease, background 150ms ease;
+}
+
+.derived-card:hover {
+    border-color: var(--mud-palette-primary);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.derived-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--mud-palette-text-secondary);
+}
+
+.derived-value {
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--mud-palette-primary);
+}
+
+.derived-hint {
+    font-size: 0.7rem;
+    color: var(--mud-palette-text-disabled);
+}

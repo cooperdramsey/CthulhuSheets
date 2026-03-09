@@ -16,7 +16,10 @@
 
     <div class="sidebar-pools">
         <div class="pool-item">
-            <MudText Typo="Typo.overline">Hit Points</MudText>
+            <div class="pool-label">
+                <MudIcon Icon="@Icons.Material.Filled.Favorite" Size="Size.Small" Color="Color.Error" />
+                <MudText Typo="Typo.overline">Hit Points</MudText>
+            </div>
             <div class="pool-inputs">
                 <MudNumericField T="int?"
                                  @bind-Value="Investigator.HitPoints.Current"
@@ -38,7 +41,10 @@
             </div>
         </div>
         <div class="pool-item">
-            <MudText Typo="Typo.overline">Magic Points</MudText>
+            <div class="pool-label">
+                <MudIcon Icon="@Icons.Material.Filled.AutoAwesome" Size="Size.Small" Color="Color.Secondary" />
+                <MudText Typo="Typo.overline">Magic Points</MudText>
+            </div>
             <div class="pool-inputs">
                 <MudNumericField T="int?"
                                  @bind-Value="Investigator.MagicPoints.Current"
@@ -60,7 +66,10 @@
             </div>
         </div>
         <div class="pool-item">
-            <MudText Typo="Typo.overline">Sanity</MudText>
+            <div class="pool-label">
+                <MudIcon Icon="@Icons.Material.Filled.Psychology" Size="Size.Small" Color="Color.Info" />
+                <MudText Typo="Typo.overline">Sanity</MudText>
+            </div>
             <div class="pool-inputs">
                 <MudNumericField T="int?"
                                  @bind-Value="Investigator.Sanity.Current"

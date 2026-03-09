@@ -28,6 +28,12 @@
     gap: 1px;
 }
 
+.pool-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
 .pool-inputs {
     display: flex;
     align-items: center;

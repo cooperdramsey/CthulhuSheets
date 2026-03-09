@@ -185,4 +185,32 @@
         }
     </div>
 
+    @* ── Derived Attributes ───────────────────────────── *@
+    @if (DerivedReady)
+    {
+        <div class="derived-section">
+            <MudText Typo="Typo.h6">Derived Attributes</MudText>
+            <div class="derived-grid">
+                <div class="derived-card">
+                    <MudIcon Icon="@Icons.Material.Filled.Psychology" Size="Size.Medium" Color="Color.Info" />
+                    <span class="derived-label">Sanity</span>
+                    <span class="derived-value">@Investigator.Sanity.Starting</span>
+                    <span class="derived-hint">= POW</span>
+                </div>
+                <div class="derived-card">
+                    <MudIcon Icon="@Icons.Material.Filled.AutoAwesome" Size="Size.Medium" Color="Color.Secondary" />
+                    <span class="derived-label">Magic Points</span>
+                    <span class="derived-value">@Investigator.MagicPoints.Max</span>
+                    <span class="derived-hint">= POW / 5</span>
+                </div>
+                <div class="derived-card">
+                    <MudIcon Icon="@Icons.Material.Filled.Favorite" Size="Size.Medium" Color="Color.Error" />
+                    <span class="derived-label">Hit Points</span>
+                    <span class="derived-value">@Investigator.HitPoints.Max</span>
+                    <span class="derived-hint">= (SIZ + CON) / 10</span>
+                </div>
+            </div>
+        </div>
+    }
+
 </div>
