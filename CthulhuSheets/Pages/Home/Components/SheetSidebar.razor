@@ -91,7 +91,29 @@
             </div>
         </div>
         <div class="pool-item">
-            <MudText Typo="Typo.overline">Luck</MudText>
+            <div class="luck-header">
+                <MudText Typo="Typo.overline">Luck</MudText>
+                <div class="luck-roll-actions">
+                    <MudTooltip Text="Roll d100">
+                        <MudIconButton Icon="@Icons.Material.Filled.Casino"
+                                       Size="Size.Small"
+                                       Color="Color.Primary"
+                                       OnClick="RollLuck" />
+                    </MudTooltip>
+                    @if (_luckRoll.HasValue)
+                    {
+                        <span class="luck-roll-result">@_luckRoll</span>
+                        @if (LuckSuccess is true)
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" Color="Color.Success" />
+                        }
+                        else if (LuckSuccess is false)
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.Close" Size="Size.Small" Color="Color.Error" />
+                        }
+                    }
+                </div>
+            </div>
             <MudNumericField T="int?"
                              @bind-Value="Investigator.Luck.Current"
                              @bind-Value:after="PersistAsync"
@@ -166,7 +188,10 @@
         else
         {
             <div class="stat-row">
-                <MudText Typo="Typo.caption" Color="Color.Secondary">Movement Rate</MudText>
+                <span class="stat-label-icon">
+                    <MudIcon Icon="@Icons.Material.Filled.DirectionsRun" Size="Size.Small" Color="Color.Warning" />
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">Movement Rate</MudText>
+                </span>
                 <MudText Typo="Typo.body2">@(Investigator.MovementRate ?? 0)</MudText>
             </div>
             <div class="stat-row">

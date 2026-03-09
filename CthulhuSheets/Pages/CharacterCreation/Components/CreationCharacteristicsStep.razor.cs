@@ -224,6 +224,7 @@ public partial class CreationCharacteristicsStep
         Investigator.Sanity = new Sanity();
         Investigator.MagicPoints = new MagicPoints();
         Investigator.HitPoints = new HitPoints();
+        Investigator.MovementRate = null;
         _ageApplied = false;
         _deductionsPending = false;
         _ageLog.Clear();
@@ -262,6 +263,32 @@ public partial class CreationCharacteristicsStep
                 Current = hp,
                 Max = hp
             };
+        }
+
+        var str = Investigator.Strength.Regular;
+        var dex = Investigator.Dexterity.Regular;
+        if (str.HasValue && dex.HasValue && siz.HasValue)
+        {
+            int mov;
+            if (str.Value > siz.Value && dex.Value > siz.Value)
+                mov = 9;
+            else if (str.Value < siz.Value && dex.Value < siz.Value)
+                mov = 7;
+            else
+                mov = 8;
+
+            var age = Investigator.Age ?? 0;
+            mov -= age switch
+            {
+                >= 80 => 5,
+                >= 70 => 4,
+                >= 60 => 3,
+                >= 50 => 2,
+                >= 40 => 1,
+                _ => 0
+            };
+
+            Investigator.MovementRate = mov;
         }
     }
 }
