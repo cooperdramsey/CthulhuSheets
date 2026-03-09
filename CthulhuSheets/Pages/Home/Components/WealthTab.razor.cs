@@ -6,8 +6,21 @@ public partial class WealthTab
     public Investigator Investigator { get; set; } = default!;
 
     [Inject] private InvestigatorService InvestigatorService { get; set; } = default!;
+    [Inject] private DiceRollService DiceRollService { get; set; } = default!;
 
     private Task PersistAsync() => InvestigatorService.PersistAsync();
+
+    private Skill? CreditRating =>
+        Investigator.Skills.FirstOrDefault(s =>
+            s.Name.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase));
+
+    private int? _creditRatingRoll;
+
+    private void RollCreditRating()
+    {
+        var result = DiceRollService.RollMany([(sides: 100, count: 1)]);
+        _creditRatingRoll = result.Total;
+    }
 
     private async Task AddAsset()
     {

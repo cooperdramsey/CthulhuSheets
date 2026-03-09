@@ -99,3 +99,22 @@
     color: var(--mud-palette-text-secondary);
     padding: 0 4px 4px;
 }
+
+.roll-action {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+}
+
+.roll-result {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--mud-palette-text-primary);
+    min-width: 2em;
+    text-align: center;
+}
+
+.roll-check-icon {
+    font-size: 1rem !important;
+}

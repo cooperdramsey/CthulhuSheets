@@ -1,0 +1,45 @@
+.equipment-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.gear-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.gear-field {
+    flex: 1;
+}
+
+.weapon-card {
+    margin-top: 8px;
+}
+
+.weapon-fields {
+    display: grid;
+    grid-template-columns: 2fr 1fr 80px 1fr 80px 80px;
+    gap: 8px;
+    align-items: end;
+}
+
+.weapon-remove {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 4px;
+}
+
+@media (max-width: 768px) {
+    .weapon-fields {
+        grid-template-columns: 1fr 1fr;
+    }
+}

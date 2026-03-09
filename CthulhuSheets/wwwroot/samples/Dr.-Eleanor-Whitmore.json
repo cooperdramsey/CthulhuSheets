@@ -123,6 +123,186 @@
       "name": "Spot Hidden",
       "baseValue": 25,
       "regular": 70
+    },
+    {
+      "name": "Accounting",
+      "baseValue": 5,
+      "regular": null
+    },
+    {
+      "name": "Appraise",
+      "baseValue": 5,
+      "regular": null
+    },
+    {
+      "name": "Art/Craft",
+      "baseValue": 5,
+      "regular": null
+    },
+    {
+      "name": "Charm",
+      "baseValue": 15,
+      "regular": null
+    },
+    {
+      "name": "Climb",
+      "baseValue": 20,
+      "regular": null
+    },
+    {
+      "name": "Computer Use",
+      "baseValue": 5,
+      "regular": null
+    },
+    {
+      "name": "Credit Rating",
+      "baseValue": 25,
+      "regular": null
+    },
+    {
+      "name": "Disguise",
+      "baseValue": 5,
+      "regular": null
+    },
+    {
+      "name": "Drive Auto",
+      "baseValue": 20,
+      "regular": null
+    },
+    {
+      "name": "Electrical Repair",
+      "baseValue": 10,
+      "regular": null
+    },
+    {
+      "name": "Fast Talk",
+      "baseValue": 5,
+      "regular": null
+    },
+    {
+      "name": "Fighting (Brawl)",
+      "baseValue": 25,
+      "regular": null
+    },
+    {
+      "name": "Firearms (Rifle/Shotgun)",
+      "baseValue": 25,
+      "regular": null
+    },
+    {
+      "name": "Intimidate",
+      "baseValue": 15,
+      "regular": null
+    },
+    {
+      "name": "Jump",
+      "baseValue": 20,
+      "regular": null
+    },
+    {
+      "name": "Language (Other)",
+      "baseValue": 1,
+      "regular": null
+    },
+    {
+      "name": "Language (Own)",
+      "baseValue": 90,
+      "regular": null
+    },
+    {
+      "name": "Law",
+      "baseValue": 5,
+      "regular": null
+    },
+    {
+      "name": "Listen",
+      "baseValue": 20,
+      "regular": null
+    },
+    {
+      "name": "Locksmith",
+      "baseValue": 1,
+      "regular": null
+    },
+    {
+      "name": "Mechanical Repair",
+      "baseValue": 10,
+      "regular": null
+    },
+    {
+      "name": "Medicine",
+      "baseValue": 1,
+      "regular": null
+    },
+    {
+      "name": "Natural World",
+      "baseValue": 10,
+      "regular": null
+    },
+    {
+      "name": "Navigate",
+      "baseValue": 10,
+      "regular": null
+    },
+    {
+      "name": "Operate Heavy Machinery",
+      "baseValue": 1,
+      "regular": null
+    },
+    {
+      "name": "Persuade",
+      "baseValue": 10,
+      "regular": null
+    },
+    {
+      "name": "Pilot",
+      "baseValue": 1,
+      "regular": null
+    },
+    {
+      "name": "Psychoanalysis",
+      "baseValue": 1,
+      "regular": null
+    },
+    {
+      "name": "Ride",
+      "baseValue": 5,
+      "regular": null
+    },
+    {
+      "name": "Science",
+      "baseValue": 1,
+      "regular": null
+    },
+    {
+      "name": "Sleight of Hand",
+      "baseValue": 10,
+      "regular": null
+    },
+    {
+      "name": "Stealth",
+      "baseValue": 20,
+      "regular": null
+    },
+    {
+      "name": "Survival",
+      "baseValue": 10,
+      "regular": null
+    },
+    {
+      "name": "Swim",
+      "baseValue": 20,
+      "regular": null
+    },
+    {
+      "name": "Throw",
+      "baseValue": 20,
+      "regular": null
+    },
+    {
+      "name": "Track",
+      "baseValue": 10,
+      "regular": null
     }
   ],
   "weapons": [

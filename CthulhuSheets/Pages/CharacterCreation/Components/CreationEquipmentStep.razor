@@ -1,6 +1,114 @@
 <div>
     <MudText Typo="Typo.h5" GutterBottom="true">Equipment</MudText>
-    <MudText Typo="Typo.body2" Color="Color.Secondary">
-        Choose your investigator's starting gear and possessions.
+    <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mb-4">
+        Choose your investigator's starting gear, possessions, and weapons.
     </MudText>
+</div>
+
+<div class="equipment-container">
+    <MudCard Outlined="true">
+        <MudCardContent>
+            <div class="section-header">
+                <MudText Typo="Typo.subtitle1">Gear &amp; Possessions</MudText>
+                <MudIconButton Icon="@Icons.Material.Filled.Add"
+                               Color="Color.Primary"
+                               Size="Size.Small"
+                               OnClick="AddGearItem" />
+            </div>
+            @if (Investigator.GearAndPossessions.Count == 0)
+            {
+                <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-2">
+                    No gear added yet. Click + to add items.
+                </MudText>
+            }
+            else
+            {
+                @for (int i = 0; i < Investigator.GearAndPossessions.Count; i++)
+                {
+                    var index = i;
+                    <div class="gear-row">
+                        <MudTextField Value="Investigator.GearAndPossessions[index]"
+                                      ValueChanged="(string v) => Investigator.GearAndPossessions[index] = v"
+                                      Variant="Variant.Outlined"
+                                      Margin="Margin.Dense"
+                                      Placeholder="Item name"
+                                      Class="gear-field" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                       Color="Color.Error"
+                                       Size="Size.Small"
+                                       OnClick="() => RemoveGearItem(index)" />
+                    </div>
+                }
+            }
+        </MudCardContent>
+    </MudCard>
+
+    <MudCard Outlined="true">
+        <MudCardContent>
+            <div class="section-header">
+                <MudText Typo="Typo.subtitle1">Weapons</MudText>
+                <MudIconButton Icon="@Icons.Material.Filled.Add"
+                               Color="Color.Primary"
+                               Size="Size.Small"
+                               OnClick="AddWeapon" />
+            </div>
+            @if (Investigator.Weapons.Count == 0)
+            {
+                <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-2">
+                    No weapons added yet. Click + to add a weapon.
+                </MudText>
+            }
+            else
+            {
+                @foreach (var weapon in Investigator.Weapons)
+                {
+                    <MudCard Outlined="true" Class="weapon-card">
+                        <MudCardContent>
+                            <div class="weapon-fields">
+                                <MudTextField @bind-Value="weapon.Name"
+                                              Label="Name"
+                                              Variant="Variant.Outlined"
+                                              Margin="Margin.Dense"
+                                              Placeholder="e.g. .38 Revolver" />
+                                <MudTextField @bind-Value="weapon.Damage"
+                                              Label="Damage"
+                                              Variant="Variant.Outlined"
+                                              Margin="Margin.Dense"
+                                              Placeholder="e.g. 1d10" />
+                                <MudNumericField T="int?"
+                                                 @bind-Value="weapon.NumberOfAttacks"
+                                                 Label="Atk/Rnd"
+                                                 Variant="Variant.Outlined"
+                                                 Margin="Margin.Dense"
+                                                 HideSpinButtons="true" />
+                                <MudTextField @bind-Value="weapon.Range"
+                                              Label="Range"
+                                              Variant="Variant.Outlined"
+                                              Margin="Margin.Dense"
+                                              Placeholder="e.g. 15m" />
+                                <MudNumericField T="int?"
+                                                 @bind-Value="weapon.Ammo"
+                                                 Label="Ammo"
+                                                 Variant="Variant.Outlined"
+                                                 Margin="Margin.Dense"
+                                                 HideSpinButtons="true" />
+                                <MudNumericField T="int?"
+                                                 @bind-Value="weapon.Malfunction"
+                                                 Label="Malf"
+                                                 Variant="Variant.Outlined"
+                                                 Margin="Margin.Dense"
+                                                 HideSpinButtons="true" />
+                            </div>
+                            <div class="weapon-remove">
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                               Color="Color.Error"
+                                               Size="Size.Small"
+                                               OnClick="() => RemoveWeapon(weapon)" />
+                            </div>
+                        </MudCardContent>
+                    </MudCard>
+                }
+            }
+        </MudCardContent>
+    </MudCard>
 </div>

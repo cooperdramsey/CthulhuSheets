@@ -6,6 +6,76 @@
     gap: 24px;
 }
 
+.wealth-credit-rating {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.credit-rating-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 12px 20px;
+    background: var(--mud-palette-surface);
+    border: 1px solid var(--mud-palette-divider);
+    border-radius: 8px;
+    min-width: 160px;
+}
+
+.credit-rating-tiers {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.credit-rating-tier {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+
+.credit-rating-num {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.credit-rating-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mud-palette-text-secondary);
+}
+
+.credit-rating-sep {
+    font-size: 1rem;
+    opacity: 0.4;
+    margin-top: -4px;
+}
+
+.roll-action {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+}
+
+.roll-result {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--mud-palette-text-primary);
+    min-width: 2em;
+    text-align: center;
+}
+
+.roll-check-icon {
+    font-size: 1rem !important;
+}
+
 .wealth-stats {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 200px));

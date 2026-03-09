@@ -26,18 +26,45 @@
             <div class="combat-dodge-row">
                 <div class="combat-dodge-tier">
                     <span class="combat-dodge-num">@(DodgeRegular?.ToString() ?? "—")</span>
+                    @if (_dodgeRoll.HasValue && DodgeRegular.HasValue)
+                    {
+                        <MudIcon Icon="@(_dodgeRoll <= DodgeRegular ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
+                                 Color="@(_dodgeRoll <= DodgeRegular ? Color.Success : Color.Error)"
+                                 Size="Size.Small" Class="roll-check-icon" />
+                    }
                     <span class="combat-dodge-label">Reg</span>
                 </div>
                 <span class="combat-dodge-sep">/</span>
                 <div class="combat-dodge-tier">
                     <span class="combat-dodge-num">@(DodgeHard?.ToString() ?? "—")</span>
+                    @if (_dodgeRoll.HasValue && DodgeHard.HasValue)
+                    {
+                        <MudIcon Icon="@(_dodgeRoll <= DodgeHard ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
+                                 Color="@(_dodgeRoll <= DodgeHard ? Color.Success : Color.Error)"
+                                 Size="Size.Small" Class="roll-check-icon" />
+                    }
                     <span class="combat-dodge-label">Hard</span>
                 </div>
                 <span class="combat-dodge-sep">/</span>
                 <div class="combat-dodge-tier">
                     <span class="combat-dodge-num">@(DodgeExtreme?.ToString() ?? "—")</span>
+                    @if (_dodgeRoll.HasValue && DodgeExtreme.HasValue)
+                    {
+                        <MudIcon Icon="@(_dodgeRoll <= DodgeExtreme ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
+                                 Color="@(_dodgeRoll <= DodgeExtreme ? Color.Success : Color.Error)"
+                                 Size="Size.Small" Class="roll-check-icon" />
+                    }
                     <span class="combat-dodge-label">Ext</span>
                 </div>
+            </div>
+            <div class="roll-action">
+                <MudTooltip Text="Roll d100">
+                    <MudIconButton Icon="@Icons.Material.Filled.Casino"
+                                   Size="Size.Small"
+                                   Color="Color.Primary"
+                                   OnClick="RollDodge" />
+                </MudTooltip>
+                <span class="roll-result">@(_dodgeRoll?.ToString() ?? "")</span>
             </div>
         </div>
     </div>

@@ -1,4 +1,58 @@
 <div class="wealth-container">
+    @{
+        var cr = CreditRating;
+    }
+    @if (cr is not null)
+    {
+        <div class="wealth-credit-rating">
+            <div class="credit-rating-chip">
+                <MudText Typo="Typo.caption" Color="Color.Secondary">Credit Rating</MudText>
+                <div class="credit-rating-tiers">
+                    <div class="credit-rating-tier">
+                        <span class="credit-rating-num">@(cr.Regular?.ToString() ?? "—")</span>
+                        @if (_creditRatingRoll.HasValue && cr.Regular.HasValue)
+                        {
+                            <MudIcon Icon="@(_creditRatingRoll <= cr.Regular ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
+                                     Color="@(_creditRatingRoll <= cr.Regular ? Color.Success : Color.Error)"
+                                     Size="Size.Small" Class="roll-check-icon" />
+                        }
+                        <span class="credit-rating-label">Reg</span>
+                    </div>
+                    <span class="credit-rating-sep">/</span>
+                    <div class="credit-rating-tier">
+                        <span class="credit-rating-num">@(cr.Half?.ToString() ?? "—")</span>
+                        @if (_creditRatingRoll.HasValue && cr.Half.HasValue)
+                        {
+                            <MudIcon Icon="@(_creditRatingRoll <= cr.Half ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
+                                     Color="@(_creditRatingRoll <= cr.Half ? Color.Success : Color.Error)"
+                                     Size="Size.Small" Class="roll-check-icon" />
+                        }
+                        <span class="credit-rating-label">Hard</span>
+                    </div>
+                    <span class="credit-rating-sep">/</span>
+                    <div class="credit-rating-tier">
+                        <span class="credit-rating-num">@(cr.Fifth?.ToString() ?? "—")</span>
+                        @if (_creditRatingRoll.HasValue && cr.Fifth.HasValue)
+                        {
+                            <MudIcon Icon="@(_creditRatingRoll <= cr.Fifth ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
+                                     Color="@(_creditRatingRoll <= cr.Fifth ? Color.Success : Color.Error)"
+                                     Size="Size.Small" Class="roll-check-icon" />
+                        }
+                        <span class="credit-rating-label">Ext</span>
+                    </div>
+                </div>
+                <div class="roll-action">
+                    <MudTooltip Text="Roll d100">
+                        <MudIconButton Icon="@Icons.Material.Filled.Casino"
+                                       Size="Size.Small"
+                                       Color="Color.Primary"
+                                       OnClick="RollCreditRating" />
+                    </MudTooltip>
+                    <span class="roll-result">@(_creditRatingRoll?.ToString() ?? "")</span>
+                </div>
+            </div>
+        </div>
+    }
     <div class="wealth-stats">
         <MudNumericField T="int?"
                          @bind-Value="Investigator.Wealth.SpendingLevel"
