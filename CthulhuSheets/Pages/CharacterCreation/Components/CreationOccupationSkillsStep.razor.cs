@@ -59,6 +59,7 @@ public partial class CreationOccupationSkillsStep
         }
     }
 
+    // TODO combine this with default skills from investigator to centralize.
     private static readonly (string Name, int BaseValue)[] DefaultSkills =
     [
         ("Accounting",               5),
