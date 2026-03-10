@@ -146,6 +146,16 @@
     max-width: 80px;
 }
 
+.allocation-header-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.allocation-filter {
+    max-width: 280px;
+}
+
 /* ── Toolbar ──────────────────────────────────────── */
 
 .skills-step-toolbar {

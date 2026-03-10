@@ -23,6 +23,8 @@ public partial class CreationOccupationSkillsStep
 
     // Allocation state
     private Dictionary<string, int> _allocations = new(StringComparer.OrdinalIgnoreCase);
+    private Dictionary<string, int> _personalAllocations = new(StringComparer.OrdinalIgnoreCase);
+    private string _personalFilter = string.Empty;
 
     private bool CanConfirmCustomOccupation =>
         !string.IsNullOrWhiteSpace(_customOccupationName) &&
@@ -59,10 +61,33 @@ public partial class CreationOccupationSkillsStep
     private int CreditRatingTotal =>
         GetSkillBase("Credit Rating") + _allocations.GetValueOrDefault("Credit Rating");
 
+    private int CreditRatingGrandTotal =>
+        GetSkillBase("Credit Rating") + _allocations.GetValueOrDefault("Credit Rating") + _personalAllocations.GetValueOrDefault("Credit Rating");
+
+    private int PersonalInterestPoints => (Investigator.Intelligence.Regular ?? 0) * 2;
+    private int PersonalPointsAllocated => _personalAllocations.Values.Sum();
+    private int PersonalPointsRemaining => PersonalInterestPoints - PersonalPointsAllocated;
+
+    private IEnumerable<string> PersonalAllocableSkillNames =>
+        Investigator.Skills
+            .Where(s => !string.IsNullOrWhiteSpace(s.Name) &&
+                         !s.Name.Equals("Cthulhu Mythos", StringComparison.OrdinalIgnoreCase))
+            .Select(s => s.Name)
+            .Where(n => string.IsNullOrWhiteSpace(_personalFilter) ||
+                         n.Contains(_personalFilter, StringComparison.OrdinalIgnoreCase))
+            .OrderBy(n => n, StringComparer.OrdinalIgnoreCase);
+
+    private int GetSkillCurrentValue(string skillName) =>
+        GetSkillBase(skillName) + _allocations.GetValueOrDefault(skillName);
+
+    private int GetSkillGrandTotal(string skillName) =>
+        GetSkillBase(skillName) + _allocations.GetValueOrDefault(skillName) + _personalAllocations.GetValueOrDefault(skillName);
+
     private bool IsAllocationValid =>
         PointsRemaining == 0 &&
-        CreditRatingTotal >= (_selectedOccupation?.CreditRatingMin ?? 0) &&
-        CreditRatingTotal <= (_selectedOccupation?.CreditRatingMax ?? 99);
+        PersonalPointsRemaining == 0 &&
+        CreditRatingGrandTotal >= (_selectedOccupation?.CreditRatingMin ?? 0) &&
+        CreditRatingGrandTotal <= (_selectedOccupation?.CreditRatingMax ?? 99);
 
     protected override void OnParametersSet()
     {
@@ -99,6 +124,7 @@ public partial class CreationOccupationSkillsStep
         Investigator.Occupation = occupation.Name;
         _occupationSkillNames = new HashSet<string>(occupation.Skills, StringComparer.OrdinalIgnoreCase);
         InitializeAllocations();
+        InitializePersonalAllocations();
     }
 
     private void ClearOccupation()
@@ -107,6 +133,7 @@ public partial class CreationOccupationSkillsStep
         Investigator.Occupation = null;
         _occupationSkillNames.Clear();
         _allocations.Clear();
+        _personalAllocations.Clear();
     }
 
     // ── Custom occupation ────────────────────────────
@@ -204,12 +231,14 @@ public partial class CreationOccupationSkillsStep
         SyncCustomOccupation();
         _customOccupationConfirmed = true;
         InitializeAllocations();
+        InitializePersonalAllocations();
     }
 
     private void EditCustomOccupation()
     {
         _customOccupationConfirmed = false;
         _allocations.Clear();
+        _personalAllocations.Clear();
     }
 
     // ── Allocation management ────────────────────────
@@ -241,14 +270,51 @@ public partial class CreationOccupationSkillsStep
     {
         var currentAlloc = _allocations.GetValueOrDefault(skillName);
         var availablePool = currentAlloc + PointsRemaining;
+        var personalAlloc = _personalAllocations.GetValueOrDefault(skillName);
+        var baseVal = GetSkillBase(skillName);
 
         if (skillName.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase))
         {
-            var crMax = (_selectedOccupation?.CreditRatingMax ?? 99) - GetSkillBase(skillName);
+            var crMax = (_selectedOccupation?.CreditRatingMax ?? 99) - baseVal - personalAlloc;
             return Math.Max(0, Math.Min(availablePool, crMax));
         }
 
-        var skillCap = 75 - GetSkillBase(skillName);
+        var skillCap = 75 - baseVal - personalAlloc;
+        return Math.Max(0, Math.Min(availablePool, skillCap));
+    }
+
+    // ── Personal interest allocation ────────────────
+
+    private void InitializePersonalAllocations()
+    {
+        _personalAllocations = new(StringComparer.OrdinalIgnoreCase);
+        foreach (var skill in Investigator.Skills)
+        {
+            if (string.IsNullOrWhiteSpace(skill.Name)) continue;
+            if (skill.Name.Equals("Cthulhu Mythos", StringComparison.OrdinalIgnoreCase)) continue;
+            _personalAllocations[skill.Name] = 0;
+        }
+    }
+
+    private void OnPersonalAllocationChanged(string skillName, int value)
+    {
+        _personalAllocations[skillName] = Math.Max(0, value);
+    }
+
+    private int GetMaxPersonalAllocation(string skillName)
+    {
+        var currentAlloc = _personalAllocations.GetValueOrDefault(skillName);
+        var availablePool = currentAlloc + PersonalPointsRemaining;
+        var occAlloc = _allocations.GetValueOrDefault(skillName);
+        var baseVal = GetSkillBase(skillName);
+
+        if (skillName.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase))
+        {
+            var crMax = (_selectedOccupation?.CreditRatingMax ?? 99) - baseVal - occAlloc;
+            return Math.Max(0, Math.Min(availablePool, crMax));
+        }
+
+        var skillCap = 75 - baseVal - occAlloc;
         return Math.Max(0, Math.Min(availablePool, skillCap));
     }
 
