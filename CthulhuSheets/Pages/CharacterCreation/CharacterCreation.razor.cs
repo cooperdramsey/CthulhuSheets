@@ -15,6 +15,7 @@ public partial class CharacterCreation
     private readonly Investigator _draft = new();
 
     private CreationProfileStep? _profileStep;
+    private CreationCharacteristicsStep? _characteristicsStep;
 
     private void GoBack()
     {
@@ -24,6 +25,9 @@ public partial class CharacterCreation
     private void GoNext()
     {
         if (_currentStep == 0 && !(_profileStep?.Validate() ?? false))
+            return;
+
+        if (_currentStep == 1 && !(_characteristicsStep?.Validate() ?? false))
             return;
 
         if (_currentStep < _steps.Length - 1) _currentStep++;

@@ -38,6 +38,8 @@ public partial class CreationCharacteristicsStep
     private bool DerivedReady => _ageApplied && !_deductionsPending;
     private int DeductionsRemaining => _deductionPool - _deductions.Values.Sum();
 
+    public bool Validate() => DerivedReady;
+
     protected override void OnParametersSet()
     {
         _characteristicDefs =
