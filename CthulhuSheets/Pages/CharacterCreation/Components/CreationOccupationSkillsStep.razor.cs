@@ -24,7 +24,6 @@ public partial class CreationOccupationSkillsStep
     // Allocation state
     private Dictionary<string, int> _allocations = new(StringComparer.OrdinalIgnoreCase);
     private Dictionary<string, int> _personalAllocations = new(StringComparer.OrdinalIgnoreCase);
-    private string _personalFilter = string.Empty;
 
     private bool CanConfirmCustomOccupation =>
         !string.IsNullOrWhiteSpace(_customOccupationName) &&
@@ -53,29 +52,12 @@ public partial class CreationOccupationSkillsStep
     private int PointsAllocated => _allocations.Values.Sum();
     private int PointsRemaining => OccupationSkillPoints - PointsAllocated;
 
-    private IEnumerable<string> AllocableSkillNames =>
-        _allocations.Keys
-            .OrderBy(n => n.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase) ? 0 : 1)
-            .ThenBy(n => n, StringComparer.OrdinalIgnoreCase);
-
-    private int CreditRatingTotal =>
-        GetSkillBase("Credit Rating") + _allocations.GetValueOrDefault("Credit Rating");
-
     private int CreditRatingGrandTotal =>
         GetSkillBase("Credit Rating") + _allocations.GetValueOrDefault("Credit Rating") + _personalAllocations.GetValueOrDefault("Credit Rating");
 
     private int PersonalInterestPoints => (Investigator.Intelligence.Regular ?? 0) * 2;
     private int PersonalPointsAllocated => _personalAllocations.Values.Sum();
     private int PersonalPointsRemaining => PersonalInterestPoints - PersonalPointsAllocated;
-
-    private IEnumerable<string> PersonalAllocableSkillNames =>
-        Investigator.Skills
-            .Where(s => !string.IsNullOrWhiteSpace(s.Name) &&
-                         !s.Name.Equals("Cthulhu Mythos", StringComparison.OrdinalIgnoreCase))
-            .Select(s => s.Name)
-            .Where(n => string.IsNullOrWhiteSpace(_personalFilter) ||
-                         n.Contains(_personalFilter, StringComparison.OrdinalIgnoreCase))
-            .OrderBy(n => n, StringComparer.OrdinalIgnoreCase);
 
     private int GetSkillCurrentValue(string skillName) =>
         GetSkillBase(skillName) + _allocations.GetValueOrDefault(skillName);

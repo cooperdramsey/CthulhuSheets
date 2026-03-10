@@ -212,152 +212,40 @@
         }
     </div>
 
-    @* ── Skill point allocation ───────────────────── *@
+    @* ── Point pool summary ────────────────────────── *@
     @if (IsOccupationConfirmed)
     {
-        <div class="allocation-section">
-            <div class="allocation-header">
-                <MudText Typo="Typo.h6">Allocate Occupation Skill Points</MudText>
+        <div class="pool-summary">
+            <div class="pool-summary-row">
+                <MudIcon Icon="@Icons.Material.Filled.Star" Size="Size.Small" Color="Color.Primary" />
+                <MudText Typo="Typo.body2">
+                    <strong>Occupation:</strong> @SkillPointsFormula = @OccupationSkillPoints
+                </MudText>
                 <MudChip T="string" Size="Size.Small"
                          Color="@(PointsRemaining == 0 ? Color.Success : PointsRemaining < 0 ? Color.Error : Color.Warning)">
-                    @PointsRemaining / @OccupationSkillPoints remaining
+                    @PointsRemaining remaining
                 </MudChip>
             </div>
-
-            <div class="allocation-grid">
-                <span class="allocation-col-header">Skill</span>
-                <span class="allocation-col-header allocation-col-center">Base</span>
-                <span class="allocation-col-header allocation-col-center">Points</span>
-                <span class="allocation-col-header allocation-col-center">Total</span>
-
-                @foreach (var skillName in AllocableSkillNames)
-                {
-                    var name = skillName;
-                    var baseVal = GetSkillBase(name);
-                    var alloc = _allocations.GetValueOrDefault(name);
-                    var total = baseVal + alloc;
-                    var isCR = name.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase);
-                    var capVal = isCR ? (_selectedOccupation?.CreditRatingMax ?? 99) : 75;
-
-                    <div class="allocation-skill-label">
-                        <MudText Typo="Typo.body2">@name</MudText>
-                        @if (isCR)
-                        {
-                            <MudText Typo="Typo.caption" Color="Color.Secondary">
-                                @(_selectedOccupation!.CreditRatingMin)–@(_selectedOccupation!.CreditRatingMax)% required
-                            </MudText>
-                        }
-                    </div>
-                    <MudText Typo="Typo.body2" Align="Align.Center">@baseVal</MudText>
-                    <MudNumericField T="int"
-                                     Value="alloc"
-                                     ValueChanged="@(v => OnAllocationChanged(name, v))"
-                                     Min="0"
-                                     Max="@GetMaxAllocation(name)"
-                                     Variant="Variant.Outlined"
-                                     Margin="Margin.Dense"
-                                     HideSpinButtons="true"
-                                     Class="allocation-input" />
-                    <MudText Typo="Typo.body2" Align="Align.Center"
-                             Color="@(total > capVal ? Color.Error : Color.Default)">
-                        <strong>@total</strong>
-                    </MudText>
-                }
-            </div>
-
-            @if (PointsRemaining > 0)
-            {
-                <MudText Typo="Typo.caption" Color="Color.Warning">
-                    You have @PointsRemaining occupation skill points remaining to allocate.
+            <div class="pool-summary-row">
+                <MudIcon Icon="@Icons.Material.Filled.Person" Size="Size.Small" Color="Color.Secondary" />
+                <MudText Typo="Typo.body2">
+                    <strong>Personal Interest:</strong> INT × 2 = @PersonalInterestPoints
                 </MudText>
-            }
+                <MudChip T="string" Size="Size.Small"
+                         Color="@(PersonalPointsRemaining == 0 ? Color.Success : PersonalPointsRemaining < 0 ? Color.Error : Color.Warning)">
+                    @PersonalPointsRemaining remaining
+                </MudChip>
+            </div>
             @if (PointsRemaining < 0)
             {
                 <MudText Typo="Typo.caption" Color="Color.Error">
-                    Over-allocated by @Math.Abs(PointsRemaining) points.
-                </MudText>
-            }
-            @if (CreditRatingTotal < (_selectedOccupation?.CreditRatingMin ?? 0))
-            {
-                <MudText Typo="Typo.caption" Color="Color.Warning">
-                    Credit Rating is @CreditRatingTotal% — minimum @(_selectedOccupation!.CreditRatingMin)% required (can also allocate from personal interest).
-                </MudText>
-            }
-        </div>
-
-        <div class="allocation-section">
-            <div class="allocation-header">
-                <MudText Typo="Typo.h6">Personal Interest Points</MudText>
-                <div class="allocation-header-info">
-                    <MudText Typo="Typo.body2" Color="Color.Secondary">INT × 2 = @PersonalInterestPoints</MudText>
-                    <MudChip T="string" Size="Size.Small"
-                             Color="@(PersonalPointsRemaining == 0 ? Color.Success : PersonalPointsRemaining < 0 ? Color.Error : Color.Warning)">
-                        @PersonalPointsRemaining / @PersonalInterestPoints remaining
-                    </MudChip>
-                </div>
-            </div>
-
-            <MudTextField @bind-Value="_personalFilter"
-                          Placeholder="Filter skills..."
-                          Variant="Variant.Outlined"
-                          Margin="Margin.Dense"
-                          Adornment="Adornment.Start"
-                          AdornmentIcon="@Icons.Material.Filled.Search"
-                          Class="allocation-filter"
-                          Immediate="true"
-                          Clearable="true" />
-
-            <div class="allocation-grid">
-                <span class="allocation-col-header">Skill</span>
-                <span class="allocation-col-header allocation-col-center">Current</span>
-                <span class="allocation-col-header allocation-col-center">Points</span>
-                <span class="allocation-col-header allocation-col-center">Total</span>
-
-                @foreach (var skillName in PersonalAllocableSkillNames)
-                {
-                    var name = skillName;
-                    var currentVal = GetSkillCurrentValue(name);
-                    var alloc = _personalAllocations.GetValueOrDefault(name);
-                    var total = currentVal + alloc;
-                    var isCR = name.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase);
-                    var capVal = isCR ? (_selectedOccupation?.CreditRatingMax ?? 99) : 75;
-
-                    <div class="allocation-skill-label">
-                        <MudText Typo="Typo.body2">@name</MudText>
-                        @if (isCR)
-                        {
-                            <MudText Typo="Typo.caption" Color="Color.Secondary">
-                                @(_selectedOccupation!.CreditRatingMin)–@(_selectedOccupation!.CreditRatingMax)% required
-                            </MudText>
-                        }
-                    </div>
-                    <MudText Typo="Typo.body2" Align="Align.Center">@currentVal</MudText>
-                    <MudNumericField T="int"
-                                     Value="alloc"
-                                     ValueChanged="@(v => OnPersonalAllocationChanged(name, v))"
-                                     Min="0"
-                                     Max="@GetMaxPersonalAllocation(name)"
-                                     Variant="Variant.Outlined"
-                                     Margin="Margin.Dense"
-                                     HideSpinButtons="true"
-                                     Class="allocation-input" />
-                    <MudText Typo="Typo.body2" Align="Align.Center"
-                             Color="@(total > capVal ? Color.Error : Color.Default)">
-                        <strong>@total</strong>
-                    </MudText>
-                }
-            </div>
-
-            @if (PersonalPointsRemaining > 0)
-            {
-                <MudText Typo="Typo.caption" Color="Color.Warning">
-                    You have @PersonalPointsRemaining personal interest points remaining to allocate.
+                    Occupation points over-allocated by @Math.Abs(PointsRemaining).
                 </MudText>
             }
             @if (PersonalPointsRemaining < 0)
             {
                 <MudText Typo="Typo.caption" Color="Color.Error">
-                    Over-allocated by @Math.Abs(PersonalPointsRemaining) points.
+                    Personal points over-allocated by @Math.Abs(PersonalPointsRemaining).
                 </MudText>
             }
             @if (CreditRatingGrandTotal < (_selectedOccupation?.CreditRatingMin ?? 0))
@@ -400,56 +288,139 @@
 
     @{
         var skillList = FilteredSkills.ToList();
-        var half = (skillList.Count + 1) / 2;
-        var leftSkills = skillList.Take(half).ToList();
-        var rightSkills = skillList.Skip(half).ToList();
     }
 
     @if (skillList.Count > 0)
     {
-        <div class="skill-step-columns">
-            @foreach (var columnSkills in new[] { leftSkills, rightSkills })
-            {
-                <div class="skill-step-grid">
-                    <span class="skill-step-col-header">Skill</span>
-                    <span class="skill-step-col-header skill-step-col-center">Base</span>
-                    <span></span>
-                    @foreach (var skill in columnSkills)
+        @if (IsOccupationConfirmed)
+        {
+            <div class="skill-step-grid-inline">
+                <span class="skill-step-col-header">Skill</span>
+                <span class="skill-step-col-header skill-step-col-center">Base</span>
+                <span class="skill-step-col-header skill-step-col-center">Occ.</span>
+                <span class="skill-step-col-header skill-step-col-center">Personal</span>
+                <span class="skill-step-col-header skill-step-col-center">Total</span>
+                <span></span>
+
+                @foreach (var skill in skillList)
+                {
+                    var isOccSkill = IsOccupationSkill(skill);
+                    var isCthulhu = skill.Name.Equals("Cthulhu Mythos", StringComparison.OrdinalIgnoreCase);
+                    var occAlloc = _allocations.GetValueOrDefault(skill.Name);
+                    var personalAlloc = _personalAllocations.GetValueOrDefault(skill.Name);
+                    var total = skill.BaseValue + occAlloc + personalAlloc;
+                    var isCR = skill.Name.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase);
+                    var capVal = isCR ? (_selectedOccupation?.CreditRatingMax ?? 99) : 75;
+
+                    <div class="skill-step-name-cell @(isOccSkill ? "skill-step-occupation" : "")">
+                        <MudTextField @bind-Value="skill.Name"
+                                      Variant="Variant.Outlined"
+                                      Margin="Margin.Dense" />
+                        @if (isOccSkill)
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.Star"
+                                     Size="Size.Small"
+                                     Color="Color.Primary"
+                                     Class="skill-step-star" />
+                        }
+                    </div>
+                    <MudNumericField T="int"
+                                     @bind-Value="skill.BaseValue"
+                                     Variant="Variant.Outlined"
+                                     Margin="Margin.Dense"
+                                     HideSpinButtons="true" />
+                    @if (isOccSkill && !isCthulhu)
                     {
-                        var isOccSkill = IsOccupationSkill(skill);
-                        <div class="skill-step-name-cell @(isOccSkill ? "skill-step-occupation" : "")">
-                            <MudTextField @bind-Value="skill.Name"
-                                          Variant="Variant.Outlined"
-                                          Margin="Margin.Dense" />
-                            @if (_isCustomOccupation && !_customOccupationConfirmed)
-                            {
-                                <MudIconButton Icon="@(isOccSkill ? Icons.Material.Filled.Star : Icons.Material.Outlined.StarBorder)"
-                                               Size="Size.Small"
-                                               Color="@(isOccSkill ? Color.Primary : Color.Default)"
-                                               OnClick="() => ToggleOccupationSkill(skill)"
-                                               Class="skill-step-star" />
-                            }
-                            else if (isOccSkill)
-                            {
-                                <MudIcon Icon="@Icons.Material.Filled.Star"
-                                         Size="Size.Small"
-                                         Color="Color.Primary"
-                                         Class="skill-step-star" />
-                            }
-                        </div>
                         <MudNumericField T="int"
-                                         @bind-Value="skill.BaseValue"
+                                         Value="occAlloc"
+                                         ValueChanged="@(v => OnAllocationChanged(skill.Name, v))"
+                                         Min="0"
+                                         Max="@GetMaxAllocation(skill.Name)"
                                          Variant="Variant.Outlined"
                                          Margin="Margin.Dense"
-                                         HideSpinButtons="true" />
-                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                                       Color="Color.Error"
-                                       Size="Size.Small"
-                                       OnClick="() => RemoveSkill(skill)" />
+                                         HideSpinButtons="true"
+                                         Class="allocation-input" />
                     }
-                </div>
-            }
-        </div>
+                    else
+                    {
+                        <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Tertiary">—</MudText>
+                    }
+                    @if (!isCthulhu)
+                    {
+                        <MudNumericField T="int"
+                                         Value="personalAlloc"
+                                         ValueChanged="@(v => OnPersonalAllocationChanged(skill.Name, v))"
+                                         Min="0"
+                                         Max="@GetMaxPersonalAllocation(skill.Name)"
+                                         Variant="Variant.Outlined"
+                                         Margin="Margin.Dense"
+                                         HideSpinButtons="true"
+                                         Class="allocation-input" />
+                    }
+                    else
+                    {
+                        <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Tertiary">—</MudText>
+                    }
+                    <MudText Typo="Typo.body2" Align="Align.Center"
+                             Color="@(total > capVal ? Color.Error : Color.Default)">
+                        <strong>@total</strong>
+                    </MudText>
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                   Color="Color.Error"
+                                   Size="Size.Small"
+                                   OnClick="() => RemoveSkill(skill)" />
+                }
+            </div>
+        }
+        else
+        {
+            var half = (skillList.Count + 1) / 2;
+            var leftSkills = skillList.Take(half).ToList();
+            var rightSkills = skillList.Skip(half).ToList();
+            <div class="skill-step-columns">
+                @foreach (var columnSkills in new[] { leftSkills, rightSkills })
+                {
+                    <div class="skill-step-grid">
+                        <span class="skill-step-col-header">Skill</span>
+                        <span class="skill-step-col-header skill-step-col-center">Base</span>
+                        <span></span>
+                        @foreach (var skill in columnSkills)
+                        {
+                            var isOccSkill = IsOccupationSkill(skill);
+                            <div class="skill-step-name-cell @(isOccSkill ? "skill-step-occupation" : "")">
+                                <MudTextField @bind-Value="skill.Name"
+                                              Variant="Variant.Outlined"
+                                              Margin="Margin.Dense" />
+                                @if (_isCustomOccupation && !_customOccupationConfirmed)
+                                {
+                                    <MudIconButton Icon="@(isOccSkill ? Icons.Material.Filled.Star : Icons.Material.Outlined.StarBorder)"
+                                                   Size="Size.Small"
+                                                   Color="@(isOccSkill ? Color.Primary : Color.Default)"
+                                                   OnClick="() => ToggleOccupationSkill(skill)"
+                                                   Class="skill-step-star" />
+                                }
+                                else if (isOccSkill)
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.Star"
+                                             Size="Size.Small"
+                                             Color="Color.Primary"
+                                             Class="skill-step-star" />
+                                }
+                            </div>
+                            <MudNumericField T="int"
+                                             @bind-Value="skill.BaseValue"
+                                             Variant="Variant.Outlined"
+                                             Margin="Margin.Dense"
+                                             HideSpinButtons="true" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                           Color="Color.Error"
+                                           Size="Size.Small"
+                                           OnClick="() => RemoveSkill(skill)" />
+                        }
+                    </div>
+                }
+            </div>
+        }
     }
     else
     {
