@@ -56,6 +56,50 @@
     margin-top: 4px;
 }
 
+.occupation-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ── Custom occupation builder ───────────────────── */
+
+.custom-credit-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.custom-credit-separator {
+    padding-top: 4px;
+}
+
+.custom-formula-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.custom-formula-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.custom-formula-select {
+    max-width: 120px;
+}
+
+.custom-formula-multiplier {
+    max-width: 70px;
+}
+
+.occupation-confirmed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 /* ── Toolbar ──────────────────────────────────────── */
 
 .skills-step-toolbar {

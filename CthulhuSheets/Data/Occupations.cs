@@ -196,14 +196,6 @@ public static class Occupations
             CreditRatingMin = 9, CreditRatingMax = 30,
             SuggestedContacts = ["Military", "Veterans", "Suppliers"],
             SkillPointFormulas = [new("EDU", 2), new("DEX", 2)]
-        },
-        new()
-        {
-            Name = "Tribe Member",
-            Skills = ["Climb", "Fighting (Brawl)", "Listen", "Natural World", "Occult", "Spot Hidden", "Survival", "Swim"],
-            CreditRatingMin = 0, CreditRatingMax = 15,
-            SuggestedContacts = ["Tribe members", "Elders"],
-            SkillPointFormulas = [new("EDU", 2), new("DEX", 2)]
-        },
+        }
     ];
 }

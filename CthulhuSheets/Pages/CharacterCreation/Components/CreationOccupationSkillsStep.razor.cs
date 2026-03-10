@@ -12,6 +12,21 @@ public partial class CreationOccupationSkillsStep
     private Occupation? _selectedOccupation;
     private HashSet<string> _occupationSkillNames = new(StringComparer.OrdinalIgnoreCase);
 
+    // Custom occupation fields
+    private bool _isCustomOccupation;
+    private string _customOccupationName = string.Empty;
+    private int _customCreditRatingMin;
+    private int _customCreditRatingMax = 50;
+    private List<SkillPointFormula> _customFormulas = [new("EDU", 2), new("DEX", 2)];
+    private bool _customOccupationConfirmed;
+    private static readonly string[] AvailableCharacteristics = ["STR", "CON", "SIZ", "DEX", "APP", "INT", "POW", "EDU"];
+
+    private bool CanConfirmCustomOccupation =>
+        !string.IsNullOrWhiteSpace(_customOccupationName) &&
+        _occupationSkillNames.Count == 8 &&
+        _customCreditRatingMax >= _customCreditRatingMin &&
+        _customFormulas.Count > 0;
+
     private IEnumerable<Skill> FilteredSkills =>
         (string.IsNullOrWhiteSpace(_skillFilter)
             ? Investigator.Skills
@@ -66,6 +81,107 @@ public partial class CreationOccupationSkillsStep
         _selectedOccupation = null;
         Investigator.Occupation = null;
         _occupationSkillNames.Clear();
+    }
+
+    // ── Custom occupation ────────────────────────────
+
+    private void ToggleCustomOccupation()
+    {
+        _isCustomOccupation = !_isCustomOccupation;
+        _customOccupationConfirmed = false;
+        ClearOccupation();
+        if (_isCustomOccupation)
+        {
+            _customOccupationName = string.Empty;
+            _customCreditRatingMin = 0;
+            _customCreditRatingMax = 50;
+            _customFormulas = [new("EDU", 2), new("DEX", 2)];
+            SyncCustomOccupation();
+        }
+    }
+
+    private void SyncCustomOccupation()
+    {
+        if (!_isCustomOccupation) return;
+        _selectedOccupation = new Occupation
+        {
+            Name = _customOccupationName,
+            Skills = [.. _occupationSkillNames],
+            CreditRatingMin = _customCreditRatingMin,
+            CreditRatingMax = _customCreditRatingMax,
+            SuggestedContacts = [],
+            SkillPointFormulas = [.. _customFormulas]
+        };
+        Investigator.Occupation = _customOccupationName;
+    }
+
+    private void ToggleOccupationSkill(Skill skill)
+    {
+        if (!_isCustomOccupation || string.IsNullOrWhiteSpace(skill.Name)) return;
+
+        if (!_occupationSkillNames.Remove(skill.Name))
+        {
+            if (_occupationSkillNames.Count < 8)
+                _occupationSkillNames.Add(skill.Name);
+        }
+        SyncCustomOccupation();
+    }
+
+    private void OnCustomNameChanged(string value)
+    {
+        _customOccupationName = value;
+        SyncCustomOccupation();
+    }
+
+    private void OnCustomCreditMinChanged(int value)
+    {
+        _customCreditRatingMin = value;
+        SyncCustomOccupation();
+    }
+
+    private void OnCustomCreditMaxChanged(int value)
+    {
+        _customCreditRatingMax = value;
+        SyncCustomOccupation();
+    }
+
+    private void OnFormulaCharacteristicChanged(int index, string value)
+    {
+        _customFormulas[index] = new(value, _customFormulas[index].Multiplier);
+        SyncCustomOccupation();
+    }
+
+    private void OnFormulaMultiplierChanged(int index, int value)
+    {
+        _customFormulas[index] = new(_customFormulas[index].Characteristic, value);
+        SyncCustomOccupation();
+    }
+
+    private void AddFormulaSlot()
+    {
+        _customFormulas.Add(new("EDU", 2));
+        SyncCustomOccupation();
+    }
+
+    private void RemoveFormulaSlot(int index)
+    {
+        if (_customFormulas.Count > 1)
+        {
+            _customFormulas.RemoveAt(index);
+            SyncCustomOccupation();
+        }
+    }
+
+    private void ConfirmCustomOccupation()
+    {
+        if (!CanConfirmCustomOccupation) return;
+        SyncCustomOccupation();
+        _customOccupationConfirmed = true;
+    }
+
+    private void EditCustomOccupation()
+    {
+        _customOccupationConfirmed = false;
     }
 
     // ── Skill management ─────────────────────────────
