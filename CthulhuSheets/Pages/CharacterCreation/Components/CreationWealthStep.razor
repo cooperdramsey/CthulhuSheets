@@ -1,6 +1,98 @@
-<div>
-    <MudText Typo="Typo.h5" GutterBottom="true">Wealth</MudText>
-    <MudText Typo="Typo.body2" Color="Color.Secondary">
-        Set your investigator's starting financial situation.
-    </MudText>
+<div class="wealth-step">
+
+    <div>
+        <MudText Typo="Typo.h5" GutterBottom="true">Wealth</MudText>
+        <MudText Typo="Typo.body2" Color="Color.Secondary">
+            Your investigator's financial situation is determined by their Credit Rating skill.
+        </MudText>
+    </div>
+
+    @* ── Credit Rating summary ────────────────────── *@
+    <div class="wealth-credit-summary">
+        <MudIcon Icon="@Icons.Material.Filled.CreditCard" Size="Size.Small" Color="Color.Primary" />
+        <MudText Typo="Typo.body1">
+            <strong>Credit Rating: @CreditRating%</strong> — <em>@CurrentTier.Label</em>
+        </MudText>
+    </div>
+
+    @* ── Wealth tier table ────────────────────────── *@
+    <MudSimpleTable Dense="true" Hover="true" Outlined="true" Class="wealth-table">
+        <thead>
+            <tr>
+                <th>Credit Rating</th>
+                <th>Living Standard</th>
+                <th>Spending Level</th>
+                <th>Cash</th>
+                <th>Assets</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tier in AllTiers)
+            {
+                var isActive = tier == CurrentTier;
+                <tr class="@(isActive ? "wealth-tier-active" : "")">
+                    <td>@FormatCrRange(tier)</td>
+                    <td>@tier.Label</td>
+                    <td>@FormatDollar(tier.SpendingLevel)</td>
+                    <td>@FormatDollar(tier.Cash)</td>
+                    <td>@FormatDollar(tier.Assets)</td>
+                </tr>
+            }
+        </tbody>
+    </MudSimpleTable>
+
+    @* ── Derived values ───────────────────────────── *@
+    <div class="wealth-derived">
+        <MudNumericField T="int?"
+                         Value="Investigator.Wealth.SpendingLevel"
+                         Label="Spending Level ($)"
+                         Variant="Variant.Outlined"
+                         ReadOnly="true"
+                         HideSpinButtons="true" />
+        <MudNumericField T="int?"
+                         Value="Investigator.Wealth.Cash"
+                         Label="Cash on Hand ($)"
+                         Variant="Variant.Outlined"
+                         ReadOnly="true"
+                         HideSpinButtons="true" />
+    </div>
+
+    @* ── Assets ───────────────────────────────────── *@
+    <div class="wealth-assets-section">
+        <div class="wealth-assets-header">
+            <MudText Typo="Typo.h6">Assets</MudText>
+            <MudIconButton Icon="@Icons.Material.Filled.Add"
+                           Color="Color.Primary"
+                           Size="Size.Small"
+                           OnClick="AddAsset" />
+        </div>
+        <MudText Typo="Typo.body2" Color="Color.Secondary">
+            Total asset value up to @FormatDollar(CurrentTier.Assets). Describe your investigator's property, investments, etc.
+        </MudText>
+        @if (Investigator.Wealth.Assets.Count == 0)
+        {
+            <MudText Typo="Typo.body2" Color="Color.Tertiary" Class="mt-2">
+                No assets added yet. Click + to add.
+            </MudText>
+        }
+        else
+        {
+            @for (int i = 0; i < Investigator.Wealth.Assets.Count; i++)
+            {
+                var index = i;
+                <div class="asset-row">
+                    <MudTextField Value="Investigator.Wealth.Assets[index]"
+                                  ValueChanged="(string v) => Investigator.Wealth.Assets[index] = v"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense"
+                                  Placeholder="e.g. House in Arkham" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                   Color="Color.Error"
+                                   Size="Size.Small"
+                                   OnClick="() => RemoveAsset(index)" />
+                </div>
+            }
+        }
+    </div>
+
 </div>

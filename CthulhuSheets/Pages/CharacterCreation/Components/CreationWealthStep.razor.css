@@ -1,0 +1,64 @@
+/* ── Wealth creation step ─────────────────────────── */
+
+.wealth-step {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 900px;
+}
+
+/* ── Credit rating banner ────────────────────────── */
+
+.wealth-credit-summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--mud-palette-divider);
+    border-radius: 12px;
+    padding: 14px 20px;
+}
+
+/* ── Tier table ──────────────────────────────────── */
+
+::deep .wealth-tier-active td {
+    background-color: rgba(var(--mud-palette-primary-rgb), 0.12);
+    font-weight: 600;
+}
+
+/* ── Derived fields ──────────────────────────────── */
+
+.wealth-derived {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* ── Assets section ──────────────────────────────── */
+
+.wealth-assets-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.wealth-assets-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.asset-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.asset-row > :first-child {
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .wealth-derived {
+        grid-template-columns: 1fr;
+    }
+}

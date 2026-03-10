@@ -71,7 +71,24 @@ public partial class CreationOccupationSkillsStep
         CreditRatingGrandTotal >= (_selectedOccupation?.CreditRatingMin ?? 0) &&
         CreditRatingGrandTotal <= (_selectedOccupation?.CreditRatingMax ?? 99);
 
-    public bool Validate() => IsOccupationConfirmed && IsAllocationValid;
+    public bool Validate()
+    {
+        if (!(IsOccupationConfirmed && IsAllocationValid))
+            return false;
+
+        FinalizeSkills();
+        return true;
+    }
+
+    private void FinalizeSkills()
+    {
+        foreach (var skill in Investigator.Skills)
+        {
+            var occ = _allocations.GetValueOrDefault(skill.Name);
+            var personal = _personalAllocations.GetValueOrDefault(skill.Name);
+            skill.Regular = skill.BaseValue + occ + personal;
+        }
+    }
 
     protected override void OnParametersSet()
     {
