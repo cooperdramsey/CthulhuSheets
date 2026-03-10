@@ -328,7 +328,8 @@
                                      @bind-Value="skill.BaseValue"
                                      Variant="Variant.Outlined"
                                      Margin="Margin.Dense"
-                                     HideSpinButtons="true" />
+                                     HideSpinButtons="true"
+                                     ReadOnly="true" />
                     @if (isOccSkill && !isCthulhu)
                     {
                         <MudNumericField T="int"
@@ -411,7 +412,8 @@
                                              @bind-Value="skill.BaseValue"
                                              Variant="Variant.Outlined"
                                              Margin="Margin.Dense"
-                                             HideSpinButtons="true" />
+                                             HideSpinButtons="true"
+                                             ReadOnly="true" />
                             <MudIconButton Icon="@Icons.Material.Filled.Delete"
                                            Color="Color.Error"
                                            Size="Size.Small"
