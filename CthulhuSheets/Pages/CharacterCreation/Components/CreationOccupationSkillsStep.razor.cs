@@ -89,6 +89,8 @@ public partial class CreationOccupationSkillsStep
         CreditRatingGrandTotal >= (_selectedOccupation?.CreditRatingMin ?? 0) &&
         CreditRatingGrandTotal <= (_selectedOccupation?.CreditRatingMax ?? 99);
 
+    public bool Validate() => IsOccupationConfirmed && IsAllocationValid;
+
     protected override void OnParametersSet()
     {
         if (!_defaultsLoaded && Investigator.Skills.Count == 0)

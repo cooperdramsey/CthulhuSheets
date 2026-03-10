@@ -16,6 +16,7 @@ public partial class CharacterCreation
 
     private CreationProfileStep? _profileStep;
     private CreationCharacteristicsStep? _characteristicsStep;
+    private CreationOccupationSkillsStep? _occupationSkillsStep;
 
     private void GoBack()
     {
@@ -28,6 +29,9 @@ public partial class CharacterCreation
             return;
 
         if (_currentStep == 1 && !(_characteristicsStep?.Validate() ?? false))
+            return;
+
+        if (_currentStep == 2 && !(_occupationSkillsStep?.Validate() ?? false))
             return;
 
         if (_currentStep < _steps.Length - 1) _currentStep++;
