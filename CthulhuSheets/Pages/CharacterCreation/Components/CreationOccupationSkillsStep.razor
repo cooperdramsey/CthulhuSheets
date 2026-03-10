@@ -9,6 +9,65 @@
         </div>
     </div>
 
+    @* ── Occupation selection ─────────────────────── *@
+    <div class="occupation-section">
+        <MudText Typo="Typo.h6">Occupation</MudText>
+
+        <div class="occupation-picker-row">
+            <MudAutocomplete T="Occupation"
+                             Value="_selectedOccupation"
+                             ValueChanged="OnOccupationSelected"
+                             SearchFunc="@((string query, CancellationToken _) =>
+                                 Task.FromResult(Data.Occupations.All
+                                     .Where(o => string.IsNullOrWhiteSpace(query) || o.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
+                                     .AsEnumerable()))"
+                             ToStringFunc="@(o => o?.Name ?? string.Empty)"
+                             Label="Select Occupation"
+                             Variant="Variant.Outlined"
+                             Margin="Margin.Dense"
+                             Dense="true"
+                             Class="occupation-autocomplete" />
+            @if (_selectedOccupation is not null)
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.Clear"
+                               Size="Size.Small"
+                               Color="Color.Default"
+                               OnClick="ClearOccupation" />
+            }
+        </div>
+
+        @if (_selectedOccupation is not null)
+        {
+            <div class="occupation-details">
+                <div class="occupation-detail-row">
+                    <MudIcon Icon="@Icons.Material.Filled.Star" Size="Size.Small" Color="Color.Primary" />
+                    <MudText Typo="Typo.body2">
+                        <strong>Skill Points:</strong> @SkillPointsFormula = <strong>@OccupationSkillPoints</strong>
+                    </MudText>
+                </div>
+                <div class="occupation-detail-row">
+                    <MudIcon Icon="@Icons.Material.Filled.CreditCard" Size="Size.Small" Color="Color.Primary" />
+                    <MudText Typo="Typo.body2">
+                        <strong>Credit Rating:</strong> @_selectedOccupation.CreditRatingMin–@_selectedOccupation.CreditRatingMax%
+                    </MudText>
+                </div>
+                <div class="occupation-detail-row">
+                    <MudIcon Icon="@Icons.Material.Filled.People" Size="Size.Small" Color="Color.Primary" />
+                    <MudText Typo="Typo.body2">
+                        <strong>Contacts:</strong> @string.Join(", ", _selectedOccupation.SuggestedContacts)
+                    </MudText>
+                </div>
+                <div class="occupation-skills-chips">
+                    @foreach (var skillName in _selectedOccupation.Skills)
+                    {
+                        <MudChip T="string" Size="Size.Small" Variant="Variant.Filled" Color="Color.Primary">@skillName</MudChip>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    @* ── Skills list ──────────────────────────────── *@
     <div class="skills-step-toolbar">
         <MudTextField @bind-Value="_skillFilter"
                       Placeholder="Filter skills..."
@@ -49,9 +108,19 @@
                     <span></span>
                     @foreach (var skill in columnSkills)
                     {
-                        <MudTextField @bind-Value="skill.Name"
-                                      Variant="Variant.Outlined"
-                                      Margin="Margin.Dense" />
+                        var isOccSkill = IsOccupationSkill(skill);
+                        <div class="skill-step-name-cell @(isOccSkill ? "skill-step-occupation" : "")">
+                            <MudTextField @bind-Value="skill.Name"
+                                          Variant="Variant.Outlined"
+                                          Margin="Margin.Dense" />
+                            @if (isOccSkill)
+                            {
+                                <MudIcon Icon="@Icons.Material.Filled.Star"
+                                         Size="Size.Small"
+                                         Color="Color.Primary"
+                                         Class="skill-step-star" />
+                            }
+                        </div>
                         <MudNumericField T="int"
                                          @bind-Value="skill.BaseValue"
                                          Variant="Variant.Outlined"

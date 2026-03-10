@@ -1,3 +1,5 @@
+using CthulhuSheets.Data;
+
 namespace CthulhuSheets.Pages.CharacterCreation.Components;
 
 public partial class CreationOccupationSkillsStep
@@ -7,12 +9,21 @@ public partial class CreationOccupationSkillsStep
 
     private string _skillFilter = string.Empty;
     private bool _defaultsLoaded;
+    private Occupation? _selectedOccupation;
+    private HashSet<string> _occupationSkillNames = new(StringComparer.OrdinalIgnoreCase);
 
     private IEnumerable<Skill> FilteredSkills =>
         (string.IsNullOrWhiteSpace(_skillFilter)
             ? Investigator.Skills
             : Investigator.Skills.Where(s => s.Name.Contains(_skillFilter, StringComparison.OrdinalIgnoreCase)))
         .OrderBy(s => s.Name);
+
+    private int OccupationSkillPoints => _selectedOccupation?.ComputeSkillPoints(Investigator) ?? 0;
+
+    private string SkillPointsFormula =>
+        _selectedOccupation is null
+            ? string.Empty
+            : string.Join(" + ", _selectedOccupation.SkillPointFormulas.Select(f => $"{f.Characteristic} × {f.Multiplier}"));
 
     protected override void OnParametersSet()
     {
@@ -21,7 +32,43 @@ public partial class CreationOccupationSkillsStep
             PopulateDefaults();
             _defaultsLoaded = true;
         }
+
+        // Restore selection if occupation was already set on investigator
+        if (_selectedOccupation is null && !string.IsNullOrEmpty(Investigator.Occupation))
+        {
+            var match = Occupations.All.FirstOrDefault(
+                o => o.Name.Equals(Investigator.Occupation, StringComparison.OrdinalIgnoreCase));
+            if (match is not null)
+                ApplyOccupation(match);
+        }
     }
+
+    private bool IsOccupationSkill(Skill skill) =>
+        _occupationSkillNames.Contains(skill.Name);
+
+    // ── Occupation selection ─────────────────────────
+
+    private void OnOccupationSelected(Occupation? occupation)
+    {
+        if (occupation is null) return;
+        ApplyOccupation(occupation);
+    }
+
+    private void ApplyOccupation(Occupation occupation)
+    {
+        _selectedOccupation = occupation;
+        Investigator.Occupation = occupation.Name;
+        _occupationSkillNames = new HashSet<string>(occupation.Skills, StringComparer.OrdinalIgnoreCase);
+    }
+
+    private void ClearOccupation()
+    {
+        _selectedOccupation = null;
+        Investigator.Occupation = null;
+        _occupationSkillNames.Clear();
+    }
+
+    // ── Skill management ─────────────────────────────
 
     private void AddSkill()
     {
@@ -59,7 +106,6 @@ public partial class CreationOccupationSkillsStep
         }
     }
 
-    // TODO combine this with default skills from investigator to centralize.
     private static readonly (string Name, int BaseValue)[] DefaultSkills =
     [
         ("Accounting",               5),
@@ -69,8 +115,7 @@ public partial class CreationOccupationSkillsStep
         ("Art/Craft",                5),
         ("Charm",                   15),
         ("Climb",                   20),
-        ("Computer Use",             5),
-        ("Credit Rating",           25),
+        ("Credit Rating",            0),
         ("Cthulhu Mythos",           0),
         ("Disguise",                 5),
         ("Dodge",                    0),
@@ -95,7 +140,6 @@ public partial class CreationOccupationSkillsStep
         ("Natural World",           10),
         ("Navigate",                10),
         ("Occult",                   5),
-        ("Operate Heavy Machinery",  1),
         ("Persuade",                10),
         ("Pilot",                    1),
         ("Psychoanalysis",           1),

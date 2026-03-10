@@ -15,6 +15,47 @@
     align-items: flex-end;
 }
 
+/* ── Occupation section ───────────────────────────── */
+
+.occupation-section {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border: 1px solid var(--mud-palette-divider);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.occupation-picker-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.occupation-autocomplete {
+    flex: 1;
+    max-width: 340px;
+}
+
+.occupation-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.occupation-detail-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.occupation-skills-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+}
+
 /* ── Toolbar ──────────────────────────────────────── */
 
 .skills-step-toolbar {
@@ -55,4 +96,24 @@
 
 .skill-step-col-center {
     text-align: center;
+}
+
+/* ── Occupation skill highlight ───────────────────── */
+
+.skill-step-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.skill-step-occupation {
+    position: relative;
+}
+
+.skill-step-occupation ::deep .mud-input-outlined .mud-input-outlined-border {
+    border-color: var(--mud-palette-primary);
+}
+
+.skill-step-star {
+    flex-shrink: 0;
 }
