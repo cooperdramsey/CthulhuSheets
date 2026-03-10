@@ -212,6 +212,80 @@
         }
     </div>
 
+    @* ── Skill point allocation ───────────────────── *@
+    @if (IsOccupationConfirmed)
+    {
+        <div class="allocation-section">
+            <div class="allocation-header">
+                <MudText Typo="Typo.h6">Allocate Occupation Skill Points</MudText>
+                <MudChip T="string" Size="Size.Small"
+                         Color="@(PointsRemaining == 0 ? Color.Success : PointsRemaining < 0 ? Color.Error : Color.Warning)">
+                    @PointsRemaining / @OccupationSkillPoints remaining
+                </MudChip>
+            </div>
+
+            <div class="allocation-grid">
+                <span class="allocation-col-header">Skill</span>
+                <span class="allocation-col-header allocation-col-center">Base</span>
+                <span class="allocation-col-header allocation-col-center">Points</span>
+                <span class="allocation-col-header allocation-col-center">Total</span>
+
+                @foreach (var skillName in AllocableSkillNames)
+                {
+                    var name = skillName;
+                    var baseVal = GetSkillBase(name);
+                    var alloc = _allocations.GetValueOrDefault(name);
+                    var total = baseVal + alloc;
+                    var isCR = name.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase);
+                    var capVal = isCR ? (_selectedOccupation?.CreditRatingMax ?? 99) : 75;
+
+                    <div class="allocation-skill-label">
+                        <MudText Typo="Typo.body2">@name</MudText>
+                        @if (isCR)
+                        {
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">
+                                @(_selectedOccupation!.CreditRatingMin)–@(_selectedOccupation!.CreditRatingMax)% required
+                            </MudText>
+                        }
+                    </div>
+                    <MudText Typo="Typo.body2" Align="Align.Center">@baseVal</MudText>
+                    <MudNumericField T="int"
+                                     Value="alloc"
+                                     ValueChanged="@(v => OnAllocationChanged(name, v))"
+                                     Min="0"
+                                     Max="@GetMaxAllocation(name)"
+                                     Variant="Variant.Outlined"
+                                     Margin="Margin.Dense"
+                                     HideSpinButtons="true"
+                                     Class="allocation-input" />
+                    <MudText Typo="Typo.body2" Align="Align.Center"
+                             Color="@(total > capVal ? Color.Error : Color.Default)">
+                        <strong>@total</strong>
+                    </MudText>
+                }
+            </div>
+
+            @if (PointsRemaining > 0)
+            {
+                <MudText Typo="Typo.caption" Color="Color.Warning">
+                    You have @PointsRemaining occupation skill points remaining to allocate.
+                </MudText>
+            }
+            @if (PointsRemaining < 0)
+            {
+                <MudText Typo="Typo.caption" Color="Color.Error">
+                    Over-allocated by @Math.Abs(PointsRemaining) points.
+                </MudText>
+            }
+            @if (CreditRatingTotal < (_selectedOccupation?.CreditRatingMin ?? 0))
+            {
+                <MudText Typo="Typo.caption" Color="Color.Error">
+                    Credit Rating must be at least @(_selectedOccupation!.CreditRatingMin)% (currently @CreditRatingTotal%).
+                </MudText>
+            }
+        </div>
+    }
+
     @* ── Skills list ──────────────────────────────── *@
     <div class="skills-step-toolbar">
         <MudTextField @bind-Value="_skillFilter"

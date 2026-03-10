@@ -100,6 +100,52 @@
     align-items: center;
 }
 
+/* ── Allocation section ──────────────────────────── */
+
+.allocation-section {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border: 1px solid var(--mud-palette-divider);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.allocation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.allocation-grid {
+    display: grid;
+    grid-template-columns: 2fr 50px 80px 50px;
+    gap: 6px 10px;
+    align-items: center;
+}
+
+.allocation-col-header {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--mud-palette-text-secondary);
+    padding: 0 4px 4px;
+}
+
+.allocation-col-center {
+    text-align: center;
+}
+
+.allocation-skill-label {
+    display: flex;
+    flex-direction: column;
+}
+
+.allocation-input {
+    max-width: 80px;
+}
+
 /* ── Toolbar ──────────────────────────────────────── */
 
 .skills-step-toolbar {

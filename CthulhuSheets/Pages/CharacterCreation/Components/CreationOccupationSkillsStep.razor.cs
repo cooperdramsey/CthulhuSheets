@@ -21,6 +21,9 @@ public partial class CreationOccupationSkillsStep
     private bool _customOccupationConfirmed;
     private static readonly string[] AvailableCharacteristics = ["STR", "CON", "SIZ", "DEX", "APP", "INT", "POW", "EDU"];
 
+    // Allocation state
+    private Dictionary<string, int> _allocations = new(StringComparer.OrdinalIgnoreCase);
+
     private bool CanConfirmCustomOccupation =>
         !string.IsNullOrWhiteSpace(_customOccupationName) &&
         _occupationSkillNames.Count == 8 &&
@@ -39,6 +42,27 @@ public partial class CreationOccupationSkillsStep
         _selectedOccupation is null
             ? string.Empty
             : string.Join(" + ", _selectedOccupation.SkillPointFormulas.Select(f => $"{f.Characteristic} × {f.Multiplier}"));
+
+    // ── Allocation properties ────────────────────────
+
+    private bool IsOccupationConfirmed =>
+        _selectedOccupation is not null && (!_isCustomOccupation || _customOccupationConfirmed);
+
+    private int PointsAllocated => _allocations.Values.Sum();
+    private int PointsRemaining => OccupationSkillPoints - PointsAllocated;
+
+    private IEnumerable<string> AllocableSkillNames =>
+        _allocations.Keys
+            .OrderBy(n => n.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase) ? 0 : 1)
+            .ThenBy(n => n, StringComparer.OrdinalIgnoreCase);
+
+    private int CreditRatingTotal =>
+        GetSkillBase("Credit Rating") + _allocations.GetValueOrDefault("Credit Rating");
+
+    private bool IsAllocationValid =>
+        PointsRemaining == 0 &&
+        CreditRatingTotal >= (_selectedOccupation?.CreditRatingMin ?? 0) &&
+        CreditRatingTotal <= (_selectedOccupation?.CreditRatingMax ?? 99);
 
     protected override void OnParametersSet()
     {
@@ -74,6 +98,7 @@ public partial class CreationOccupationSkillsStep
         _selectedOccupation = occupation;
         Investigator.Occupation = occupation.Name;
         _occupationSkillNames = new HashSet<string>(occupation.Skills, StringComparer.OrdinalIgnoreCase);
+        InitializeAllocations();
     }
 
     private void ClearOccupation()
@@ -81,6 +106,7 @@ public partial class CreationOccupationSkillsStep
         _selectedOccupation = null;
         Investigator.Occupation = null;
         _occupationSkillNames.Clear();
+        _allocations.Clear();
     }
 
     // ── Custom occupation ────────────────────────────
@@ -177,11 +203,53 @@ public partial class CreationOccupationSkillsStep
         if (!CanConfirmCustomOccupation) return;
         SyncCustomOccupation();
         _customOccupationConfirmed = true;
+        InitializeAllocations();
     }
 
     private void EditCustomOccupation()
     {
         _customOccupationConfirmed = false;
+        _allocations.Clear();
+    }
+
+    // ── Allocation management ────────────────────────
+
+    private void InitializeAllocations()
+    {
+        _allocations = new(StringComparer.OrdinalIgnoreCase) { ["Credit Rating"] = 0 };
+        foreach (var name in _occupationSkillNames)
+        {
+            if (name.Equals("Cthulhu Mythos", StringComparison.OrdinalIgnoreCase)) continue;
+            if (name.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase)) continue;
+            _allocations[name] = 0;
+        }
+    }
+
+    private void OnAllocationChanged(string skillName, int value)
+    {
+        _allocations[skillName] = Math.Max(0, value);
+    }
+
+    private int GetSkillBase(string skillName)
+    {
+        var skill = Investigator.Skills.FirstOrDefault(
+            s => s.Name.Equals(skillName, StringComparison.OrdinalIgnoreCase));
+        return skill?.BaseValue ?? 0;
+    }
+
+    private int GetMaxAllocation(string skillName)
+    {
+        var currentAlloc = _allocations.GetValueOrDefault(skillName);
+        var availablePool = currentAlloc + PointsRemaining;
+
+        if (skillName.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase))
+        {
+            var crMax = (_selectedOccupation?.CreditRatingMax ?? 99) - GetSkillBase(skillName);
+            return Math.Max(0, Math.Min(availablePool, crMax));
+        }
+
+        var skillCap = 75 - GetSkillBase(skillName);
+        return Math.Max(0, Math.Min(availablePool, skillCap));
     }
 
     // ── Skill management ─────────────────────────────
