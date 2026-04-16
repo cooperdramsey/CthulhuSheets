@@ -14,7 +14,7 @@ public partial class MainLayout
 
     private Task HandleCreateNewCharacter()
     {
-        Navigation.NavigateTo("/create");
+        Navigation.NavigateTo("/CthulhuSheets/create");
         return Task.CompletedTask;
     }
 
