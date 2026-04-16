@@ -17,7 +17,7 @@ public partial class Home : IDisposable
         InvestigatorService.OnChanged += StateHasChanged;
     }
 
-    private void NavigateToCreate() => Navigation.NavigateTo("/CthulhuSheets/create");
+    private void NavigateToCreate() => Navigation.NavigateTo("/create");
 
     private async Task LoadSampleAsync()
     {
