@@ -42,6 +42,6 @@ public partial class CharacterCreation
         await InvestigatorService.LoadAsync(_draft);
         var name = _draft.Name is { Length: > 0 } n ? n : "Investigator";
         Snackbar.Add($"{name} created!", Severity.Success);
-        Navigation.NavigateTo("/");
+        Navigation.NavigateTo("");
     }
 }
