@@ -69,37 +69,59 @@
             <div class="pool-label">
                 <MudIcon Icon="@Icons.Material.Filled.Psychology" Size="Size.Small" Color="Color.Info" />
                 <MudText Typo="Typo.overline">Sanity</MudText>
+                <div class="luck-roll-actions">
+                    <RollButton Size="Size.Small"
+                                Color="Color.Primary"
+                                OnRoll="mod => RollSanity(mod)" />
+                    @if (_sanityRoll.HasValue)
+                    {
+                        <span class="luck-roll-result">@_sanityRoll</span>
+                        @if (SanitySuccess is true)
+                        {
+                            <MudTooltip Text="Passed — take the lower SAN loss">
+                                <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" Color="Color.Success" />
+                            </MudTooltip>
+                        }
+                        else if (SanitySuccess is false)
+                        {
+                            <MudTooltip Text="Failed — take the higher SAN loss">
+                                <MudIcon Icon="@Icons.Material.Filled.Close" Size="Size.Small" Color="Color.Error" />
+                            </MudTooltip>
+                        }
+                    }
+                </div>
             </div>
             <div class="pool-inputs">
                 <MudNumericField T="int?"
                                  @bind-Value="Investigator.Sanity.Current"
                                  @bind-Value:after="PersistAsync"
-                                 Placeholder="Cur"
+                                 Label="Cur"
                                  Variant="Variant.Outlined"
                                  Margin="Margin.Dense"
                                  HideSpinButtons="true"
                                  Class="pool-input" />
                 <span class="pool-sep">/</span>
                 <MudNumericField T="int?"
-                                 @bind-Value="Investigator.Sanity.Max"
+                                 @bind-Value="Investigator.Sanity.Starting"
                                  @bind-Value:after="PersistAsync"
-                                 Placeholder="Max"
+                                 Label="Start"
                                  Variant="Variant.Outlined"
                                  Margin="Margin.Dense"
                                  HideSpinButtons="true"
                                  Class="pool-input" />
             </div>
+            <div class="sanity-insane-row">
+                <MudText Typo="Typo.caption" Color="Color.Secondary">Insane threshold:</MudText>
+                <MudText Typo="Typo.caption" Color="Color.Error">@(Investigator.Sanity.Insane?.ToString() ?? "—")</MudText>
+            </div>
         </div>
         <div class="pool-item">
-            <div class="luck-header">
+            <div class="pool-label">
                 <MudText Typo="Typo.overline">Luck</MudText>
                 <div class="luck-roll-actions">
-                    <MudTooltip Text="Roll d100">
-                        <MudIconButton Icon="@Icons.Material.Filled.Casino"
-                                       Size="Size.Small"
-                                       Color="Color.Primary"
-                                       OnClick="RollLuck" />
-                    </MudTooltip>
+                    <RollButton Size="Size.Small"
+                                Color="Color.Primary"
+                                OnRoll="mod => RollLuck(mod)" />
                     @if (_luckRoll.HasValue)
                     {
                         <span class="luck-roll-result">@_luckRoll</span>

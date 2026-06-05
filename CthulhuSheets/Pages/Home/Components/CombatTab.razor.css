@@ -86,7 +86,7 @@
 
 .weapon-grid {
     display: grid;
-    grid-template-columns: 2fr 1.2fr 80px 1.2fr 70px 70px auto;
+    grid-template-columns: 2fr 55px 46px 46px 1.1fr 62px 1fr 55px 55px auto auto;
     gap: 4px 8px;
     align-items: center;
 }
@@ -98,6 +98,41 @@
     letter-spacing: 0.1em;
     color: var(--mud-palette-text-secondary);
     padding: 0 4px 4px;
+}
+
+.weapon-col-center {
+    text-align: center;
+}
+
+.weapon-derived-val {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--mud-palette-text-secondary);
+}
+
+.weapon-roll-cell {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.weapon-roll-result {
+    font-size: 0.95rem;
+    font-weight: 700;
+    min-width: 2em;
+    text-align: center;
+}
+
+.weapon-roll-result.success {
+    color: var(--mud-palette-success);
+}
+
+.weapon-roll-result.fail {
+    color: var(--mud-palette-error);
 }
 
 .roll-action {

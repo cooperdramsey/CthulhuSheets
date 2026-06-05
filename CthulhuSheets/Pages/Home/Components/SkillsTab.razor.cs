@@ -14,6 +14,9 @@ public partial class SkillsTab
     private bool _skillsEditMode;
     private readonly Dictionary<Skill, int> _lastSkillRolls = new();
 
+    private record ImprovementResult(string SkillName, int Roll, int OldValue, bool Improved, int NewValue);
+    private List<ImprovementResult> _improvementResults = [];
+
     private IEnumerable<Skill> VisibleSkills =>
         (string.IsNullOrWhiteSpace(_skillFilter)
             ? Investigator.Skills
@@ -33,10 +36,44 @@ public partial class SkillsTab
         await PersistAsync();
     }
 
-    private void RollSkill(Skill skill)
+    private async Task RollSkill(Skill skill, int modifier = 0)
     {
-        var result = DiceRollService.RollMany([(sides: 100, count: 1)]);
+        var result = DiceRollService.RollPercentile(modifier);
         _lastSkillRolls[skill] = result.Total;
+
+        if (result.Total <= skill.EffectiveRegular && !skill.HasExperienceCheck)
+        {
+            skill.HasExperienceCheck = true;
+            await PersistAsync();
+        }
+    }
+
+    private async Task ImproveSkills()
+    {
+        _improvementResults.Clear();
+        var checkedSkills = Investigator.Skills.Where(s => s.HasExperienceCheck).ToList();
+
+        foreach (var skill in checkedSkills)
+        {
+            var current = skill.EffectiveRegular;
+            var roll = DiceRollService.Roll(100);
+
+            if (roll > current)
+            {
+                var gain = DiceRollService.Roll(10);
+                var newVal = Math.Min(99, current + gain);
+                skill.Regular = newVal;
+                _improvementResults.Add(new(skill.Name, roll, current, true, newVal));
+            }
+            else
+            {
+                _improvementResults.Add(new(skill.Name, roll, current, false, current));
+            }
+
+            skill.HasExperienceCheck = false;
+        }
+
+        await PersistAsync();
     }
 
     private async Task LoadDefaultSkills()

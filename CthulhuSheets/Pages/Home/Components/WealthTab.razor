@@ -5,6 +5,10 @@
     @if (cr is not null)
     {
         <div class="wealth-credit-rating">
+            @if (CreditRatingLabel is not null)
+            {
+                <MudText Typo="Typo.caption" Color="Color.Secondary" Class="credit-rating-band">@CreditRatingLabel</MudText>
+            }
             <div class="credit-rating-chip">
                 <MudText Typo="Typo.caption" Color="Color.Secondary">Credit Rating</MudText>
                 <div class="credit-rating-tiers">
@@ -42,12 +46,9 @@
                     </div>
                 </div>
                 <div class="roll-action">
-                    <MudTooltip Text="Roll d100">
-                        <MudIconButton Icon="@Icons.Material.Filled.Casino"
-                                       Size="Size.Small"
-                                       Color="Color.Primary"
-                                       OnClick="RollCreditRating" />
-                    </MudTooltip>
+                    <RollButton Size="Size.Small"
+                                Color="Color.Primary"
+                                OnRoll="mod => RollCreditRating(mod)" />
                     <span class="roll-result">@(_creditRatingRoll?.ToString() ?? "")</span>
                 </div>
             </div>

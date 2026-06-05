@@ -30,9 +30,9 @@ public partial class StatsTab
         ("Education",    Investigator.Education),
     ];
 
-    private void RollStat(Characteristic stat)
+    private void RollStat(Characteristic stat, int modifier = 0)
     {
-        var result = DiceRollService.RollMany([(sides: 100, count: 1)]);
+        var result = DiceRollService.RollPercentile(modifier);
         _lastRolls[stat.Name] = result.Total;
     }
 

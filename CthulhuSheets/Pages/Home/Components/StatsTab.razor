@@ -19,12 +19,9 @@
                             <div class="char-title-actions">
                                 @if (!EditMode)
                                 {
-                                    <MudTooltip Text="Roll d100">
-                                        <MudIconButton Icon="@Icons.Material.Filled.Casino"
-                                                       Size="Size.Small"
-                                                       Color="Color.Primary"
-                                                       OnClick="() => RollStat(stat)" />
-                                    </MudTooltip>
+                                    <RollButton Size="Size.Small"
+                                                Color="Color.Primary"
+                                                OnRoll="mod => RollStat(stat, mod)" />
                                     @if (_lastRolls.TryGetValue(stat.Name, out var lastRoll))
                                     {
                                         <span class="char-roll-result">@lastRoll</span>

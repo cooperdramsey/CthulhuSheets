@@ -8,8 +8,15 @@
 
 .wealth-credit-rating {
     display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.credit-rating-band {
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
 }
 
 .credit-rating-chip {

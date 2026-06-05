@@ -1,0 +1,961 @@
+welcome to
+
+DO YOU HEAR  
+THE CALL OF CTHULHU?
+
+Interested in Chaosium’s Call of Cthulhu? You are not alone! 
+Call of Cthulhu is Chaosium’s tabletop roleplaying game of 
+mystery and horror, where ordinary people delve into weird 
+events and lore, and confront the terrifying and alien forces 
+of the Cthulhu Mythos. 
+
+The game has won many awards for gaming excellence and 
+is published by Chaosium Inc., one of the oldest roleplaying 
+game  companies  in  the  world.  Chaosium  is  famous  for 
+publishing  engaging  games—including  Call  of  Cthulhu, 
+RuneQuest, Pendragon, 7th Sea, and many more.
+
+All you need to play Call of Cthulhu for the first time is 
+this  Quick-Start  Rules  guide,  some  polyhedral  dice  (or  a 
+dice-rolling  app),  plenty  of  imagination,  and  your  friends. 
+Welcome to the worlds of Call of Cthulhu!
+
+INTRODUCTION
+Call of Cthulhu is a game full of secrets, mysteries, and horror. 
+Playing  the  roles  of  steadfast  investigators,  you  and  your 
+friends will travel to strange and dangerous places, uncover 
+foul plots, and stand against the terrors of the night. Within 
+strange and forgotten tomes of lore you may discover secrets 
+that humanity was not meant to know. Along the way, sanity-
+blasting  monsters  and  insane  cultists  work  to  bring  about 
+your demise. You and your companions may well decide the 
+fate of the world! 
+
+Call  of  Cthulhu  is  a  horror-themed  roleplaying  game 
+concerning both horrors from beyond and from within. The 
+game is inspired by the 20th century horror and weird fiction 
+written  by  H.  P.  Lovecraft  and  other  writers  like  Frank 
+Belknap  Long,  Lin  Carter,  and  August  Derleth,  as  well  as 
+contemporary writers like Ramsey Campbell (to name but 
+a few). The game draws upon the fictional invention of what 
+has become known as the “Cthulhu Mythos,” a selection of 
+stories  sharing  common  plot  elements—such  as  mythical 
+books  of  arcane  lore  and  alien  god-like  entities. The  game 
+draws  on  the  imaginative  ideas  and  creations  arising  from 
+the  Cthulhu  Mythos,  while  avoiding  Lovecraft’s  own 
+distasteful personal views and racism, which have no place 
+in  the  game.  If  you  have  not  read  any  Cthulhu  Mythos 
+stories  we  encourage  you  to  do  so—there  are  many  to 
+be  found  alongside  Lovecraft’s  own,  including  modern 
+reinterpretations of the Cthulhu Mythos  seen through the 
+eyes of differing cultures and heritages.
+
+These  Quick-Start  Rules  gives  you  all  the  information 
+you will need to begin playing and having fun with the Call 
+of  Cthulhu  roleplaying  game,  and  include  a  brief  overview 
+of  the  core  rules  and  how  to  play  the  game.  If  you  enjoy 
+the experience, we recommend you consider moving on to 
+the Call of Cthulhu Starter Set, which includes the full basic 
+rules,  a  simplified  investigator  creation  system,  and  four 
+introductory adventures. Once you have mastered and played 
+through the material in the Starter Set, you’ll be ready to use 
+the Call of Cthulhu: Keeper Rulebook, which contains the full 
+rules  and  a  complete  investigator  creation  system,  as  well 
+as a plethora of game information. You can purchase these 
+products from good game and hobby stores, large bookstores, 
+online, and directly from chaosium.com.
+
+5
+
+Keeper takes on the roles of all the supporting characters and 
+monsters in the adventure, while each of the players just plays 
+one role—that of their investigator.
+
+“Winning”  in  such  a  situation  depends  on  whether  the 
+investigators succeed in their goal, and “losing” is what happens 
+if they fail to achieve it (though they may be able to try again 
+later).  During  the  game,  investigators  may  become  injured, 
+suffer  sanity-shattering  experiences,  or  even  die!  However, 
+someone has to make a stand against the cosmic horrors of the 
+Cthulhu Mythos, and the death of a single investigator matters 
+little if it means repulsing Cthulhu’s master plan to enslave the 
+Earth! In the game, investigators are mostly ordinary people 
+forced into heroic roles, but they are still fragile humans and 
+prone to injury and death. If an investigator must “retire” from 
+play, their player can pick up or create a new investigator to 
+join the team and continue the story.
+
+Investigators who survive gain knowledge of horrendous 
+monsters, power from arcane volumes of forgotten lore, and 
+advancement in their skills as they become more experienced; 
+thus, the players’ investigators continue to progress until their 
+demise or retirement—whichever comes first.
+
+ROLEPLAYING  DICE
+The Keeper and players use a set of roleplaying dice in the game. 
+These polyhedral dice include: percentile dice (D100), a four-
+sided die (D4), a six-sided die (D6), an eight-sided die (D8), 
+and a twenty-sided die (D20). Such sets can be purchased from 
+game hobby  stores—only one set is  needed, although players 
+often  like  to  have  their  own  dice  sets;  alternatively,  you  may 
+prefer to use a dice-rolling app instead. The letter “D” stands for 
+“dice.” The number after the D is the range of numbers available: 
+1D8 generates random numbers 1 through 8, for instance, while 
+1D100 generates the numbers 1–100. In an adventure, the text 
+will call for different dice rolls using this terminology. So, if the 
+text says a monster delivers 1D8 damage, then roll the 8-sided 
+die once to determine how much damage is actually caused.
+
+Reading D100 (Percentile Dice)
+
+AN  OVERVIEW  
+OF THE  GAME
+The  aim  of  playing  Call  of  Cthulhu  is  to  have  fun  with  your 
+friends as you explore and create a story of mystery and horror. 
+One  player  takes  the  role  of  game  moderator,  known  as  the 
+Keeper of Arcane Lore (“Keeper” for short), whose role is to 
+run the game for the rest of the players and apply the rules as 
+necessary. Everyone else takes the parts of intrepid Investigators 
+of  the  Unknown  (“investigators”)—the  heroes  of  the  story—
+attempting to seek out, understand, and eventually confront the 
+horrors, mysteries, and secrets of the Cthulhu Mythos.
+
+As  you  are  the  person  reading  this  book,  we  will  assume 
+that you are going to take on the role of Keeper for the first 
+few games you play. The Keeper picks a story to run—these 
+are  known  as  “adventures”  or  “scenarios.”  You  can  find  an 
+introductory adventure at the back of this book—a scenario 
+called The Haunting (page 17). Each adventure provides the 
+Keeper with the structure of a story (the plot) to present to 
+the players. The Keeper’s role is a little like that of a director 
+making a movie in which the actors don’t know how the story 
+will develop. The players are like actors, who have the freedom 
+to improvise their own scripts and actions within the game.
+
+The  investigators  need  not  be  anything  at  all  like  the 
+people  who  play  them.  Indeed,  it  is  often  more  rewarding 
+and enjoyable for players to create characters entirely unlike 
+themselves—such  as  tough  private  eyes,  wisecracking 
+journalists, or learned academics. Most of the game play is 
+a verbal exchange. The Keeper sets the scene, describing the 
+environment, the individuals, and encounters to the players. 
+The  players  tell  the  Keeper  what  they  intend  for  their 
+investigators to do, how they interact with people and things, 
+and so on. The Keeper then tells the players what happens. 
+In  play,  the  game  takes  the  form  of  a  group  conversation, 
+with many twists and turns and fun along the way. Together, 
+everyone tells the group’s story—their version of how their 
+characters overcame (or not) the challenges of the adventure.
+The  game’s  rules  use  polyhedral  dice  to  determine  if  an 
+investigator’s action succeeds or fails when a dramatic “conflict” 
+presents itself—for example, whether the investigators are able 
+to leap out of the way of a giant statue about to crash down 
+upon their heads! The rules in this Quick-Start describe how 
+to decide the outcome of such conflicts.
+
+Winners and Losers 
+In Call of Cthulhu there are no winners and losers in the standard 
+competitive sense—play is cooperative. The participants work 
+together  to  attain  a  common  goal—usually  to  discover  and 
+then  foil  a  nefarious  plot  being  perpetrated  by  the  minions 
+of a dark cult or some devious monster. The opposition that 
+the investigators face can often be an alien or hostile situation 
+controlled  by  an  impartial  Keeper,  not  another  player.  The 
+
+6
+
+WELCOME TO CALL OF CTHULHU1 2 3 4 5 6 7 8 9 0NEVER PLAYED A ROLEPLAYING GAME BEFORE?
+
+If  you’ve  never  played  a  roleplaying  game  before  you  may 
+be wondering what this is all about. To set you on the right 
+track, it may be useful to describe an average session of play, 
+which can take place in person around a table or online over 
+a video conference.
+
+Debbie and their partner Alex, along with their two friends 
+Morgan and Susan, meet up at John’s house on Friday evening 
+at around seven o’clock. After catching up on the week’s news and 
+getting  some  drinks  and  nibbles,  they  sit  down  in  the  lounge, 
+ready  to  play.  John  hands  out  some  ready-made  investigators 
+along with some paper and pencils, and everyone is ready to start.
+It’s now about eight o’clock. John kicks off the game by describing 
+the opening scene from the adventure they have chosen to play, 
+telling how the investigators find themselves talking with a man 
+who  wants  them  to  check  out  an  old  property  he  owns;  rumor 
+has it that it might be haunted! One of the players immediately 
+
+responds to this, putting on the voice of their investigator to say 
+that  such  things  are  “Complete  hokum.”  As  the  story  unfolds, 
+everyone becomes involved, describing what their characters are 
+doing or saying. Some of the players decide to speak in the manner 
+of their characters, such as with a New York accent, while others 
+prefer  not  to  “act”  out  their  character  and  just  speak  normally. 
+Dramatic  conflicts  arise  and  dice  are  rolled  to  determine  the 
+outcome, with John being the referee of the rules.
+
+Sometimes  the  players  get  their  way,  while  at  other  times 
+events appear to conspire against them. It is all played out simply 
+by  talking  and  rolling  dice  to  determine  the  outcome  of  certain 
+situations; people aren’t getting out of their chairs to act it out, 
+neither are they donning costumes. 
+
+Everyone ceases play at around ten-thirty, and then chat for a 
+while before calling it a night at around eleven o’clock. Everyone 
+is looking forward to meeting up again next week to find out how 
+the story develops.
+
+Percentile  dice  usually  consist  of  two  10-sided  dice,  which 
+are  rolled  together  at  the  same  time.  One  die  (units)  is 
+numbered  1  to  0,  the  other  die  (tens)  being  numbered  10 
+to  00.  Both  dice  are  rolled  and  should  be  read  together— 
+e.g. “30” on the tens die and “05” on the units die is read as 
+35%. A roll of “00” (tens die) combined with a “0” (units die) 
+indicates a result of 100%, while a roll of “00” on the tens die 
+combined with any other roll on the units die indicates a roll 
+of under 10%; for example, a roll of 00 on the tens die and 3 
+on the units die is read as 3%.
+
+Dice Roll Variations
+Sometimes, a dice notation is preceded by a number other 
+than “1”—this means that more than one such die should be 
+rolled, with their results added together. For instance, 2D6 
+means that two 6-sided dice are rolled and totaled (or roll a 
+D6 twice and add the results together).
+
+You  might  also  see  1D8+1  or  1D6+1,  for  instance.  This 
+means  that  the  number  following  the  plus  sign  should  be 
+added to the result of the die roll. For 1D6+1, the result must 
+be 2, 3, 4, 5, 6, or 7. If a monster claws for 1D6+1+2D4 damage, 
+find the result of the attack by rolling the two requested dice, 
+totaling the results, and adding 1 (rolling 1D6 and 2D4, then 
+adding 1 to the total rolled across all of the dice).
+
+7
+
+EQUIPMENT REQUIRED
+
+When you are ready to begin playing Call of Cthulhu, you’ll 
+need a few things to start:
+
+•  This Quick-Start Rules guide.
+•  A set of polyhedral (“roleplaying”) dice or a dice-rolling app.
+•  Some notepaper.
+•  Some pencils.
+•  At least one other person to game with.
+•  A quiet place to play, such as around a kitchen table or 
+
+lounge.
+
+•  Two to four hours in which to play.
+
+Of  course,  playing  online  is  possible  too.  Instead  of 
+a  set  of  real  dice  you  could  use  an  online  dice  roller,”  and 
+you  could  share  investigator  sheets  as  PDFs  (you  can 
+download writable PDF sheets at chaosium.com). Any video 
+conferencing platform could be used—you just need to make 
+sure everyone can see and hear everyone else in the game.
+
+WELCOME TO CALL OF CTHULHUINVESTIGATORS
+
+This Quick-Start guide does not include the rules for creating 
+investigator characters from scratch—those rules are included 
+in the Call of Cthulhu Starter Set and the Call of Cthulhu: Keeper 
+Rulebook. Instead, at the back of this book you will find four 
+ready-to-play investigators—note that PDF versions of these 
+characters are available to download from chaosium.com. The 
+players can pick from these pre-generated characters and use 
+them when playing the included adventure, The Haunting. To 
+help understand the investigator sheet, here’s the lowdown on 
+what everything means.
+
+Players  record  the  details  of  their  character  on  an 
+investigator sheet, which holds all the information they need 
+in the game. Each sheet is divided into sections:
+
+1� About Your Investigator: your investigator’s name, age, 
+gender, and occupation, as well as their birthplace and current 
+residence. In Call of Cthulhu, an investigator’s occupation 
+determines the skills they are most proficient with. 
+
+2� Characteristics: there are eight characteristics used to measure 
+Strength (STR), Constitution (CON), Size (SIZ), Dexterity 
+(DEX), Appearance (APP), Education (EDU), Intelligence 
+(INT), and Willpower (POW). Each of these has a “Regular” 
+percentile value between 1 and 100; thus, STR 60 means 
+Strength 60%. Note that there are two smaller boxes to the 
+edge of each characteristic—the upper small box is half value 
+(or “Hard” value, i.e. the Regular value divided by 2), while the 
+lower small box is the one-fifth value (or “Extreme” value, i.e. 
+the Regular value divided by 5). E.g. with STR 60, the upper 
+
+box would be “30” (half of 60) and the lower box would be 
+“12” (one-fifth of 60). See Skill Rolls and Difficulty Levels, 
+page 10, for what these values mean in play. 
+Each of the characteristics measures a certain attribute:
+
+•  STR: the raw physical power your investigator can bring 
+
+to bear.
+
+•  CON: the health and hardiness of your investigator.
+•  SIZ: an abstracted value of your investigator’s height and weight.
+•  DEX: physical agility and speed.
+•  APP: the physical appeal or how “good looking” your 
+
+investigator is.
+
+•  EDU: a measure of the knowledge that your investigator 
+has accumulated through formal education or the venerated 
+“school of hard knocks” (i.e. street smarts). 
+
+•  INT: a measure of your investigator’s cunning, problem 
+solving, and ability to make leaps of logic and intuition. 
+•  POW: a combination of force of will, spirit, and mental stability. 
+
+In addition, there there are four key values for an investigator—
+Hit Points (HP), Magic Points (MP), Luck (Luck), and Sanity 
+(SAN). These values may go up and down in play. 
+
+•  Hit Points (HP): when your investigator suffers damage, 
+deduct damage points from hit points—at zero hit points 
+your investigator falls unconscious and may die—see Hit 
+Points, Wounds, and Healing, page 14. 
+
+•  Magic Points (MP): used to cast a spell or some other magical 
+effect. When spent, magic points regenerate at a rate of 1-point 
+per hour. If a character uses up all of their magic points, any 
+further expenditure is taken from their hit points (becoming 
+physical damage)—see Corbitt’s Spells, page 31, in The 
+Haunting for an example of how magic points are used. 
+
+•  Luck: used to determine whether external circumstances are 
+with or against your investigator (whether your investigator 
+can find a lantern in a dark barn, and so on)—see Luck 
+Rolls, page 12. 
+
+•  Sanity (SAN): measures your investigator’s ability to deal 
+with the shock and corruption from exposure to alien and 
+mind-bending horrors of the Cthulhu Mythos. Sometimes, 
+when such things overcome your investigator, they lose Sanity 
+points, reflecting the lingering effect of such trauma—see 
+Sanity, page 12. Note that “Starting” SAN begins equal to 
+POW, but may later rise or fall through play, and the “Insane” 
+box is used to write in one-fifth of the “Starting” SAN value.
+
+Running along the bottom of this section are Temporary 
+Insanity,  Indefinite  Insanity,  Major  Wound,  Unconscious, 
+and Dying—these are checked when certain events happen 
+during the game.
+
+8
+
+WELCOME TO CALL OF CTHULHU1 2 3 4 5 6 7 8 9 0CREDIT RATING
+
+Credit Rating is a skill on the investigator sheet, and can be 
+used as a means to exemplify your investigators wealth (or 
+lack of it) and social status. 
+
+•  Credit Rating of 0: Penniless, living on the streets.
+•  Credit Rating of 1–9: Poor, has the bare minimum.
+•  Credit Rating of 10–49: Average, a reasonable comfort level.
+•  Credit Rating of 50–89: Wealthy, some degree of luxury.
+•  Credit Rating of 90–98: Rich, great wealth and luxury.
+•  Credit Rating of 99–100: Super rich, money is no object.
+
+9� Wealth: don’t worry about this section—it’s just for advanced 
+games, where a character’s money on hand and savings might 
+be important (these are covered in the Call of Cthulhu: Keeper 
+Rulebook)—see the nearby box about Credit Rating. 
+
+10�Fellow  Investigators:  record  the  names  of  the  other 
+players in your game, as well as their investigators’ names. 
+11�Quick  Reference  Rules:  a  handy  rules  reminder  and 
+something  you  might  refer  to  once  you  have  more 
+experience of playing the game. 
+
+3� Skills: this section lists all of the common skills available. 
+Your investigator can attempt to use most of these skills 
+using the “base value” noted in parentheses next to the skill, 
+e.g. “Accounting (05%)” means that everyone has a 5% skill 
+in accountancy. On the ready-made investigator sheets you 
+can see that each character has increased values for certain 
+skills (these higher values supersede the base values). The 
+ones with increased values are the skills your investigator 
+is relatively proficient in; the higher the value, the more 
+skilled they are.
+
+Note that there are two boxes to the right of each skill 
+box—the middle box is half value (or “Hard” value, i.e. 
+the  Regular  value  divided  by  2),  while  the  box  on  the 
+right is the one-fifth value (or “Extreme” value, i.e. the 
+Regular value divided by 5). E.g. with a Charm skill of 
+50%, the middle box would be “25” (half of 50) and the 
+box to the right would be “10” (one-fifth of 50). See Skill 
+Rolls  and  Difficulty  Levels,  page  10,  for  what  these 
+values mean in play. 
+
+4� Weapons: notes any weapons possessed by your investigator. 
+Each weapon has an entry for its Regular, Hard, and 
+Extreme skill values, the damage it can inflict (usually a die 
+roll), and the number of attacks (per round) it can be used; 
+and, for firearms, its range, ammunition, and its malfunction 
+number—see Combat, page 12, for more details.
+
+5� Action Reference: this is a quick reference area showing 
+Move (the human average is Move 8), Build, Damage Bonus 
+(DB), and also a duplicate of your investigator’s Dodge skill 
+value—all useful during combat and other dramatic events!
+6� My Story: use this to write in the personal history of your 
+investigator. You might add to and develop this during play. 
+7� Backstory: each entry is a way to further describe your 
+investigator, whether it’s a short description of how they 
+appear, their ideology and beliefs, or their traits and 
+mannerisms. You can also make a note about any significant 
+people in their life, treasured possessions, and locations that 
+are important to them. Most times, filling in two or more of 
+these sections helps to round out your character. Note that 
+Injuries & Scars, Phobias & Manias, Arcane Tomes, Spell & 
+Artifacts, and Encounters with Strange Entities are usually 
+filled out during play rather than beforehand. 
+
+8� Gear and Possessions: record important items, equipment, 
+and weapons carried on your investigator’s person. As a rule 
+of thumb, an investigator would be carrying the items they 
+would use day-to-day in their occupation, so there’s no need 
+to write every single thing down—only the important and 
+relevant stuff. 
+
+9
+
+WELCOME TO CALL OF CTHULHUGAME SYSTEM 
+
+“Skill rolls” may be called for during dramatic situations in 
+the game. Walking down a well-lit hallway is not a dramatic 
+situation,  whereas  running  down  a  rubble-strewn  corridor 
+while  being  chased  by  monsters  most  definitely  is!  Only 
+make a skill roll when the outcome is uncertain and dramatic.
+When  attempting  a  skill  roll,  you  should  first  agree  a 
+goal  with  the  Keeper—what  is  your  investigator  trying  to 
+achieve? If your skill roll is successful, you achieve your goal. 
+Additionally, when you successfully roll a skill, put a check 
+mark  in  the  box  next  to  it  on  your  investigator  sheet.  You 
+can only get one check per skill at a time. At the end of the 
+scenario,  that  skill  could  increase  due  to  experience—your 
+Keeper will ask you to “roll for skill increases,” if you roll over 
+a checked skill’s value, you gain +1D10 points to that skill 
+(with a checked Climb skill of 40, you roll 1D100 and get 
+58, as this is above 40, you get to add 1D10 points to Climb). 
+In other words, the more you know, the hardier it is to learn 
+something new or to get better. 
+
+On occasion, you may need to roll a test that is not covered 
+by the skills on your sheet. If so, look at your investigator’s 
+characteristics and determine which one of them is best to 
+use and treat it like a skill.
+
+SKILL  ROLLS  AND 
+DIFFICULTY  LEVELS
+Your  Keeper  will  tell  you  when  you  should  attempt  a  skill 
+roll and how difficult the task is—you just describe what your 
+investigator is doing, and the Keeper will advise you if a skill 
+roll is needed.
+
+•  A regular task requires a roll of equal to or less than your 
+
+skill value on 1D100 (a Regular success).
+
+•  A difficult task requires a 1D100 roll result equal to or less 
+
+than half your skill value (a Hard success).
+
+•  A task approaching the limits of human capability requires a 
+1D100 roll equal to or less than one-fifth of your skill value 
+(an Extreme success).
+
+If  you  can  justify  it  through  your  investigator’s  actions,  you 
+can “push” a failed skill roll. Pushing a roll allows you to roll the 
+dice a second time; however, the stakes are raised. If you fail a 
+second time, the Keeper gets to inflict a dire consequence upon 
+your character—you might partially succeed in your goal or not, 
+depending on the Keeper’s determination, but either way, your 
+investigator will pay some sort of price for failing the roll. Before a 
+pushed roll is made, the Keeper has the option of foreshadowing 
+what might happen if the pushed roll is failed; the player can then 
+decide whether it’s worth the risk to take the second roll or not.
+
+Example:  your  investigator  is  trying  to  open  the  heavy  stone 
+door of a crypt—the goal is “open the crypt.” The Keeper decides 
+this  is  very  difficult  and  asks  for  a  STR  roll,  specifying  that  a 
+“Hard  success”  is  required.  Your  investigator’s  STR  is  60,  so  a 
+Hard success requires a roll of 30 or below. You roll the dice but 
+the result is 43—you have failed, as you rolled above half your 
+investigator’s STR. You ask if you can push the roll, saying that 
+your character is picking up and using a spade to help lever the 
+door. The Keeper permits a second roll, but warns that if you fail 
+this  roll,  not  only  will  the  door  still  be  closed  but  “something” 
+may hear you and could be coming for your blood! Note that we 
+used  the  STR  characteristic  here,  as  opening  the  door  is  feat  of 
+strength rather than a specific skill; if the door had a lock on it, 
+you might instead use the Locksmith skill at Regular difficulty or 
+a Mechanical Repair roll at Hard difficulty. 
+
+OPPOSED  SKILL  ROLLS
+If  two  investigators  are  opposing  one  another,  or  if  an 
+investigator  is  in  a  conflict  with  a  significant  Keeper-
+controlled character (a monster or NPC, i.e. one for whom 
+statistics are listed in the scenario), the Keeper may require 
+an  “opposed  roll.”  To  resolve  an  opposed  roll,  both  sides 
+make a skill (or characteristic) roll and compare their levels 
+of  success.  A  Regular  success  beats  a  Fail,  a  Hard  success 
+beats a Regular success, and an Extreme success beats a Hard 
+success. In the case of a draw, the side with the higher skill 
+value wins—if both skills are equal, then have both sides roll 
+1D100, with the lower result winning.
+
+LEVELS OF SUCCESS
+
+(worst) FAIL — REGULAR SUCCESS — HARD SUCCESS — EXTREME SUCCESS (best)
+
+10
+
+WELCOME TO CALL OF CTHULHU1 2 3 4 5 6 7 8 9 0Bonus  and Penalty Dice
+Sometimes,  the  prevailing  conditions  for  the  investigators, 
+their environment, and/or the time available can hinder or 
+benefit a skill or characteristic roll. Under certain conditions 
+the Keeper may grant a “bonus” or a “penalty” die to a roll. 
+One  bonus  die  and  one  penalty  die  cancel  each  other  out. 
+Such  bonuses  and  penalties  operate  in  a  similar  way  to 
+raising  the  difficulty  of  a  roll,  and  can  be  used  instead  of, 
+or in addition to, an increased difficulty. Normally, though, 
+bonus and penalty dice are used primarily with opposed rolls.
+
+For each bonus die:  roll  an  additional “tens”  die  alongside 
+the usual pair of percentile (D100) dice when making a roll. 
+You are now rolling three separate dice: one “units” die and 
+two  “tens”  dice.  To  take  the  benefit  of  the  bonus,  use  the 
+“tens” die that yields the better (lower) result.
+
+Example: two rival investigators, Malcolm and Hugh, are vying 
+for the affection of Lady Greene. Only one can gain her hand in 
+marriage, so the Keeper decides that an opposed roll is needed to 
+determine the outcome of their wooing. It is decided that an opposed 
+Charm roll should fit the scene. The Keeper reviews the events of the 
+scenario so far: Malcolm has visited Lady Greene twice, each time 
+lavishing  expensive  gifts  upon  her,  while  Hugh  has  only  visited 
+once and brought no gifts at all. The Keeper states that Malcolm has 
+an advantage and receives a bonus die in the opposed roll.
+
+Hugh’s player rolls first against his Charm skill of 55, getting 
+45—a Regular success. Malcolm’s player rolls against his Charm 
+skill with one bonus die, rolling one units die and two tens dice 
+
+(see fig 1.) The units die reads 4 and can be paired with either of 
+the two tens dice to give scores of 44 or 24. Malcolm’s player takes 
+the lower result 24—a Hard success. Malcolm wins the opposed 
+roll, and his proposal of marriage to Lady Greene is accepted.
+
+For each penalty die: roll an additional “tens” die alongside 
+the  usual  pair  of  percentile  (D100)  dice.  You’re  now  rolling 
+three separate dice: one “units” die and two “tens” dice. For a 
+penalty, use the “tens” die that yields the worst (higher) result.
+
+Example:  in  a  dire  turn  of  events,  two  investigators—Felix  and 
+Harrison—have been captured by the cultists of the Scarlet Smile. The 
+cultists decide to have some “fun” at the investigators’ expense, decreeing 
+that both must undertake the Ordeal of Pain, from which only one can 
+survive as the loser will be sacrificed to the cultists’ foul god.
+
+The Ordeal of Pain involves lifting a huge rock and holding it 
+aloft. Whoever holds the rock up the longest wins. This requires an 
+opposed STR roll from each of the investigators; however, the Keeper 
+rules that Harrison must take a penalty die, as he recently suffered a 
+major wound (he received an injury when he was captured by the 
+cultists) and is still recovering. Felix’s player rolls 51 against STR 
+65—a  Regular  success.  Harrison’s  STR  is  55.  His  player  rolls  20 
+and 40 on two tens dice and 1 on the units die (see fig 2.), which 
+can be combined to read 21 or 41. The extra die was a penalty die, so 
+Harrison must take the higher result—a Regular success
+
+Both  players  have  achieved  a  Regular  success;  Felix  wins 
+because he has the higher STR value. Felix is able to hold the rock 
+above his head for longer than Harrison. The cultists jeer and lead 
+Harrison off towards their altar…
+
+Fig. 1
+
+Fig. 2
+
+11
+
+WELCOME TO CALL OF CTHULHULUCK  ROLLS
+Luck  rolls  may  be  called  for  by  the  Keeper  when 
+circumstances  external  to  an  investigator  are  in  question, 
+and  also  when  determining  the  fickle  hand  of  fate.  If,  for 
+example,  an  investigator  wants  to  know  if  there  is  an  item 
+lying nearby that could be used as weapon, or if the flashlight 
+they have found has any juice left in it, then call for a Luck 
+roll. Note that if a skill or characteristic is more appropriate 
+to a situation, then it should be used rather than Luck. To 
+succeed with a Luck roll, the investigator must roll equal to 
+or under their current Luck value.
+
+If the Keeper calls for a “group Luck roll,” the player whose 
+investigator has the lowest Luck score (among those present 
+in the scene) should make the roll on behalf of the group.
+
+Example: finding a cab doesn’t require a dice roll, but getting one 
+before the investigators lose sight of the car that they wish to pursue 
+could. Credit Rating could be a factor in attracting the attention 
+of a cabdriver on the lookout for a well-dressed fare who may tip 
+generously. However, quickly getting a ride at two o’clock in the 
+morning  on  the  undesirable  side  of  town  might  not  be  so  easy. 
+Would there even be a cab to hail? No skill is going to make a cab 
+appear at that moment. It is a matter of chance whether a cab may 
+be driving down that road, hence a Luck roll is required.
+
+SANITY  (SAN)
+Whenever  an  investigator  encounters  the  horrors  of  the 
+Cthulhu  Mythos  or  comes  across  something  mundane  yet 
+horrific (such as stumbling across a friend’s mutilated corpse), 
+make a percentile roll against the investigator’s current Sanity 
+score. If you roll over your current Sanity, you lose a greater 
+amount of Sanity points. If you roll under, you will lose less 
+or none. The Sanity loss is generally described for an event as 
+something like “0/1D6” or “2/1D10.” The number before the 
+slash mark tells you how much Sanity your character loses 
+if the roll is equal to or under their current Sanity score; the 
+number after the slash is how much your investigator loses 
+if you roll over their current Sanity score (the worst result).
+
+When  you  fail  a  “Sanity  roll”  the  Keeper  gets  to 
+momentarily  dictate  your  investigator’s  next  action  as  the 
+fear takes hold; perhaps they unwittingly scream, freeze, or 
+squeeze the trigger of the gun they are holding.
+
+If  an  investigator  loses  5  or  more  Sanity  points  as  the 
+consequence of a single Sanity roll, they have suffered major 
+emotional  trauma,  and  the  player  must  roll  1D100.  If  the 
+result  is  equal  to  or  less  than  their  Intelligence  (INT),  the 
+investigator  fully  understands  and  comprehends  what  has 
+been seen and goes temporarily insane (for 1D10 hours). If 
+they fail the roll, their mind is closed to the horror and they 
+remain sane (for now).
+
+In  addition,  when  falling  insane,  an  investigator  suffers 
+a  “bout  of  madness”—roll  1D10  and  refer  to  the  Bouts 
+of  Madness Table  (page  29).  If  the  investigator  is  in  the 
+presence  of  other  investigators,  play  out  the  result  round 
+by  round  (the  player  has,  more  or  less,  control  of  their 
+character, but should be guided by Keeper in terms of their 
+investigator’s  portrayal  of  madness).  If  the  investigator  is 
+alone you may use the result to describe how the investigator 
+is  found  sometime  later  in  a  bad  way,  perhaps  hiding  in  a 
+cupboard, drunk in a gutter, or unconscious under a tree.
+
+If  your  investigator  is  temporarily  insane,  the  Keeper 
+may  decide  to  add  a  phobia  or  mania  to  your  sheet 
+(such  as  “fear  of  the  dark,”  “fear  of  confined  spaces,”  or 
+“kleptomania,  an  irrational  compulsion  to  steal  things”). 
+Alternatively,  they  may  decide  to  rewrite  one  of  your 
+existing backstory entries, perhaps corrupting it in some 
+way (where you wrote “Trusting” under Traits, the Keeper 
+corrupts this to “Fearful.”)
+
+While temporarily insane, the Keeper may present your 
+investigator  with  “Delusions”  (hallucinations)—is  that  a 
+zombie creeping up on you or is it just a homeless person 
+asking for spare change? You can only be certain by asking 
+to make a “reality check”—electing to make a Sanity roll; 
+if you’re successful, you see through the hallucination, but 
+if  you  fail,  you  fall  deeper  into  the  madness  and  believe 
+the delusion!
+
+Once  1D10  hours  have  passed,  the  investigator  is  sane 
+once  more  and  cannot  be  affected  by  more  delusions; 
+however,  altered  backstories  or  phobias  or  manias  gained 
+while insane remain in effect.
+
+Unfortunately, regaining lost Sanity points can be a long 
+and  arduous  process.  Checking  characters  into  some  form 
+of care while they take a break from the action, or undergo 
+some  form  of  psychotherapy,  are  ways  to  recover  small 
+amounts  of  Sanity.  Successfully  completing  investigations 
+also  provides  a  way  to  gain  Sanity  points.  But,  such  gains 
+often do not outweigh the steady loss of Sanity, which tends 
+to be a downward spiral. As Sanity slips away, investigators 
+become less stable and their ability to deal with new horrors 
+diminishes. Full rules for Sanity and Insanity in the game are 
+more fully explained in the Call of Cthulhu: Keeper Rulebook. 
+
+COMBAT
+When you are confronted with the horrors of the Cthulhu 
+Mythos  it  is  generally  a  better  idea  to  run  away  or  avoid 
+confrontation  altogether,  as  such  entities  are  very  powerful 
+and often resistant to bullets! However, sometimes there is 
+no other choice than to go in, guns blazing, and make the 
+best of it.
+
+12
+
+WELCOME TO CALL OF CTHULHU1 2 3 4 5 6 7 8 9 0When  a  combat  occurs,  all  investigators,  as  well  as 
+characters  and  monsters  controlled  by  the  Keeper,  act  in 
+order  of  their  DEX  values.  The  investigator,  character,  or 
+monster with the highest DEX acts first and then the others 
+go in descending order from there. 
+
+The duration of a combat round is best described as “long 
+enough  for  everyone  to  take  one  significant  action.”  The 
+Keeper controls the flow of the round. On each character’s 
+DEX  turn,  the  Keeper  decides  or  asks  (if  an  investigator) 
+what  action  is  being  taken;  usually  this  is  something  as 
+simple as, “I attack the monster,” “I pull out my revolver,” or “I 
+run away!” The Keeper should give everyone a chance to do 
+something,  while  being  aware  of  the  narrative  flow  of  the 
+events taking place.
+
+Investigators  have  three  combat  skills:  Fighting,  Dodge, 
+and  Firearms. Two  of  these  skills  are  made  up  of  multiple 
+specializations,  such  as  Fighting  (Brawl)  or  Firearms 
+(Rifle/Shotgun)—each 
+investigator  may  have  different 
+specializations  (or  none  at  all).  Note  that  the  Fighting 
+(Brawl) skill includes unarmed combat and the use of simple 
+weapons (like knives and clubs); however, wielding a sword 
+requires the Fighting (Sword) specialization.
+
+You  make  a  combat  roll  using  the  appropriate  skill,  just 
+like  any  other  skill  roll;  however,  you  don’t  get  to  “push” 
+combat rolls—you simply make another attack next round.
+
+Close Combat
+On  a  character’s  turn  in  the  DEX  order,  they  may  choose 
+to initiate an attack against an opponent. In addition, each 
+time a character is attacked, they get to choose how they will 
+respond,  be  it  by  dodging  (attempting  to  avoid  the  attack 
+completely) or fighting back (attempting to avoid, block, or 
+parry an attack while also hitting back). Both attacker and 
+defender  roll  percentage  dice  (1D100)  and  compare  their 
+levels of success.
+
+•  If you are initiating the attack: roll your Fighting skill and 
+
+compare the result to your opponent.
+
+•  If you are responding—fighting back: use your Fighting 
+skill. You need to achieve a higher level of success than 
+your attacker (you inflict damage instead of your opponent).
+•  If you are responding—dodging: use your Dodge skill. Your 
+attacker needs to achieve a higher level of success than you 
+(if you equal or exceed your attacker’s level of success, you 
+successfully dodge and avoid taking damage).
+
+The winning side avoids receiving any damage and inflicts 
+damage (unless they are dodging) on their opponent. Note 
+that, when fighting back (responding to an attack on you), 
+the  best  a  person  can  achieve  is “regular”  damage,  whereas 
+a character initiating an attack (if successful) could achieve 
+
+“extreme damage” if they win the combat with an Extreme 
+success—if a blunt weapon, extreme damage deals maximum 
+damage plus damage bonus (if any); if an impaling weapon 
+(like a knife), extreme damage deals maximum damage (of 
+the  weapon)  plus  an  additional  dice  roll  for  the  weapon’s 
+damage  and  also  damage  bonus  (if  any).  E.g.  when  a 
+knife  with  1D4  damage  causes  extreme  damage,  it  deals 
+4+1D4+damage bonus (if any).
+
+Example: a ghoul initiates, swinging a clawed hand at Susan, 
+who  elects  to  dodge.  The  Keeper  rolls  03—an  Extreme  success 
+(below one-fifth of the ghoul’s skill). Susan rolls 20 for her Dodge 
+roll—a  Hard  success.  The  attacker  has  achieved  a  better  level 
+of success than the dodger, so Susan is hit, automatically taking 
+maximum damage of 6+1D4 (1D6+1D4 damage bonus) because 
+the attack was an Extreme success.
+
+The  ghoul  is  a  monster  with  3  attacks  per  round  (all  of  its 
+attacks  take  place  simultaneously  on  its  DEX).  On  its  second 
+attack  it  tries  to  bite  Susan,  who  fights  back.  Susan  achieves  a 
+Hard  success;  the  ghoul  achieves  a  Regular  success.  Susan  has 
+a  better  level  of  success  than  the  ghoul,  so  she  successfully  fights 
+back—not only does she avoid injury, but she also inflicts 1D3 
+points of damage on the ghoul.
+
+Fighting Maneuvers
+If  a  player  describes  a  goal  in  combat  that  is  something 
+other  than  simply  inflicting  harm,  it  can  be  resolved  with 
+a  “Fighting  Maneuver.”  A  successful  maneuver  allows  the 
+character to achieve one thing, such as:
+
+•  Disarm an opponent.
+•  Knock an opponent to the floor.
+•  Seize and hold an opponent, whereupon the opponent must 
+apply one penalty die to their actions until they can break 
+free with an opposed STR roll.
+
+A maneuver is treated the same way as a normal Fighting 
+attack, using the Fighting (Brawl) skill. The opponent may 
+dodge or fight back as usual. Compare the Build of the two 
+combatants.  If  the  character  initiating  the  maneuver  has  a 
+smaller Build than their opponent, they take a penalty die for 
+each point of difference (to a maximum of two penalty dice). 
+If an opponent exceeds the attacker’s Build by three or more 
+points,  any  fighting  maneuvers  are  ineffective;  the  attacker 
+may  be  able  to  lay  hands  on  their  opponent,  but  lacks  the 
+strength and size required to take advantage of their grip.
+
+Example:  Susan  attempts  to  push  a  ghoul  out  of  a  window  (a 
+Fighting Maneuver). Susan’s Build is zero and the ghoul’s Build is 
+1, so Susan suffers one penalty die on her attack roll. Susan rolls 02 
+
+13
+
+WELCOME TO CALL OF CTHULHUand 22; as she had a penalty die, she must take the higher result—a 
+Hard  success  (under  half  Susan’s  Fighting  skill).  The  ghoul  is 
+fighting back, and it rolls a Regular success on its Fighting skill. 
+Susan has achieved a better level of success and so her maneuver is 
+successful—she shoves the ghoul through the window.
+
+Outnumbered
+A character outnumbered by the opposition is at a disadvantage. 
+Once a character has responded to an attack (either fought back 
+or dodged) in the present combat round, all subsequent melee 
+attacks on them (in the same round) are made with one bonus 
+die. This does not apply to attacks made using firearms.
+
+Firearms 
+You  may  shoot  a  firearm  on  your  turn  in  the  DEX  order 
+to  initiate  an  attack  (usually,  firearms  cannot  be  used  in 
+fighting back reactions). Make a percentile (1D100) roll and 
+compares the result with the Firearms skill.
+
+•  Readied firearms act at DEX+50 for the purpose of 
+
+determining the DEX turn order.
+
+•  If firing 2 or 3 shots from a handgun in one round, apply 
+
+one penalty die to each shot.
+
+•  If at point-blank range (within one-fifth of DEX in feet), 
+
+the shooter gains one bonus die on the skill roll.
+
+The  target  of  the  shot  cannot  fight  back  (you  can’t 
+dodge  a  bullet)  but  may  instead “dive  for  cover”  by  rolling 
+against their Dodge skill. If the Dodge roll is successful, the 
+attacker’s  roll(s)  to  hit  are  made  with  one  penalty  die  (i.e. 
+make the Dodge roll before the Firearms roll). A character 
+that opts to dive for cover forfeits their next attack or action 
+(regardless of whether they were successful or not), or if they 
+have already used their attack this round, they forfeit their 
+attack in the following round.
+
+HIT  POINTS,  
+WOUNDS,  AND  HEALING
+Points of damage are deducted from a character’s hit points. 
+Hit points cannot fall below zero, so do not record a negative 
+value.  When  a  character’s  hit  points  reach  zero,  they  fall 
+unconscious and, in some situations, may die. 
+
+When a character takes damage of greater than or equal 
+to  half  their  full  hit  points  in  a  single  blow,  they  have 
+received a “major wound”—they must make a CON roll or 
+fall unconscious. If a character with a major wound falls to 
+zero  hit  points  they  are  close  to  death  (dying). They  must 
+make  a  successful  CON  roll  at  the  end  of  the  following 
+round  and  every  round  thereafter  or  die.  Only  successful 
+use of the First Aid skill can alleviate the dying condition, 
+
+14
+
+through stabilizing the character. If a character suffers points 
+of damage greater than or equal to their maximum hit points 
+in a single blow, they die instantly.
+
+•  Characters without a major wound naturally heal 1 hit point 
+
+per day.
+
+•  Characters with a major wound must make a healing roll 
+(rolling equal to or under their CON) at the end of each 
+week—if successful, they regain 1D3 hit points, or 2D3 
+points for an Extreme success. The major wound condition 
+is removed if either an Extreme success is rolled or current hit 
+points are healed to half their maximum value or greater. Thus, 
+it may take a number of weeks for a major wound to heal.
+
+Successful First Aid can heal 1 hit point, as well as rousing 
+a  character  from  unconsciousness.  If  First  Aid  is  used  on 
+a dying character it, extends the character’s life so that the 
+Medicine  skill  can  use  used.  The  Medicine  skill  can  heal 
+1D3 hit points, but takes at least one hour and appropriate 
+equipment  and  supplies.  If  Medicine  is  used  on  a  dying 
+character, it allows a healing roll at the end of one week.
+
+Example: Brian starts with 12 hit points. On Monday he gets in 
+a barroom brawl, taking damage from three separate slugs to his 
+jaw of 4, 2, and 4 points. This is a total of 10 damage, reducing 
+his hit points to 2. He has not taken a major wound (as no single 
+attack delivered significant damage) and recovers at the rate of 
+1 hit point per day. On Thursday, Brian (now at 5 hit points) 
+clumsily falls out of a window; suffering 7 hit points of damage. 
+This is a major wound (7 damage is more than half of Brian’s 
+
+WEAPON DAMAGE
+
+•  Unarmed attacks (human): 1D3 + damage bonus
+•  Small knife: 1D4 + damage bonus
+•  Machete: 1D8 + damage bonus
+•  Small club: 1D6 + damage bonus
+•  Baseball bat: 1D8 + damage bonus
+•  Handgun: 1D10
+•  Shotgun: 4D6 (at close range*, otherwise 2D6; does not 
+
+impale)
+
+•  Rifle: 2D6+4
+
+*Close range: within DEX in feet (i.e. if DEX is 60, close 
+range is 60 feet).
+
+WELCOME TO CALL OF CTHULHU1 2 3 4 5 6 7 8 9 0maximum  12  hit  points).  A  friend  administers  First  Aid  and 
+rushes him to hospital. After seven days have passed, a successful 
+CON  roll  is  made  for  Brian  and  he  regains  2  hit  points  on  a 
+1D3 die roll. At the end of the second week, Brian’s player rolls 
+an Extreme success on the CON roll and regains 4 hit points on 
+a 2D3 roll of the dice, and his current hit points now stand at 
+6. This erases his major wound marker (he has regained half his 
+maximum hit points), after which he heals at 1 hit point per day.
+
+OTHER  FORMS  OF  DAMAGE
+Often  the  Keeper  will  be  forced  to  judge  the  amount  of 
+damage caused by some random event. Whatever the cause, 
+consider  the  likely  injury  and  rate  it  against  the  left-hand 
+column on the Other Forms of Damage Table. Each injury 
+type  is  for  one  incident  or  one  combat  round  (one  round 
+of  being  punched  by  an  attacker,  one  bullet,  one  round  of 
+drowning,  one  round  of  being  burned,  etc.). The  character 
+takes further damage on each successive round that they are 
+exposed to the source of the harm.
+
+ABOUT THE READY-MADE INVESTIGATORS
+
+The four ready-made investigators are designed to be used 
+with The Haunting. Give these to your players and get them 
+each to pick whichever one they prefer. Each player can decide 
+the  name  and  gender  of  their  investigator,  and  write  these 
+details in the top left-hand box on their character’s sheet. The 
+four characters are a team, brought together to solve a case, 
+although  it’s  ok  if  you  have  less  than  four  players—every 
+player takes on the role of one of these characters. 
+
+•  A weary private detective
+•  An enthusiastic graduate student
+•  An open-minded academic
+•  An author with an interest in the occult
+
+OTHER FORMS OF DAMAGE
+
+15
+
+WELCOME TO CALL OF CTHULHUInjuryDamageExamplesMinor: a person could survive numerous occurrences of this level of damage.1D3Punch / kick / head-butt / mild acid / breathing smoky atmosphere / a thrown fist-size rock / falling (per 10 feet) onto soft ground.Moderate: might cause a major wound; it would take a few such attacks to kill.1D6Falling (per 10 feet) onto grass / club / strong acid / breathing water / exposure to vacuum / small-caliber bullet / arrow / fire (burning torch).Severe: likely to cause a major wound. One or two occurrences would render a person unconscious or dead.1D10.38 calibre bullet / falling (per 10 feet) on to concrete / axe / fire (flamethrower, running through a burning room) / being 6 to 10 yards from an exploding hand grenade or stick of dynamite / mild poison.Deadly: the average person has a 50% chance of dying.2D10Hit by a car at 30 mph / being 3 to 6 yards from an exploding hand grenade or stick of dynamite / strong poison.Terminal: outright death is likely.4D10Hit by a speeding car / being within 3 yards of an exploding hand grenade or stick of dynamite/lethal poison.Splat: outright death is almost certain.8D10Being involved in a high-speed head-on collision, being hit by a train.

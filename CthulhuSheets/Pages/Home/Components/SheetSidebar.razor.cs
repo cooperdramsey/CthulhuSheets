@@ -14,15 +14,27 @@ public partial class SheetSidebar
     private Task PersistAsync() => InvestigatorService.PersistAsync();
 
     private int? _luckRoll;
+    private int? _sanityRoll;
 
-    private void RollLuck()
+    private void RollLuck(int modifier = 0)
     {
-        var result = DiceRollService.RollMany([(sides: 100, count: 1)]);
+        var result = DiceRollService.RollPercentile(modifier);
         _luckRoll = result.Total;
+    }
+
+    private void RollSanity(int modifier = 0)
+    {
+        var result = DiceRollService.RollPercentile(modifier);
+        _sanityRoll = result.Total;
     }
 
     private bool? LuckSuccess =>
         _luckRoll.HasValue && Investigator.Luck.Current.HasValue
             ? _luckRoll.Value <= Investigator.Luck.Current.Value
+            : null;
+
+    private bool? SanitySuccess =>
+        _sanityRoll.HasValue && Investigator.Sanity.Current.HasValue
+            ? _sanityRoll.Value <= Investigator.Sanity.Current.Value
             : null;
 }

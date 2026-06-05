@@ -14,11 +14,21 @@ public partial class WealthTab
         Investigator.Skills.FirstOrDefault(s =>
             s.Name.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase));
 
+    private string? CreditRatingLabel => CreditRating is null ? null : CreditRating.EffectiveRegular switch
+    {
+        0          => "Penniless",
+        <= 9       => "Poor",
+        <= 49      => "Average",
+        <= 89      => "Wealthy",
+        <= 98      => "Rich",
+        _          => "Super Rich"
+    };
+
     private int? _creditRatingRoll;
 
-    private void RollCreditRating()
+    private void RollCreditRating(int modifier = 0)
     {
-        var result = DiceRollService.RollMany([(sides: 100, count: 1)]);
+        var result = DiceRollService.RollPercentile(modifier);
         _creditRatingRoll = result.Total;
     }
 

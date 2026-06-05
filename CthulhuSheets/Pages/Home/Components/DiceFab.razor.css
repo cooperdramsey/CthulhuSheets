@@ -30,6 +30,17 @@
     pointer-events: none;
 }
 
+.dice-chip--dismissible {
+    pointer-events: all;
+    cursor: pointer;
+    transition: opacity 120ms, background 120ms;
+}
+
+.dice-chip--dismissible:hover {
+    background: color-mix(in oklab, CanvasText 20%, Canvas 80%);
+    opacity: 0.85;
+}
+
 .dice-chip-meta {
     font-size: 0.85rem;
     line-height: 1;
@@ -47,6 +58,41 @@
     gap: 8px;
     align-items: center;
     animation: fadeInUp 140ms ease-out both;
+}
+
+.bonus-penalty-selector {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: var(--mud-palette-surface);
+    border: 1px solid var(--mud-palette-divider);
+    border-radius: 20px;
+    padding: 2px 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.bonus-penalty-chip {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 8px;
+    border-radius: 12px;
+    cursor: default;
+    min-width: 54px;
+    text-align: center;
+}
+
+.bonus-penalty-chip--normal {
+    color: var(--mud-palette-text-secondary);
+}
+
+.bonus-penalty-chip--bonus {
+    color: var(--mud-palette-success);
+}
+
+.bonus-penalty-chip--penalty {
+    color: var(--mud-palette-error);
 }
 
 .dice-option {

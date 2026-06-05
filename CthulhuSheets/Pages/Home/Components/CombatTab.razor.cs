@@ -15,11 +15,18 @@ public partial class CombatTab
     private int? DodgeExtreme => Investigator.Dexterity.Half / 5;
 
     private int? _dodgeRoll;
+    private readonly Dictionary<Weapon, int> _weaponRolls = new();
 
-    private void RollDodge()
+    private void RollDodge(int modifier = 0)
     {
-        var result = DiceRollService.RollMany([(sides: 100, count: 1)]);
+        var result = DiceRollService.RollPercentile(modifier);
         _dodgeRoll = result.Total;
+    }
+
+    private void RollWeapon(Weapon weapon, int modifier = 0)
+    {
+        var result = DiceRollService.RollPercentile(modifier);
+        _weaponRolls[weapon] = result.Total;
     }
 
     private async Task AddWeapon()
@@ -30,6 +37,7 @@ public partial class CombatTab
 
     private async Task RemoveWeapon(Weapon weapon)
     {
+        _weaponRolls.Remove(weapon);
         Investigator.Weapons.Remove(weapon);
         await PersistAsync();
     }

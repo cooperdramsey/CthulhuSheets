@@ -22,6 +22,18 @@
                            Size="Size.Small"
                            OnClick="AddSkill" />
         }
+        @if (!_skillsEditMode && Investigator.Skills.Any(s => s.HasExperienceCheck))
+        {
+            <MudTooltip Text="Roll d100 per checked skill. Roll over current value to gain +1D10.">
+                <MudButton Variant="Variant.Outlined"
+                           Size="Size.Small"
+                           StartIcon="@Icons.Material.Filled.TrendingUp"
+                           Color="Color.Success"
+                           OnClick="ImproveSkills">
+                    Improve Skills
+                </MudButton>
+            </MudTooltip>
+        }
         <MudTooltip Text="@(_skillsEditMode ? "Done Editing" : "Edit Skills")">
             <MudIconButton Icon="@(_skillsEditMode ? Icons.Material.Filled.EditOff : Icons.Material.Filled.Edit)"
                            Color="@(_skillsEditMode ? Color.Primary : Color.Default)"
@@ -29,6 +41,33 @@
                            OnClick="() => _skillsEditMode = !_skillsEditMode" />
         </MudTooltip>
     </div>
+    @if (_improvementResults.Count > 0)
+    {
+        <div class="skill-improvement-results">
+            <div class="skill-improvement-header">
+                <MudText Typo="Typo.caption" Color="Color.Secondary">Skill Improvement Results</MudText>
+                <MudIconButton Icon="@Icons.Material.Filled.Close"
+                               Size="Size.Small"
+                               OnClick="() => _improvementResults.Clear()" />
+            </div>
+            @foreach (var result in _improvementResults)
+            {
+                <div class="skill-improvement-row @(result.Improved ? "improved" : "no-change")">
+                    <span class="skill-improvement-name">@result.SkillName</span>
+                    @if (result.Improved)
+                    {
+                        <span>rolled @result.Roll vs @result.OldValue → <strong>+@(result.NewValue - result.OldValue)</strong> (now @result.NewValue)</span>
+                        <MudIcon Icon="@Icons.Material.Filled.TrendingUp" Size="Size.Small" Color="Color.Success" />
+                    }
+                    else
+                    {
+                        <span>rolled @result.Roll vs @result.OldValue → no improvement</span>
+                        <MudIcon Icon="@Icons.Material.Filled.Remove" Size="Size.Small" Color="Color.Secondary" />
+                    }
+                </div>
+            }
+        </div>
+    }
     @{
         var skillList = VisibleSkills.ToList();
         var half = (skillList.Count + 1) / 2;
@@ -77,14 +116,22 @@
                         }
                         else
                         {
-                            <div class="skill-name-val">@(string.IsNullOrWhiteSpace(skill.Name) ? "—" : skill.Name)</div>
+                            <div class="skill-name-val">
+                                <MudTooltip Text="@(skill.HasExperienceCheck ? "Clear experience check" : "Mark for experience check")">
+                                    <input type="checkbox"
+                                           class="skill-exp-check"
+                                           checked="@skill.HasExperienceCheck"
+                                           @onchange="async e => { skill.HasExperienceCheck = (bool)e.Value!; await PersistAsync(); }" />
+                                </MudTooltip>
+                                @(string.IsNullOrWhiteSpace(skill.Name) ? "—" : skill.Name)
+                            </div>
                             <div class="skill-val">@skill.BaseValue</div>
                             <div class="skill-val-cell">
-                                <span class="skill-val skill-val--regular">@(skill.Regular?.ToString() ?? "—")</span>
-                                @if (hasSkillRoll && skill.Regular.HasValue)
+                                <span class="skill-val skill-val--regular">@skill.EffectiveRegular</span>
+                                @if (hasSkillRoll)
                                 {
-                                    <MudIcon Icon="@(skillRoll <= skill.Regular.Value ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
-                                             Color="@(skillRoll <= skill.Regular.Value ? Color.Success : Color.Error)"
+                                    <MudIcon Icon="@(skillRoll <= skill.EffectiveRegular ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
+                                             Color="@(skillRoll <= skill.EffectiveRegular ? Color.Success : Color.Error)"
                                              Size="Size.Small"
                                              Class="char-check-icon" />
                                 }
@@ -113,12 +160,9 @@
                                 else { <span class="skill-roll-icon-placeholder"></span> }
                             </div>
                             <div class="skill-roll-cell">
-                                <MudTooltip Text="Roll d100">
-                                    <MudIconButton Icon="@Icons.Material.Filled.Casino"
-                                                   Size="Size.Small"
-                                                   Color="Color.Primary"
-                                                   OnClick="() => RollSkill(skill)" />
-                                </MudTooltip>
+                                <RollButton Size="Size.Small"
+                                            Color="Color.Primary"
+                                            OnRoll="async mod => await RollSkill(skill, mod)" />
                                 <span class="skill-roll-result">@(hasSkillRoll ? skillRoll.ToString() : "")</span>
                             </div>
                         }

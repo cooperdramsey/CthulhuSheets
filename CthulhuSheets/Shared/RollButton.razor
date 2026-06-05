@@ -1,0 +1,43 @@
+<div class="roll-btn-root">
+    @if (_open)
+    {
+        <div class="roll-popup @(_flipBelow ? "roll-popup--below" : "")"
+             style="left: @(_popupX)px; top: @(_popupY)px;"
+             @onclick:stopPropagation
+             @oncontextmenu:stopPropagation
+             @oncontextmenu:preventDefault>
+            <div class="roll-popup-header">
+                <span class="roll-popup-title">Dice Modifier</span>
+                <MudIconButton Icon="@Icons.Material.Filled.Close" Size="Size.Small" OnClick="Close" />
+            </div>
+            <div class="roll-popup-selector">
+                <MudIconButton Icon="@Icons.Material.Filled.Remove"
+                               Size="Size.Small"
+                               Disabled="@(_modifier <= -2)"
+                               OnClick="Decrement" />
+                <span class="roll-popup-mod @ModifierClass">@ModifierLabel</span>
+                <MudIconButton Icon="@Icons.Material.Filled.Add"
+                               Size="Size.Small"
+                               Disabled="@(_modifier >= 2)"
+                               OnClick="Increment" />
+            </div>
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       Size="Size.Small"
+                       FullWidth="true"
+                       OnClick="ConfirmRoll">
+                Roll d100
+            </MudButton>
+        </div>
+    }
+    <div @oncontextmenu="OpenPopover" @oncontextmenu:preventDefault>
+        <MudIconButton Icon="@Icons.Material.Filled.Casino"
+                       Size="@Size"
+                       Color="@Color"
+                       OnClick="RollImmediate" />
+    </div>
+</div>
+@if (_open)
+{
+    <div class="roll-popup-backdrop" @onclick="Close"></div>
+}

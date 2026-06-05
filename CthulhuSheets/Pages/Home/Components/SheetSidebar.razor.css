@@ -97,3 +97,10 @@
     font-size: 0.8rem;
     font-weight: 600;
 }
+
+.sanity-insane-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-top: 2px;
+}

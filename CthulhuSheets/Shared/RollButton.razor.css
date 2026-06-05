@@ -1,0 +1,87 @@
+.roll-btn-root {
+    position: relative;
+    display: inline-flex;
+}
+
+.roll-popup {
+    position: fixed;
+    z-index: 9999;
+    transform: translateY(-100%);
+    background: var(--mud-palette-surface);
+    border: 1px solid var(--mud-palette-divider);
+    border-radius: 10px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+    padding: 10px 12px;
+    min-width: 170px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: rollPopupIn 100ms ease-out both;
+}
+
+@keyframes rollPopupIn {
+    from { opacity: 0; transform: translateY(calc(-100% + 6px)); }
+    to   { opacity: 1; transform: translateY(-100%); }
+}
+
+.roll-popup--below {
+    transform: none;
+    animation: rollPopupInBelow 100ms ease-out both;
+}
+
+@keyframes rollPopupInBelow {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: none; }
+}
+
+.roll-popup-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    cursor: default;
+}
+
+.roll-popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.roll-popup-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mud-palette-text-secondary);
+}
+
+.roll-popup-selector {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+}
+
+.roll-popup-mod {
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex: 1;
+    text-align: center;
+    padding: 4px 6px;
+    border-radius: 6px;
+}
+
+.roll-popup-mod--normal {
+    color: var(--mud-palette-text-secondary);
+    background: transparent;
+}
+
+.roll-popup-mod--bonus {
+    color: var(--mud-palette-success-text);
+    background: color-mix(in oklab, var(--mud-palette-success) 15%, transparent);
+}
+
+.roll-popup-mod--penalty {
+    color: var(--mud-palette-error-text);
+    background: color-mix(in oklab, var(--mud-palette-error) 15%, transparent);
+}

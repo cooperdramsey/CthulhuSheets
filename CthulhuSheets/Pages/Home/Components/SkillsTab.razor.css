@@ -119,3 +119,55 @@
 .char-check-icon {
     font-size: 1rem !important;
 }
+
+.skill-exp-check {
+    width: 13px;
+    height: 13px;
+    margin-right: 4px;
+    cursor: pointer;
+    accent-color: var(--mud-palette-primary);
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+.skill-improvement-results {
+    background: var(--mud-palette-surface);
+    border: 1px solid var(--mud-palette-divider);
+    border-radius: 6px;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.skill-improvement-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2px;
+}
+
+.skill-improvement-row {
+    display: grid;
+    grid-template-columns: 160px 1fr auto;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    padding: 2px 0;
+}
+
+.skill-improvement-row.improved .skill-improvement-name {
+    font-weight: 600;
+    color: var(--mud-palette-success);
+}
+
+.skill-improvement-row.no-change .skill-improvement-name {
+    color: var(--mud-palette-text-secondary);
+}
+
+.skill-improvement-name {
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

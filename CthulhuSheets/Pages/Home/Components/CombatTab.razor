@@ -58,12 +58,9 @@
                 </div>
             </div>
             <div class="roll-action">
-                <MudTooltip Text="Roll d100">
-                    <MudIconButton Icon="@Icons.Material.Filled.Casino"
-                                   Size="Size.Small"
-                                   Color="Color.Primary"
-                                   OnClick="RollDodge" />
-                </MudTooltip>
+                <RollButton Size="Size.Small"
+                            Color="Color.Primary"
+                            OnRoll="mod => RollDodge(mod)" />
                 <span class="roll-result">@(_dodgeRoll?.ToString() ?? "")</span>
             </div>
         </div>
@@ -80,19 +77,49 @@
         {
             <div class="weapon-grid">
                 <span class="weapon-col-header">Name</span>
+                <span class="weapon-col-header weapon-col-center">Skill</span>
+                <span class="weapon-col-header weapon-col-center">Hard</span>
+                <span class="weapon-col-header weapon-col-center">Ext</span>
                 <span class="weapon-col-header">Damage</span>
-                <span class="weapon-col-header">Atk/Rnd</span>
+                <span class="weapon-col-header weapon-col-center">Atk/Rnd</span>
                 <span class="weapon-col-header">Range</span>
-                <span class="weapon-col-header">Ammo</span>
-                <span class="weapon-col-header">Malf</span>
+                <span class="weapon-col-header weapon-col-center">Ammo</span>
+                <span class="weapon-col-header weapon-col-center">Malf</span>
+                <span></span>
                 <span></span>
                 @foreach (var weapon in Investigator.Weapons)
                 {
+                    var hasRoll = _weaponRolls.TryGetValue(weapon, out var weaponRoll);
                     <MudTextField @bind-Value="weapon.Name"
                                   @bind-Value:after="PersistAsync"
                                   Variant="Variant.Outlined"
                                   Margin="Margin.Dense"
                                   Placeholder="Name" />
+                    <MudNumericField T="int?"
+                                     @bind-Value="weapon.SkillRegular"
+                                     @bind-Value:after="PersistAsync"
+                                     Variant="Variant.Outlined"
+                                     Margin="Margin.Dense"
+                                     HideSpinButtons="true"
+                                     Placeholder="—" />
+                    <div class="weapon-derived-val">
+                        <span>@(weapon.SkillHalf?.ToString() ?? "—")</span>
+                        @if (hasRoll && weapon.SkillHalf.HasValue)
+                        {
+                            <MudIcon Icon="@(weaponRoll <= weapon.SkillHalf ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
+                                     Color="@(weaponRoll <= weapon.SkillHalf ? Color.Success : Color.Error)"
+                                     Size="Size.Small" Class="roll-check-icon" />
+                        }
+                    </div>
+                    <div class="weapon-derived-val">
+                        <span>@(weapon.SkillFifth?.ToString() ?? "—")</span>
+                        @if (hasRoll && weapon.SkillFifth.HasValue)
+                        {
+                            <MudIcon Icon="@(weaponRoll <= weapon.SkillFifth ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
+                                     Color="@(weaponRoll <= weapon.SkillFifth ? Color.Success : Color.Error)"
+                                     Size="Size.Small" Class="roll-check-icon" />
+                        }
+                    </div>
                     <MudTextField @bind-Value="weapon.Damage"
                                   @bind-Value:after="PersistAsync"
                                   Variant="Variant.Outlined"
@@ -121,6 +148,17 @@
                                      Variant="Variant.Outlined"
                                      Margin="Margin.Dense"
                                      HideSpinButtons="true" />
+                    <div class="weapon-roll-cell">
+                        <RollButton Size="Size.Small"
+                                    Color="Color.Primary"
+                                    OnRoll="mod => RollWeapon(weapon, mod)" />
+                        @if (hasRoll)
+                        {
+                            <span class="weapon-roll-result @(weapon.SkillRegular.HasValue ? (weaponRoll <= weapon.SkillRegular ? "success" : "fail") : "")">
+                                @weaponRoll
+                            </span>
+                        }
+                    </div>
                     <MudIconButton Icon="@Icons.Material.Filled.Delete"
                                    Color="Color.Error"
                                    Size="Size.Small"

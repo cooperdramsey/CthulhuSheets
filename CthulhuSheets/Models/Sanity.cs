@@ -9,5 +9,5 @@ public class Sanity
     public int? Max { get; set; }
 
     [JsonIgnore]
-    public int? Insane => Current.HasValue ? Current.Value / 5 : null;
+    public int? Insane => Starting.HasValue ? Starting.Value / 5 : null;
 }
