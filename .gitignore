@@ -364,3 +364,6 @@ FodyWeavers.xsd
 
 # Local Claude Settings
 .claude/settings.local.json
+
+# References folder
+References/
