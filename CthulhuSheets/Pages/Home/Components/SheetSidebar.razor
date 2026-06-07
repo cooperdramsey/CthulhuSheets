@@ -109,10 +109,29 @@
                                  Margin="Margin.Dense"
                                  HideSpinButtons="true"
                                  Class="pool-input" />
+                <span class="pool-sep">/</span>
+                <MudTooltip Text="@($"Maximum Sanity = 99 − Cthulhu Mythos ({CthulhuMythos}%). Sanity can never be restored above this value.")">
+                    <MudNumericField T="int?"
+                                     Value="@SanMax"
+                                     ReadOnly="true"
+                                     Label="Max"
+                                     Variant="Variant.Outlined"
+                                     Margin="Margin.Dense"
+                                     HideSpinButtons="true"
+                                     Class="pool-input" />
+                </MudTooltip>
             </div>
-            <div class="sanity-insane-row">
-                <MudText Typo="Typo.caption" Color="Color.Secondary">Insane threshold:</MudText>
-                <MudText Typo="Typo.caption" Color="Color.Error">@(Investigator.Sanity.Insane?.ToString() ?? "—")</MudText>
+            <div class="sanity-thresholds">
+                <MudText Typo="Typo.caption" Color="Color.Secondary">Bout triggers:</MudText>
+                <MudTooltip Text="Lose 5 or more Sanity from a single source → make an INT roll; success means a bout of madness (temporary insanity, 1D10 hours).">
+                    <MudChip T="string" Size="Size.Small" Variant="Variant.Text" Color="Color.Warning">Temporary: 5+ from one source</MudChip>
+                </MudTooltip>
+                <MudTooltip Text="@($"Lose ⅕ or more of current Sanity ({(IndefiniteLoss?.ToString() ?? "—")}) within a single day → indefinitely insane until cured.")">
+                    <MudChip T="string" Size="Size.Small" Variant="Variant.Text" Color="Color.Error">Indefinite: lose @(IndefiniteLoss?.ToString() ?? "—")+ in a day</MudChip>
+                </MudTooltip>
+                <MudTooltip Text="Sanity reduced to 0 → permanently insane; the investigator is retired from play.">
+                    <MudChip T="string" Size="Size.Small" Variant="Variant.Text" Color="Color.Default">Permanent: 0</MudChip>
+                </MudTooltip>
             </div>
         </div>
         <div class="pool-item">

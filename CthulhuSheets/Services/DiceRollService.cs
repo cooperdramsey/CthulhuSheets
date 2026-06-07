@@ -14,37 +14,49 @@ public class DiceRollService
     public event Action? OnRollHistoryChanged;
 
     /// <summary>
-    /// Rolls d100 with optional bonus/penalty dice (-2 to +2).
-    /// Bonus: roll extra dice, take the lowest result. Penalty: take the highest.
+    /// Rolls d100 with optional bonus/penalty dice (-2 to +2), per CoC 7e:
+    /// roll one units die and (1 + extra) tens dice that share that units digit.
+    /// Bonus dice keep the lowest final result; penalty dice keep the highest.
+    /// A tens of 00 with units 0 reads as 100.
     /// </summary>
     public DiceGroup RollPercentile(int bonusPenalty = 0)
     {
         bonusPenalty = Math.Clamp(bonusPenalty, -2, 2);
-        var diceCount = Math.Abs(bonusPenalty) + 1;
-        var rolls = Enumerable.Range(0, diceCount).Select(_ => Roll(100)).ToList();
+
+        var units = _random.Next(0, 10);          // 0–9, shared across all tens dice
+        var tensDiceCount = Math.Abs(bonusPenalty) + 1;
+        var candidates = Enumerable.Range(0, tensDiceCount)
+            .Select(_ => Combine(_random.Next(0, 10), units))
+            .ToList();
 
         int result;
         string expression;
 
         if (bonusPenalty == 0)
         {
-            result = rolls[0];
+            result = candidates[0];
             expression = "1d100";
         }
         else if (bonusPenalty > 0)
         {
-            result = rolls.Min();
+            result = candidates.Min();
             var tag = bonusPenalty == 1 ? "+bonus" : "+2bonus";
-            expression = $"1d100 {tag} ({string.Join(", ", rolls)})";
+            expression = $"1d100 {tag} ({string.Join(", ", candidates)})";
         }
         else
         {
-            result = rolls.Max();
+            result = candidates.Max();
             var tag = bonusPenalty == -1 ? "-penalty" : "-2penalty";
-            expression = $"1d100 {tag} ({string.Join(", ", rolls)})";
+            expression = $"1d100 {tag} ({string.Join(", ", candidates)})";
         }
 
         return AddToHistory(result, expression);
+
+        static int Combine(int tensDigit, int unitsDigit)
+        {
+            var value = tensDigit * 10 + unitsDigit;
+            return value == 0 ? 100 : value;
+        }
     }
 
     public DiceGroup RollMany(IEnumerable<(int sides, int count)> requests)

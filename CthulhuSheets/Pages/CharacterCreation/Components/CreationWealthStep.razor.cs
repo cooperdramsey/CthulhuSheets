@@ -12,11 +12,15 @@ public partial class CreationWealthStep
 
     private WealthTier CurrentTier => GetTier(CreditRating);
 
+    // Cash and Assets scale with the investigator's exact Credit Rating
+    // (Table II, 1920s): e.g. Average cash = CR×2, assets = CR×50.
+    private int CurrentCash => ComputeCash(CurrentTier, CreditRating);
+    private int CurrentAssets => ComputeAssets(CurrentTier, CreditRating);
+
     protected override void OnParametersSet()
     {
-        var tier = CurrentTier;
-        Investigator.Wealth.SpendingLevel = tier.SpendingLevel;
-        Investigator.Wealth.Cash = tier.Cash;
+        Investigator.Wealth.SpendingLevel = CurrentTier.SpendingLevel;
+        Investigator.Wealth.Cash = CurrentCash;
     }
 
     private void AddAsset() => Investigator.Wealth.Assets.Add(string.Empty);
@@ -25,7 +29,7 @@ public partial class CreationWealthStep
 
     private static WealthTier GetTier(int creditRating) => creditRating switch
     {
-        0 => AllTiers[0],
+        <= 0 => AllTiers[0],
         <= 9 => AllTiers[1],
         <= 49 => AllTiers[2],
         <= 89 => AllTiers[3],
@@ -33,20 +37,48 @@ public partial class CreationWealthStep
         _ => AllTiers[5],
     };
 
+    private static int ComputeCash(WealthTier tier, int creditRating) =>
+        tier.FixedCash ?? creditRating * tier.CashMultiplier;
+
+    private static int ComputeAssets(WealthTier tier, int creditRating) =>
+        tier.FixedAssets ?? creditRating * tier.AssetMultiplier;
+
     private static string FormatCrRange(WealthTier tier) =>
         tier.CrMin == tier.CrMax ? $"{tier.CrMin}" : $"{tier.CrMin}–{tier.CrMax}";
 
     private static string FormatDollar(int amount) => $"${amount:N0}";
 
+    // Cash/Assets columns scale with Credit Rating, so the table shows each band's range.
+    private static string FormatCashCell(WealthTier tier) =>
+        tier.FixedCash is int fixedCash
+            ? FormatDollar(fixedCash)
+            : $"{FormatDollar(tier.CrMin * tier.CashMultiplier)}–{FormatDollar(tier.CrMax * tier.CashMultiplier)}";
+
+    private static string FormatAssetCell(WealthTier tier) =>
+        tier.FixedAssets is int fixedAssets
+            ? (fixedAssets == 0 ? "None" : FormatDollar(fixedAssets))
+            : $"{FormatDollar(tier.CrMin * tier.AssetMultiplier)}–{FormatDollar(tier.CrMax * tier.AssetMultiplier)}";
+
+    // 1920s Table II. Cash/Assets derive from CR × multiplier within each band;
+    // the Penniless and Super Rich bands use fixed amounts instead.
     private static readonly WealthTier[] AllTiers =
     [
-        new("Penniless",  0,  0,     0,      0,         0),
-        new("Poor",       1,  9,     2,     10,       500),
-        new("Average",   10, 49,    10,     50,     5_000),
-        new("Wealthy",   50, 89,    50,    250,    50_000),
-        new("Rich",      90, 98,   250,  2_500,   500_000),
-        new("Super Rich", 99, 99, 5_000, 50_000, 5_000_000),
+        //   Label          Min Max  Spend  CashX AssetX  FixedCash  FixedAssets
+        new("Penniless",      0,  0,     0,     0,     0,         0,           0),
+        new("Poor",           1,  9,     2,     1,    10),
+        new("Average",       10, 49,    10,     2,    50),
+        new("Wealthy",       50, 89,    50,     5,   500),
+        new("Rich",          90, 98,   250,    20,  2000),
+        new("Super Rich",    99, 99,  5000,     0,     0,    50_000,   5_000_000),
     ];
 
-    private record WealthTier(string Label, int CrMin, int CrMax, int SpendingLevel, int Cash, int Assets);
+    private record WealthTier(
+        string Label,
+        int CrMin,
+        int CrMax,
+        int SpendingLevel,
+        int CashMultiplier,
+        int AssetMultiplier,
+        int? FixedCash = null,
+        int? FixedAssets = null);
 }

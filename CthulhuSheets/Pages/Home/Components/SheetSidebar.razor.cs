@@ -37,4 +37,17 @@ public partial class SheetSidebar
         _sanityRoll.HasValue && Investigator.Sanity.Current.HasValue
             ? _sanityRoll.Value <= Investigator.Sanity.Current.Value
             : null;
+
+    // ── Sanity thresholds (derived; see ch_8) ────────
+    private int CthulhuMythos =>
+        Investigator.Skills
+            .FirstOrDefault(s => s.Name.Equals("Cthulhu Mythos", StringComparison.OrdinalIgnoreCase))
+            ?.EffectiveRegular ?? 0;
+
+    // Maximum Sanity = 99 − Cthulhu Mythos. Sanity can never be restored above this.
+    private int SanMax => Math.Max(0, 99 - CthulhuMythos);
+
+    // Indefinite insanity triggers on losing ⅕ or more of current Sanity in one day.
+    private int? IndefiniteLoss =>
+        Investigator.Sanity.Current.HasValue ? Investigator.Sanity.Current.Value / 5 : null;
 }

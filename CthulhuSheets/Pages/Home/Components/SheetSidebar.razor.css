@@ -98,9 +98,10 @@
     font-weight: 600;
 }
 
-.sanity-insane-row {
+.sanity-thresholds {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 6px;
-    padding-top: 2px;
+    gap: 4px;
+    padding-top: 4px;
 }

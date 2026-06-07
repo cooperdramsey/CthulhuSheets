@@ -25,6 +25,10 @@ public partial class CreationOccupationSkillsStep
     private Dictionary<string, int> _allocations = new(StringComparer.OrdinalIgnoreCase);
     private Dictionary<string, int> _personalAllocations = new(StringComparer.OrdinalIgnoreCase);
 
+    // The 75% starting-skill cap is a Keeper option (ch_3), on by default.
+    private const int StartingSkillCap = 75;
+    private bool _capSkillsAt75 = true;
+
     private bool CanConfirmCustomOccupation =>
         !string.IsNullOrWhiteSpace(_customOccupationName) &&
         _occupationSkillNames.Count == 8 &&
@@ -260,6 +264,28 @@ public partial class CreationOccupationSkillsStep
         _allocations[skillName] = Math.Max(0, value);
     }
 
+    private void OnCapToggled(bool enabled)
+    {
+        _capSkillsAt75 = enabled;
+        if (!enabled) return;
+
+        // Re-clamp any allocation whose grand total now exceeds the cap.
+        foreach (var name in _allocations.Keys.ToList())
+        {
+            if (name.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase)) continue;
+            var ceiling = StartingSkillCap - GetSkillBase(name) - _personalAllocations.GetValueOrDefault(name);
+            if (_allocations[name] > ceiling)
+                _allocations[name] = Math.Max(0, ceiling);
+        }
+        foreach (var name in _personalAllocations.Keys.ToList())
+        {
+            if (name.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase)) continue;
+            var ceiling = StartingSkillCap - GetSkillBase(name) - _allocations.GetValueOrDefault(name);
+            if (_personalAllocations[name] > ceiling)
+                _personalAllocations[name] = Math.Max(0, ceiling);
+        }
+    }
+
     private int GetSkillBase(string skillName)
     {
         var skill = Investigator.Skills.FirstOrDefault(
@@ -280,7 +306,10 @@ public partial class CreationOccupationSkillsStep
             return Math.Max(0, Math.Min(availablePool, crMax));
         }
 
-        var skillCap = 75 - baseVal - personalAlloc;
+        if (!_capSkillsAt75)
+            return Math.Max(0, availablePool);
+
+        var skillCap = StartingSkillCap - baseVal - personalAlloc;
         return Math.Max(0, Math.Min(availablePool, skillCap));
     }
 
@@ -315,7 +344,10 @@ public partial class CreationOccupationSkillsStep
             return Math.Max(0, Math.Min(availablePool, crMax));
         }
 
-        var skillCap = 75 - baseVal - occAlloc;
+        if (!_capSkillsAt75)
+            return Math.Max(0, availablePool);
+
+        var skillCap = StartingSkillCap - baseVal - occAlloc;
         return Math.Max(0, Math.Min(availablePool, skillCap));
     }
 
@@ -342,67 +374,12 @@ public partial class CreationOccupationSkillsStep
             .Select(s => s.Name)
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-        foreach (var (name, baseVal) in DefaultSkills)
+        foreach (var (name, baseVal) in DefaultSkills.All)
         {
             if (existing.Contains(name)) continue;
 
-            var computedBase = name switch
-            {
-                "Dodge"          => Investigator.Dexterity.Half ?? 0,
-                "Language (Own)" => Investigator.Education.Regular ?? 0,
-                _                => baseVal
-            };
-
+            var computedBase = DefaultSkills.ComputeBase(name, baseVal, Investigator);
             Investigator.Skills.Add(new Skill { Name = name, BaseValue = computedBase });
         }
     }
-
-    private static readonly (string Name, int BaseValue)[] DefaultSkills =
-    [
-        ("Accounting",               5),
-        ("Anthropology",             1),
-        ("Appraise",                 5),
-        ("Archaeology",              1),
-        ("Art/Craft",                5),
-        ("Charm",                   15),
-        ("Climb",                   20),
-        ("Credit Rating",            0),
-        ("Cthulhu Mythos",           0),
-        ("Disguise",                 5),
-        ("Dodge",                    0),
-        ("Drive Auto",              20),
-        ("Electrical Repair",       10),
-        ("Fast Talk",                5),
-        ("Fighting (Brawl)",        25),
-        ("Firearms (Handgun)",      20),
-        ("Firearms (Rifle/Shotgun)", 25),
-        ("First Aid",               30),
-        ("History",                  5),
-        ("Intimidate",              15),
-        ("Jump",                    20),
-        ("Language (Other)",         1),
-        ("Language (Own)",           0),
-        ("Law",                      5),
-        ("Library Use",             20),
-        ("Listen",                  20),
-        ("Locksmith",                1),
-        ("Mechanical Repair",       10),
-        ("Medicine",                 1),
-        ("Natural World",           10),
-        ("Navigate",                10),
-        ("Occult",                   5),
-        ("Persuade",                10),
-        ("Pilot",                    1),
-        ("Psychoanalysis",           1),
-        ("Psychology",              10),
-        ("Ride",                     5),
-        ("Science",                  1),
-        ("Sleight of Hand",         10),
-        ("Spot Hidden",             25),
-        ("Stealth",                 20),
-        ("Survival",                10),
-        ("Swim",                    20),
-        ("Throw",                   20),
-        ("Track",                   10),
-    ];
 }

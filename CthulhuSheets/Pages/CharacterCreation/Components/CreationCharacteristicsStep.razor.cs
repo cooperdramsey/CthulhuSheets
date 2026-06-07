@@ -239,77 +239,8 @@ public partial class CreationCharacteristicsStep
 
     private void ComputeDerivedAttributes()
     {
-        var pow = Investigator.Power.Regular;
-        var siz = Investigator.Size.Regular;
-        var con = Investigator.Constitution.Regular;
-
-        if (pow.HasValue)
-        {
-            Investigator.Sanity = new Sanity
-            {
-                Starting = pow.Value,
-                Current = pow.Value,
-                Max = 99
-            };
-
-            Investigator.MagicPoints = new MagicPoints
-            {
-                Current = pow.Value / 5,
-                Max = pow.Value / 5
-            };
-        }
-
-        if (siz.HasValue && con.HasValue)
-        {
-            var hp = (siz.Value + con.Value) / 10;
-            Investigator.HitPoints = new HitPoints
-            {
-                Current = hp,
-                Max = hp
-            };
-        }
-
-        var str = Investigator.Strength.Regular;
-        var dex = Investigator.Dexterity.Regular;
-        if (str.HasValue && dex.HasValue && siz.HasValue)
-        {
-            int mov;
-            if (str.Value > siz.Value && dex.Value > siz.Value)
-                mov = 9;
-            else if (str.Value < siz.Value && dex.Value < siz.Value)
-                mov = 7;
-            else
-                mov = 8;
-
-            var age = Investigator.Age ?? 0;
-            mov -= age switch
-            {
-                >= 80 => 5,
-                >= 70 => 4,
-                >= 60 => 3,
-                >= 50 => 2,
-                >= 40 => 1,
-                _ => 0
-            };
-
-            Investigator.MovementRate = mov;
-        }
-
-        if (str.HasValue && siz.HasValue)
-        {
-            var total = str.Value + siz.Value;
-            (Investigator.DamageBonus, Investigator.Build) = total switch
-            {
-                <= 64 => ("-2", -2),
-                <= 84 => ("-1", -1),
-                <= 124 => ("0", 0),
-                <= 164 => ("1d4", 1),
-                <= 204 => ("1d6", 2),
-                <= 284 => ("2d6", 3),
-                <= 364 => ("3d6", 4),
-                <= 444 => ("4d6", 5),
-                _ => ("5d6", 6)
-            };
-        }
+        // Pools are freshly reset before this runs (current values unset), so the
+        // shared helper seeds full pools and computes the derived stats.
+        CharacteristicHelper.RecomputeDerived(Investigator);
     }
 }

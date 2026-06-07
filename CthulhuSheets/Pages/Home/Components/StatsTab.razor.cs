@@ -16,6 +16,14 @@ public partial class StatsTab
 
     private Task PersistAsync() => InvestigatorService.PersistAsync();
 
+    // Editing a characteristic auto-recomputes the derived stats (HP/MP max, MOV,
+    // Build, Damage Bonus, starting SAN), preserving current pool values.
+    private async Task OnCharacteristicChanged()
+    {
+        CharacteristicHelper.RecomputeDerived(Investigator);
+        await PersistAsync();
+    }
+
     private readonly Dictionary<string, int> _lastRolls = new();
 
     private IEnumerable<(string Label, Characteristic Stat)> CharacteristicList =>

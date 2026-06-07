@@ -236,6 +236,16 @@
                     @PersonalPointsRemaining remaining
                 </MudChip>
             </div>
+            <div class="pool-summary-row">
+                <MudTooltip Text="Optional rule (ch_3): the Keeper may cap each starting skill at 75%. Turn off to allocate beyond 75%.">
+                    <MudCheckBox T="bool"
+                                 Value="_capSkillsAt75"
+                                 ValueChanged="OnCapToggled"
+                                 Label="Cap starting skills at 75% (Keeper option)"
+                                 Color="Color.Primary"
+                                 Size="Size.Small" />
+                </MudTooltip>
+            </div>
             @if (PointsRemaining < 0)
             {
                 <MudText Typo="Typo.caption" Color="Color.Error">

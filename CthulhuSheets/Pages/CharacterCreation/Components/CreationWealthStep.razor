@@ -34,8 +34,8 @@
                     <td>@FormatCrRange(tier)</td>
                     <td>@tier.Label</td>
                     <td>@FormatDollar(tier.SpendingLevel)</td>
-                    <td>@FormatDollar(tier.Cash)</td>
-                    <td>@FormatDollar(tier.Assets)</td>
+                    <td>@FormatCashCell(tier)</td>
+                    <td>@FormatAssetCell(tier)</td>
                 </tr>
             }
         </tbody>
@@ -67,7 +67,7 @@
                            OnClick="AddAsset" />
         </div>
         <MudText Typo="Typo.body2" Color="Color.Secondary">
-            Total asset value up to @FormatDollar(CurrentTier.Assets). Describe your investigator's property, investments, etc.
+            Total asset value up to @FormatDollar(CurrentAssets). Describe your investigator's property, investments, etc.
         </MudText>
         @if (Investigator.Wealth.Assets.Count == 0)
         {

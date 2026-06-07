@@ -36,7 +36,7 @@
                     {
                         <MudNumericField T="int?"
                                          @bind-Value="stat.Regular"
-                                         @bind-Value:after="PersistAsync"
+                                         @bind-Value:after="OnCharacteristicChanged"
                                          Label="Regular"
                                          Variant="Variant.Outlined"
                                          Margin="Margin.Dense"

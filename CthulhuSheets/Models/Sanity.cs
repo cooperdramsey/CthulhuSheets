@@ -1,13 +1,10 @@
-using System.Text.Json.Serialization;
-
 namespace CthulhuSheets.Models;
 
 public class Sanity
 {
     public int? Starting { get; set; }
     public int? Current { get; set; }
-    public int? Max { get; set; }
 
-    [JsonIgnore]
-    public int? Insane => Starting.HasValue ? Starting.Value / 5 : null;
+    // Maximum Sanity (99 − Cthulhu Mythos) is derived from the investigator's
+    // skills rather than stored here, so it can never drift from the Mythos value.
 }
