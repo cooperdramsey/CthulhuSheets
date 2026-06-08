@@ -18,4 +18,5 @@ public class Skill
     public int? Fifth => EffectiveRegular / 5;
 
     public bool HasExperienceCheck { get; set; }
+    public bool IsDefault { get; set; }
 }

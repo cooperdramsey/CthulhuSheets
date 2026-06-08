@@ -379,7 +379,7 @@ public partial class CreationOccupationSkillsStep
             if (existing.Contains(name)) continue;
 
             var computedBase = DefaultSkills.ComputeBase(name, baseVal, Investigator);
-            Investigator.Skills.Add(new Skill { Name = name, BaseValue = computedBase });
+            Investigator.Skills.Add(new Skill { Name = name, BaseValue = computedBase, IsDefault = true });
         }
     }
 }

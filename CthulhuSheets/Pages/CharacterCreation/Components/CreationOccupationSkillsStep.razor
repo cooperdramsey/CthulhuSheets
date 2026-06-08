@@ -376,10 +376,17 @@
                              Color="@(total > capVal ? Color.Error : Color.Default)">
                         <strong>@total</strong>
                     </MudText>
-                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                                   Color="Color.Error"
-                                   Size="Size.Small"
-                                   OnClick="() => RemoveSkill(skill)" />
+                    @if (!skill.IsDefault)
+                    {
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                       Color="Color.Error"
+                                       Size="Size.Small"
+                                       OnClick="() => RemoveSkill(skill)" />
+                    }
+                    else
+                    {
+                        <span></span>
+                    }
                 }
             </div>
         }
@@ -424,10 +431,17 @@
                                              Margin="Margin.Dense"
                                              HideSpinButtons="true"
                                              ReadOnly="true" />
-                            <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                                           Color="Color.Error"
-                                           Size="Size.Small"
-                                           OnClick="() => RemoveSkill(skill)" />
+                            @if (!skill.IsDefault)
+                            {
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                               Color="Color.Error"
+                                               Size="Size.Small"
+                                               OnClick="() => RemoveSkill(skill)" />
+                            }
+                            else
+                            {
+                                <span></span>
+                            }
                         }
                     </div>
                 }

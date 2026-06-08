@@ -144,6 +144,12 @@
     letter-spacing: 0.06em;
 }
 
+.char-fullname {
+    font-size: 0.7rem;
+    color: var(--mud-palette-text-secondary);
+    letter-spacing: 0.03em;
+}
+
 .char-formula-chip {
     font-size: 0.65rem !important;
     height: 20px !important;
@@ -268,6 +274,31 @@
 .deduction-inputs {
     display: flex;
     gap: 12px;
+}
+
+/* ── Age reference table ─────────────────────────── */
+
+.age-reference-panels {
+    margin-top: 4px;
+}
+
+.age-reference-table {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 4px 0;
+}
+
+.age-reference-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.age-reference-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--mud-palette-text-primary);
 }
 
 /* ── Results log ──────────────────────────────────── */

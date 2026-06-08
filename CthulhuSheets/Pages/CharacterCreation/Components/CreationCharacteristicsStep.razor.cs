@@ -12,7 +12,7 @@ public partial class CreationCharacteristicsStep
 
     private enum CreationMethod { Roll, PlaceRolls, PointBuy, QuickFire }
 
-    private record CharacteristicDef(Characteristic Stat, bool Is3d6, string Formula);
+    private record CharacteristicDef(Characteristic Stat, bool Is3d6, string Formula, string FullName);
 
     private record AgeBracket(
         string Label,
@@ -45,7 +45,7 @@ public partial class CreationCharacteristicsStep
     private bool IsAssignmentMethod => _method is CreationMethod.PlaceRolls or CreationMethod.QuickFire;
 
     private PoolDie? AssignedDie(string statName) => _dice.FirstOrDefault(d => d.Zone == statName);
-    private IEnumerable<PoolDie> PooledDice => _dice.Where(d => d.Zone == PoolZone);
+    private IEnumerable<PoolDie> PooledDice => _dice.Where(d => d.Zone == PoolZone).OrderBy(d => d.Value);
 
     // ── Modify Low Rolls (Roll add-on) ───────────────
     private bool _lowRollPending;
@@ -98,17 +98,23 @@ public partial class CreationCharacteristicsStep
     {
         _characteristicDefs =
         [
-            new(Investigator.Strength,     Is3d6: true,  Formula: "3D6 × 5"),
-            new(Investigator.Constitution, Is3d6: true,  Formula: "3D6 × 5"),
-            new(Investigator.Dexterity,    Is3d6: true,  Formula: "3D6 × 5"),
-            new(Investigator.Appearance,   Is3d6: true,  Formula: "3D6 × 5"),
-            new(Investigator.Power,        Is3d6: true,  Formula: "3D6 × 5"),
-            new(Investigator.Size,         Is3d6: false, Formula: "(2D6+6) × 5"),
-            new(Investigator.Intelligence, Is3d6: false, Formula: "(2D6+6) × 5"),
-            new(Investigator.Education,    Is3d6: false, Formula: "(2D6+6) × 5"),
+            new(Investigator.Strength,     Is3d6: true,  Formula: "3D6 × 5",   FullName: "Strength"),
+            new(Investigator.Constitution, Is3d6: true,  Formula: "3D6 × 5",   FullName: "Constitution"),
+            new(Investigator.Dexterity,    Is3d6: true,  Formula: "3D6 × 5",   FullName: "Dexterity"),
+            new(Investigator.Appearance,   Is3d6: true,  Formula: "3D6 × 5",   FullName: "Appearance"),
+            new(Investigator.Power,        Is3d6: true,  Formula: "3D6 × 5",   FullName: "Power"),
+            new(Investigator.Size,         Is3d6: false, Formula: "(2D6+6) × 5", FullName: "Size"),
+            new(Investigator.Intelligence, Is3d6: false, Formula: "(2D6+6) × 5", FullName: "Intelligence"),
+            new(Investigator.Education,    Is3d6: false, Formula: "(2D6+6) × 5", FullName: "Education"),
         ];
         _selectedAge = Investigator.Age;
+        // Recompute bracket so the age-gate renders correctly if the component is
+        // recreated mid-flow (e.g. the user navigates away and back in the stepper).
+        _currentBracket = _selectedAge.HasValue ? GetBracket(_selectedAge.Value) : null;
     }
+
+    private static IEnumerable<AgeBracket> AllBrackets =>
+        new[] { 15, 20, 40, 50, 60, 70, 80 }.Select(a => GetBracket(a)!);
 
     // ── Method switching ─────────────────────────────
 
@@ -235,13 +241,16 @@ public partial class CreationCharacteristicsStep
     {
         if (BaseLocked || _draggedDie is null) return;
 
-        // A characteristic holds at most one value: bump any die already in the
-        // target zone back to the pool before placing the dragged one onto it.
+        var origin = _draggedDie.Zone;
+
         if (zone != PoolZone)
         {
-            foreach (var die in _dice)
-                if (die.Zone == zone && !ReferenceEquals(die, _draggedDie))
-                    die.Zone = PoolZone;
+            var target = _dice.FirstOrDefault(d => d.Zone == zone && !ReferenceEquals(d, _draggedDie));
+            if (target is not null)
+            {
+                // Stat→stat: swap. Pool→stat: bump displaced die to pool.
+                target.Zone = (origin != PoolZone && origin != zone) ? origin : PoolZone;
+            }
         }
 
         _draggedDie.Zone = zone;
