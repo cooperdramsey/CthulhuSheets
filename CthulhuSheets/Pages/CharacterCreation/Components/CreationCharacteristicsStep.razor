@@ -1,21 +1,122 @@
+@using CthulhuSheets.Helpers
+
 <div class="characteristics-step">
 
     <div class="characteristics-header">
         <div>
             <MudText Typo="Typo.h5">Characteristics</MudText>
             <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-1">
-                Roll or assign values for your investigator's core characteristics.
+                Choose a generation method, then roll or assign your investigator's core characteristics.
             </MudText>
         </div>
-        <MudButton Variant="Variant.Filled"
-                   Color="Color.Primary"
-                   StartIcon="@Icons.Material.Filled.Casino"
-                   Disabled="_ageApplied"
-                   OnClick="RollAll">
-            Roll All
-        </MudButton>
     </div>
 
+    @* ── Method selector ──────────────────────────────── *@
+    <div class="method-selector">
+        <MudToggleGroup T="CreationMethod"
+                        Value="_method"
+                        ValueChanged="ChangeMethod"
+                        SelectionMode="SelectionMode.SingleSelection"
+                        Color="Color.Primary"
+                        CheckMark="true"
+                        Disabled="BaseLocked">
+            <MudToggleItem Value="CreationMethod.Roll" Text="Roll (dice)" />
+            <MudToggleItem Value="CreationMethod.PlaceRolls" Text="Place Rolls" />
+            <MudToggleItem Value="CreationMethod.PointBuy" Text="Point Buy" />
+            <MudToggleItem Value="CreationMethod.QuickFire" Text="Quick Fire" />
+        </MudToggleGroup>
+
+        <MudSwitch T="bool"
+                   Value="_humanPotentialEnabled"
+                   ValueChanged="OnHumanPotentialToggled"
+                   Color="Color.Secondary"
+                   Disabled="_ageApplied"
+                   Label="Human Potential (+1D10)" />
+    </div>
+
+    @* ── Method toolbar (bulk actions / counters / help) ── *@
+    <div class="method-toolbar">
+        @switch (_method)
+        {
+            case CreationMethod.Roll:
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           StartIcon="@Icons.Material.Filled.Casino"
+                           Disabled="BaseLocked"
+                           OnClick="RollAll">
+                    @(AllStatsRolled ? "Reroll All" : "Roll All")
+                </MudButton>
+                <MudText Typo="Typo.caption" Color="Color.Secondary">
+                    Roll each characteristic (3D6 × 5, or (2D6+6) × 5 for SIZ / INT / EDU).
+                </MudText>
+                break;
+
+            case CreationMethod.PlaceRolls:
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           StartIcon="@Icons.Material.Filled.Casino"
+                           Disabled="BaseLocked"
+                           OnClick="RollPlacePool">
+                    @(_dice.Count == 0 ? "Roll Pool" : "Reroll Pool")
+                </MudButton>
+                <MudText Typo="Typo.caption" Color="Color.Secondary">
+                    Roll a pool of eight values, then drag each one onto a characteristic
+                    (recommended minimum 40 for INT and SIZ).
+                </MudText>
+                break;
+
+            case CreationMethod.PointBuy:
+                <MudChip T="string"
+                         Size="Size.Medium"
+                         Color="@(PointBuyRemaining == 0 ? Color.Success : PointBuyRemaining < 0 ? Color.Error : Color.Warning)">
+                    @PointBuyRemaining / @CharacteristicHelper.PointBuyTotal remaining
+                </MudChip>
+                <MudText Typo="Typo.caption" Color="Color.Secondary">
+                    Distribute @CharacteristicHelper.PointBuyTotal points; each characteristic
+                    @CharacteristicHelper.PointBuyMin–@CharacteristicHelper.PointBuyMax
+                    (recommended minimum 40 for INT and SIZ).
+                </MudText>
+                break;
+
+            case CreationMethod.QuickFire:
+                <MudButton Variant="Variant.Outlined"
+                           Color="Color.Default"
+                           StartIcon="@Icons.Material.Filled.Clear"
+                           Disabled="BaseLocked"
+                           OnClick="ResetDiceToPool">
+                    Clear
+                </MudButton>
+                <MudText Typo="Typo.caption" Color="Color.Secondary">
+                    Drag the fixed set @string.Join(", ", CharacteristicHelper.QuickFireArray) — one value per characteristic.
+                </MudText>
+                break;
+        }
+    </div>
+
+    @* ── Pool of draggable values (Place Rolls / Quick Fire) ── *@
+    @if (IsAssignmentMethod)
+    {
+        <div class="assign-pool-wrap">
+            <MudText Typo="Typo.caption" Color="Color.Secondary">
+                @(_dice.Count == 0 ? "Roll the pool to get values to assign." : "Drag a value onto a characteristic below.")
+            </MudText>
+            <div class="assign-pool-zone"
+                 @ondragover:preventDefault="true"
+                 @ondrop="@(() => DropOnZone(PoolZone))">
+                @foreach (var die in PooledDice)
+                {
+                    var d = die;
+                    <div class="pool-die"
+                         draggable="@(BaseLocked ? "false" : "true")"
+                         @ondragstart="@(() => OnDragStart(d))">
+                        @d.Value
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    @* ── Characteristic grid ──────────────────────────── *@
     <div class="characteristics-grid">
         @foreach (var def in _characteristicDefs)
         {
@@ -25,9 +126,48 @@
                     <span class="char-abbr">@stat.Name</span>
                     <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Class="char-formula-chip">@def.Formula</MudChip>
                 </div>
-                <div class="char-value">
-                    @(stat.Regular.HasValue ? stat.Regular.Value.ToString() : "—")
-                </div>
+
+                @if (_method == CreationMethod.PointBuy)
+                {
+                    <MudNumericField T="int?"
+                                     Value="stat.Regular"
+                                     ValueChanged="@(v => OnPointBuyChanged(stat, v))"
+                                     Min="CharacteristicHelper.PointBuyMin"
+                                     Max="CharacteristicHelper.PointBuyMax"
+                                     Disabled="BaseLocked"
+                                     Variant="Variant.Outlined"
+                                     Margin="Margin.Dense"
+                                     HideSpinButtons="true"
+                                     Class="char-input" />
+                }
+                else if (IsAssignmentMethod)
+                {
+                    var assigned = AssignedDie(stat.Name);
+                    <div class="char-drop-zone @(assigned is null ? "empty" : "")"
+                         @ondragover:preventDefault="true"
+                         @ondrop="@(() => DropOnZone(stat.Name))">
+                        @if (assigned is not null)
+                        {
+                            var a = assigned;
+                            <div class="pool-die"
+                                 draggable="@(BaseLocked ? "false" : "true")"
+                                 @ondragstart="@(() => OnDragStart(a))">
+                                @a.Value
+                            </div>
+                        }
+                        else
+                        {
+                            <span class="drop-hint">drop</span>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="char-value">
+                        @(stat.Regular.HasValue ? stat.Regular.Value.ToString() : "—")
+                    </div>
+                }
+
                 @if (stat.Regular.HasValue)
                 {
                     <div class="char-derived">
@@ -39,12 +179,16 @@
                 {
                     <div class="char-derived-placeholder"></div>
                 }
-                <MudIconButton Icon="@Icons.Material.Filled.Casino"
-                               Size="Size.Small"
-                               Color="Color.Primary"
-                               Disabled="_ageApplied"
-                               OnClick="@(() => RollSingle(def))"
-                               Title="@($"Roll {stat.Name}")" />
+
+                @if (_method == CreationMethod.Roll)
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.Casino"
+                                   Size="Size.Small"
+                                   Color="Color.Primary"
+                                   Disabled="BaseLocked"
+                                   OnClick="@(() => RollSingle(def))"
+                                   Title="@($"Roll {stat.Name}")" />
+                }
             </div>
         }
 
@@ -61,6 +205,142 @@
         </div>
     </div>
 
+    @* ── Roll add-ons (Start Over / Modify Low Rolls) ──── *@
+    @if (_method == CreationMethod.Roll && !BaseLocked && AllStatsRolled)
+    {
+        @if (CanStartOver)
+        {
+            <MudAlert Severity="Severity.Info" Dense="true" Class="mt-2">
+                Three or more characteristics started below 50 — the Keeper may let you start over (use Reroll All).
+            </MudAlert>
+        }
+
+        @if (CanModifyLowRolls)
+        {
+            <MudAlert Severity="Severity.Warning" Dense="true" Class="mt-2">
+                <div class="lowroll-alert">
+                    <span>Three or more rolls are very low (under 10 before ×5). You may roll 1D6 and spread the extra among them.</span>
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Warning"
+                               Size="Size.Small"
+                               StartIcon="@Icons.Material.Filled.Casino"
+                               OnClick="StartModifyLowRolls">
+                        Modify Low Rolls
+                    </MudButton>
+                </div>
+            </MudAlert>
+        }
+
+        @if (_lowRollPending)
+        {
+            <div class="distribute-panel">
+                <div class="distribute-header">
+                    <MudText Typo="Typo.subtitle2">Distribute @_lowRollPool points (+5 each)</MudText>
+                    <MudChip T="string"
+                             Size="Size.Small"
+                             Color="@(LowRollRemaining == 0 ? Color.Success : LowRollRemaining < 0 ? Color.Error : Color.Warning)">
+                        @LowRollRemaining remaining
+                    </MudChip>
+                </div>
+                <div class="distribute-inputs">
+                    @foreach (var target in _lowRollTargets)
+                    {
+                        var t = target;
+                        var stat = GetCharacteristicByName(t);
+                        <MudNumericField T="int"
+                                         Value="_lowRollAlloc[t]"
+                                         ValueChanged="@(v => OnLowRollAllocChanged(t, v))"
+                                         Label="@t"
+                                         Adornment="Adornment.End"
+                                         AdornmentText="@($"= {stat.Regular}")"
+                                         Min="0"
+                                         Variant="Variant.Outlined"
+                                         Margin="Margin.Dense"
+                                         HideSpinButtons="true" />
+                    }
+                </div>
+                <div class="distribute-actions">
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               Disabled="@(LowRollRemaining != 0)"
+                               OnClick="ConfirmModifyLowRolls">
+                        Confirm
+                    </MudButton>
+                    <MudButton Variant="Variant.Text" OnClick="CancelModifyLowRolls">Cancel</MudButton>
+                </div>
+            </div>
+        }
+    }
+
+    @* ── Human Potential add-on ───────────────────────── *@
+    @if (_humanPotentialEnabled && BaseStatsReady && !_ageApplied)
+    {
+        <div class="distribute-panel human-potential">
+            <MudText Typo="Typo.h6">Human Potential</MudText>
+
+            @if (_humanPotentialApplied)
+            {
+                <div class="distribute-actions">
+                    <MudText Typo="Typo.body2" Color="Color.Success">
+                        Bonus of @_hpPool points applied.
+                    </MudText>
+                    <MudButton Variant="Variant.Outlined"
+                               Color="Color.Warning"
+                               StartIcon="@Icons.Material.Filled.Undo"
+                               OnClick="ResetHumanPotential">
+                        Reset Bonus
+                    </MudButton>
+                </div>
+            }
+            else if (_hpRolled)
+            {
+                <div class="distribute-header">
+                    <MudText Typo="Typo.subtitle2">Distribute @_hpPool bonus points (max 99 per characteristic)</MudText>
+                    <MudChip T="string"
+                             Size="Size.Small"
+                             Color="@(HumanPotentialRemaining == 0 ? Color.Success : HumanPotentialRemaining < 0 ? Color.Error : Color.Warning)">
+                        @HumanPotentialRemaining remaining
+                    </MudChip>
+                </div>
+                <div class="distribute-inputs">
+                    @foreach (var def in _characteristicDefs)
+                    {
+                        var stat = def.Stat;
+                        var name = stat.Name;
+                        <MudNumericField T="int"
+                                         Value="_hpAlloc[name]"
+                                         ValueChanged="@(v => OnHpAllocChanged(name, v))"
+                                         Label="@name"
+                                         Adornment="Adornment.End"
+                                         AdornmentText="@($"= {(stat.Regular ?? 0) + _hpAlloc[name]}")"
+                                         Min="0"
+                                         Max="@(CharacteristicHelper.HumanPotentialMax - (stat.Regular ?? 0))"
+                                         Variant="Variant.Outlined"
+                                         Margin="Margin.Dense"
+                                         HideSpinButtons="true" />
+                    }
+                </div>
+                <div class="distribute-actions">
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               Disabled="@(HumanPotentialRemaining != 0)"
+                               OnClick="ConfirmHumanPotential">
+                        Confirm Bonus
+                    </MudButton>
+                </div>
+            }
+            else
+            {
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Secondary"
+                           StartIcon="@Icons.Material.Filled.Casino"
+                           OnClick="RollHumanPotential">
+                    Roll 1D10 Bonus
+                </MudButton>
+            }
+        </div>
+    }
+
     @* ── Age Section ────────────────────────────────── *@
     <div class="age-section">
         <MudText Typo="Typo.h6">Age</MudText>
@@ -75,7 +355,7 @@
                              Disabled="_ageApplied"
                              HideSpinButtons="true"
                              Class="age-input" />
-            @if (_currentBracket is not null && !_ageApplied && AllStatsRolled)
+            @if (_currentBracket is not null && !_ageApplied && StatsReady)
             {
                 <MudButton Variant="Variant.Filled"
                            Color="Color.Primary"
@@ -95,10 +375,10 @@
             }
         </div>
 
-        @if (!AllStatsRolled && _selectedAge.HasValue)
+        @if (!StatsReady && _selectedAge.HasValue)
         {
             <MudText Typo="Typo.caption" Color="Color.Warning" Class="mt-1">
-                Roll all characteristics before applying age modifiers.
+                Finish generating all characteristics before applying age modifiers.
             </MudText>
         }
 

@@ -2,6 +2,40 @@ namespace CthulhuSheets.Helpers;
 
 public static class CharacteristicHelper
 {
+    // ── Alternative characteristic-generation method constants ──────────────
+
+    /// <summary>Point Buy (CoC 7e creation option 4): total points to distribute.</summary>
+    public const int PointBuyTotal = 460;
+
+    /// <summary>Point Buy: minimum allowed value for any single characteristic.</summary>
+    public const int PointBuyMin = 15;
+
+    /// <summary>Point Buy: maximum allowed value for any single characteristic.</summary>
+    public const int PointBuyMax = 90;
+
+    /// <summary>Maximum characteristic value reachable via the Human Potential add-on (option 6).</summary>
+    public const int HumanPotentialMax = 99;
+
+    /// <summary>
+    /// Quick Fire (CoC 7e creation option 5): the fixed set of values assigned
+    /// across the eight characteristics (high → low for display convenience).
+    /// </summary>
+    public static readonly int[] QuickFireArray = [80, 70, 60, 60, 50, 50, 50, 40];
+
+    /// <summary>
+    /// Place Rolls (CoC 7e creation option 3): rolls a pool of eight values to be
+    /// assigned freely — five 3D6 × 5 and three (2D6+6) × 5, each already multiplied.
+    /// </summary>
+    public static List<int> RollPlacePool(DiceRollService dice)
+    {
+        var pool = new List<int>(8);
+        for (var i = 0; i < 5; i++)
+            pool.Add((dice.Roll(6) + dice.Roll(6) + dice.Roll(6)) * 5);
+        for (var i = 0; i < 3; i++)
+            pool.Add((dice.Roll(6) + dice.Roll(6) + 6) * 5);
+        return pool;
+    }
+
     /// <summary>
     /// CoC 7e EDU improvement check: roll d100, if result &gt; current EDU add 1d10 (max 99).
     /// </summary>

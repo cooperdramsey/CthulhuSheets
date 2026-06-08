@@ -13,6 +13,96 @@
     align-items: flex-end;
 }
 
+/* ── Method selector ──────────────────────────────── */
+
+.method-selector {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.method-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+}
+
+/* ── Assignment drag & drop (Place Rolls / Quick Fire) ── */
+
+.assign-pool-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.assign-pool-zone {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    min-height: 52px;
+    padding: 10px 12px;
+    border: 1px dashed var(--mud-palette-divider);
+    border-radius: 10px;
+}
+
+.char-drop-zone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 4px;
+    border: 1px dashed var(--mud-palette-divider);
+    border-radius: 8px;
+    transition: border-color 150ms ease, background 150ms ease;
+}
+
+.char-drop-zone.empty {
+    border-style: dashed;
+}
+
+.char-drop-zone:hover {
+    border-color: var(--mud-palette-primary);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.drop-hint {
+    font-size: 0.7rem;
+    color: var(--mud-palette-text-disabled);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    pointer-events: none;
+}
+
+.pool-die {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 8px;
+    background: var(--mud-palette-primary);
+    color: var(--mud-palette-primary-text);
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: grab;
+    user-select: none;
+}
+
+.pool-die:active {
+    cursor: grabbing;
+}
+
+.char-input {
+    width: 100%;
+}
+
 /* ── Grid ─────────────────────────────────────────── */
 
 .characteristics-grid {
@@ -81,6 +171,44 @@
 
 .char-derived-placeholder {
     min-height: 1.1rem;
+}
+
+/* ── Distribute panels (Modify Low Rolls / Human Potential) ── */
+
+.distribute-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    border: 1px dashed var(--mud-palette-divider);
+    border-radius: 8px;
+}
+
+.distribute-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.distribute-inputs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.distribute-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.lowroll-alert {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
 }
 
 /* ── Age Section ──────────────────────────────────── */
