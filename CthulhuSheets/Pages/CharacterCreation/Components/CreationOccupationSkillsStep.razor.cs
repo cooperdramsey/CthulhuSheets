@@ -91,6 +91,7 @@ public partial class CreationOccupationSkillsStep
             var occ = _allocations.GetValueOrDefault(skill.Name);
             var personal = _personalAllocations.GetValueOrDefault(skill.Name);
             skill.Regular = skill.BaseValue + occ + personal;
+            skill.IsOccupationSkill = _occupationSkillNames.Contains(skill.Name);
         }
     }
 

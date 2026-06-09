@@ -1,4 +1,17 @@
 <div class="skills-container">
+    @if (!string.IsNullOrWhiteSpace(Investigator.Occupation))
+    {
+        <div class="skills-occupation-header">
+            <MudIcon Icon="@Icons.Material.Filled.Work" Size="Size.Small" Color="Color.Secondary" />
+            <MudText Typo="Typo.subtitle2" Color="Color.Secondary">@Investigator.Occupation</MudText>
+            @if (Investigator.Skills.Any(s => s.IsOccupationSkill))
+            {
+                <MudText Typo="Typo.caption" Color="Color.Secondary" Class="skills-occ-legend">
+                    ★ occupation skill
+                </MudText>
+            }
+        </div>
+    }
     <div class="skills-toolbar">
         <MudTextField @bind-Value="_skillFilter"
                       Placeholder="Filter skills..."
@@ -117,13 +130,22 @@
                         else
                         {
                             <div class="skill-name-val">
-                                <MudTooltip Text="@(skill.HasExperienceCheck ? "Clear experience check" : "Mark for experience check")">
-                                    <input type="checkbox"
-                                           class="skill-exp-check"
-                                           checked="@skill.HasExperienceCheck"
-                                           @onchange="async e => { skill.HasExperienceCheck = (bool)e.Value!; await PersistAsync(); }" />
-                                </MudTooltip>
+                                @if (!NonImprovableSkills.Contains(skill.Name))
+                                {
+                                    <MudTooltip Text="@(skill.HasExperienceCheck ? "Clear experience check" : "Mark for experience check")">
+                                        <input type="checkbox"
+                                               class="skill-exp-check"
+                                               checked="@skill.HasExperienceCheck"
+                                               @onchange="async e => { skill.HasExperienceCheck = (bool)e.Value!; await PersistAsync(); }" />
+                                    </MudTooltip>
+                                }
                                 @(string.IsNullOrWhiteSpace(skill.Name) ? "—" : skill.Name)
+                                @if (skill.IsOccupationSkill)
+                                {
+                                    <MudTooltip Text="Occupation skill">
+                                        <span class="skill-occ-star">★</span>
+                                    </MudTooltip>
+                                }
                             </div>
                             <div class="skill-val">@skill.BaseValue</div>
                             <div class="skill-val-cell">

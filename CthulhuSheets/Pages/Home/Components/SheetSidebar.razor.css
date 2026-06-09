@@ -16,6 +16,35 @@
     gap: 2px;
 }
 
+.sidebar-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+
+.detail-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+}
+
+.detail-label {
+    color: var(--mud-palette-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.65rem;
+    font-weight: 600;
+}
+
+.detail-value {
+    margin-left: auto;
+    text-align: right;
+    color: var(--mud-palette-text-primary);
+    overflow-wrap: anywhere;
+}
+
 .sidebar-pools {
     display: flex;
     flex-direction: column;

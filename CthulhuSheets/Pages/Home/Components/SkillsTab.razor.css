@@ -6,6 +6,25 @@
     gap: 16px;
 }
 
+.skills-occupation-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.skills-occ-legend {
+    margin-left: auto;
+    opacity: 0.6;
+}
+
+.skill-occ-star {
+    color: var(--mud-palette-warning);
+    font-size: 0.7rem;
+    vertical-align: super;
+    margin-left: 2px;
+    line-height: 1;
+}
+
 .skills-toolbar {
     display: flex;
     align-items: center;

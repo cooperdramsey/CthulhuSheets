@@ -19,4 +19,5 @@ public class Skill
 
     public bool HasExperienceCheck { get; set; }
     public bool IsDefault { get; set; }
+    public bool IsOccupationSkill { get; set; }
 }

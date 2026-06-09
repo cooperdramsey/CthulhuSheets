@@ -1,7 +1,12 @@
+using MudBlazor;
+
 namespace CthulhuSheets.Shared;
 
 public partial class PortraitUpload
 {
+    [Inject]
+    private IDialogService DialogService { get; set; } = null!;
+
     [Parameter]
     public string? PortraitDataUrl { get; set; }
 
@@ -12,9 +17,6 @@ public partial class PortraitUpload
     public int PortraitSize { get; set; } = 180;
 
     [Parameter]
-    public bool ShowRemoveButton { get; set; } = true;
-
-    [Parameter]
     public string PlaceholderIcon { get; set; } = Icons.Material.Filled.AddAPhoto;
 
     [Parameter]
@@ -23,24 +25,25 @@ public partial class PortraitUpload
     [Parameter]
     public EventCallback OnChanged { get; set; }
 
-    private readonly string _inputId = $"portrait-{Guid.NewGuid():N}";
-
-    private async Task HandleFileUpload(InputFileChangeEventArgs e)
+    private async Task OpenDialogAsync()
     {
-        using var stream = e.File.OpenReadStream(maxAllowedSize: 5 * 1024 * 1024);
-        using var ms = new MemoryStream();
-        await stream.CopyToAsync(ms);
-        var dataUrl = $"data:{e.File.ContentType};base64,{Convert.ToBase64String(ms.ToArray())}";
+        var parameters = new DialogParameters<PortraitDialog>
+        {
+            { x => x.InitialValue, PortraitDataUrl }
+        };
+        var options = new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true, CloseOnEscapeKey = true };
 
-        PortraitDataUrl = dataUrl;
-        await PortraitDataUrlChanged.InvokeAsync(dataUrl);
-        await OnChanged.InvokeAsync();
-    }
+        var dialog = await DialogService.ShowAsync<PortraitDialog>("Set Portrait", parameters, options);
+        var result = await dialog.Result;
 
-    private async Task RemovePortrait()
-    {
-        PortraitDataUrl = null;
-        await PortraitDataUrlChanged.InvokeAsync(null);
+        if (result is null || result.Canceled)
+            return;
+
+        var data = result.Data as PortraitDialogResult;
+        var value = data?.Cleared == true ? null : data?.Value;
+
+        PortraitDataUrl = value;
+        await PortraitDataUrlChanged.InvokeAsync(value);
         await OnChanged.InvokeAsync();
     }
 }

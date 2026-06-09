@@ -1,5 +1,7 @@
 <div class="portrait-upload">
-    <label for="@_inputId" class="portrait-upload-box" style="width: @(PortraitSize)px; height: @(PortraitSize)px;">
+    <button type="button" class="portrait-upload-box"
+            style="width: @(PortraitSize)px; height: @(PortraitSize)px;"
+            @onclick="OpenDialogAsync">
         @if (!string.IsNullOrEmpty(PortraitDataUrl))
         {
             <img src="@PortraitDataUrl" class="portrait-upload-img" alt="Portrait" />
@@ -14,17 +16,5 @@
                 }
             </div>
         }
-        <InputFile id="@_inputId" OnChange="HandleFileUpload" accept="image/*" style="display:none" />
-    </label>
-    @if (ShowRemoveButton && !string.IsNullOrEmpty(PortraitDataUrl))
-    {
-        <MudButton Variant="Variant.Text"
-                   Color="Color.Error"
-                   Size="MudBlazor.Size.Small"
-                   StartIcon="@Icons.Material.Filled.Delete"
-                   OnClick="RemovePortrait"
-                   Class="mt-1">
-            Remove
-        </MudButton>
-    }
+    </button>
 </div>
