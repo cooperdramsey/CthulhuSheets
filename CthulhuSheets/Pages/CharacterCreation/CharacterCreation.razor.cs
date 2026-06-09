@@ -1,4 +1,5 @@
 using CthulhuSheets.Pages.CharacterCreation.Components;
+using CthulhuSheets.Shared;
 
 namespace CthulhuSheets.Pages.CharacterCreation;
 
@@ -7,6 +8,7 @@ public partial class CharacterCreation
     [Inject] private NavigationManager Navigation { get; set; } = default!;
     [Inject] private InvestigatorService InvestigatorService { get; set; } = default!;
     [Inject] private ISnackbar Snackbar { get; set; } = default!;
+    [Inject] private IDialogService DialogService { get; set; } = default!;
 
     private static readonly string[] _steps =
         ["Profile", "Characteristics", "Occupation & Skills", "Backstory & Connections", "Wealth", "Equipment"];
@@ -39,6 +41,18 @@ public partial class CharacterCreation
 
     private async Task SaveAsync()
     {
+        if (InvestigatorService.Current is not null)
+        {
+            var dialog = await DialogService.ShowAsync<ConfirmDialog>("Replace saved character?", new DialogParameters<ConfirmDialog>
+            {
+                { x => x.Title, "Replace saved character?" },
+                { x => x.Message, "This will replace the currently saved character. Export a copy first if you want to keep it." },
+                { x => x.ConfirmText, "Replace" }
+            });
+            var result = await dialog.Result;
+            if (result is null || result.Canceled) return;
+        }
+
         await InvestigatorService.LoadAsync(_draft);
         var name = _draft.Name is { Length: > 0 } n ? n : "Investigator";
         Snackbar.Add($"{name} created!", Severity.Success);

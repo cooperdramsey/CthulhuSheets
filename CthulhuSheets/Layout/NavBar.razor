@@ -12,4 +12,9 @@
     </MudFileUpload>
     <MudIconButton Icon="@Icons.Material.Filled.FileDownload" Color="Color.Inherit"
                    OnClick="OnFileDownload" Class="ml-2" Title="Download" />
+    @if (HasCharacter)
+    {
+        <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Inherit"
+                       OnClick="OnClearCharacter" Class="ml-2" Title="Delete Saved Character" />
+    }
 </MudAppBar>

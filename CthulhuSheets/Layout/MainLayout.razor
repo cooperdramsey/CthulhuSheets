@@ -1,8 +1,10 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
 
 <NavBar OnCreateNewCharacter="HandleCreateNewCharacter"
         OnFileSelected="HandleFileSelected"
-        OnFileDownload="HandleFileDownload" />
+        OnFileDownload="HandleFileDownload"
+        HasCharacter="@(InvestigatorService.Current is not null)"
+        OnClearCharacter="HandleClearCharacter" />
 
 <MudMainContent Class="pt-16">
     @Body

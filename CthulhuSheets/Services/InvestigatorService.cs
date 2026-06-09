@@ -2,7 +2,7 @@ namespace CthulhuSheets.Services;
 
 public class InvestigatorService(IJSRuntime js)
 {
-    private const string SessionKey = "cthulhu-investigator";
+    private const string StorageKey = "cthulhu-investigator";
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNameCaseInsensitive = true,
@@ -12,6 +12,7 @@ public class InvestigatorService(IJSRuntime js)
     public Investigator? Current { get; private set; }
 
     public event Action? OnChanged;
+    public event Action<string>? OnStorageError;
 
     public async Task LoadAsync(Investigator investigator)
     {
@@ -24,12 +25,19 @@ public class InvestigatorService(IJSRuntime js)
     {
         if (Current is null) return;
         var json = JsonSerializer.Serialize(Current, JsonOptions);
-        await js.InvokeVoidAsync("sessionStorage.setItem", SessionKey, json);
+        try
+        {
+            await js.InvokeVoidAsync("localStorage.setItem", StorageKey, json);
+        }
+        catch (JSException)
+        {
+            OnStorageError?.Invoke("Couldn't save your character — browser storage is full. Try a smaller portrait or export to a file.");
+        }
     }
 
     public async Task<bool> TryRestoreAsync()
     {
-        var json = await js.InvokeAsync<string?>("sessionStorage.getItem", SessionKey);
+        var json = await js.InvokeAsync<string?>("localStorage.getItem", StorageKey);
         if (string.IsNullOrEmpty(json)) return false;
 
         try
@@ -42,6 +50,8 @@ public class InvestigatorService(IJSRuntime js)
         }
         catch (JsonException)
         {
+            await js.InvokeVoidAsync("localStorage.removeItem", StorageKey);
+            OnStorageError?.Invoke("Your saved character couldn't be read and was cleared.");
             return false;
         }
     }
@@ -49,7 +59,7 @@ public class InvestigatorService(IJSRuntime js)
     public async Task ClearAsync()
     {
         Current = null;
-        await js.InvokeVoidAsync("sessionStorage.removeItem", SessionKey);
+        await js.InvokeVoidAsync("localStorage.removeItem", StorageKey);
         OnChanged?.Invoke();
     }
 }
