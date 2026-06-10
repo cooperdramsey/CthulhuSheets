@@ -19,6 +19,11 @@
                   Label="Significant People"
                   Variant="Variant.Outlined"
                   Lines="4" />
+    <MudTextField @bind-Value="Investigator.Contacts"
+                  @bind-Value:after="PersistAsync"
+                  Label="Contacts"
+                  Variant="Variant.Outlined"
+                  Lines="4" />
     <MudTextField @bind-Value="Investigator.MeaningfulLocations"
                   @bind-Value:after="PersistAsync"
                   Label="Meaningful Locations"

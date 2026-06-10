@@ -170,6 +170,7 @@
                                  Variant="Variant.Outlined"
                                  Margin="Margin.Dense"
                                  Dense="true"
+                                 MaxItems="null"
                                  Class="occupation-autocomplete" />
                 @if (_selectedOccupation is not null)
                 {
@@ -209,6 +210,18 @@
                     </div>
                 </div>
             }
+        }
+
+        @if (_selectedOccupation is not null)
+        {
+            <MudTextField T="string"
+                          @bind-Value="Investigator.Contacts"
+                          Label="Contacts"
+                          HelperText="People and organisations your investigator knows. Pre-filled from the occupation — edit freely."
+                          Variant="Variant.Outlined"
+                          Margin="Margin.Dense"
+                          Lines="2"
+                          Class="mt-3 occupation-contacts-field" />
         }
     </div>
 

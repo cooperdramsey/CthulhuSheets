@@ -54,6 +54,7 @@ public class Investigator
     public string? PersonalDescription { get; set; }
     public string? IdeologyBeliefs { get; set; }
     public string? SignificantPeople { get; set; }
+    public string? Contacts { get; set; }
     public string? MeaningfulLocations { get; set; }
     public string? TreasuredPossessions { get; set; }
     public string? Traits { get; set; }

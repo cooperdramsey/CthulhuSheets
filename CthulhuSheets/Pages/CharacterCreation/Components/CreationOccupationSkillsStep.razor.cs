@@ -109,7 +109,7 @@ public partial class CreationOccupationSkillsStep
             var match = Occupations.All.FirstOrDefault(
                 o => o.Name.Equals(Investigator.Occupation, StringComparison.OrdinalIgnoreCase));
             if (match is not null)
-                ApplyOccupation(match);
+                ApplyOccupation(match, prefillContacts: false);
         }
     }
 
@@ -121,14 +121,21 @@ public partial class CreationOccupationSkillsStep
     private void OnOccupationSelected(Occupation? occupation)
     {
         if (occupation is null) return;
-        ApplyOccupation(occupation);
+        ApplyOccupation(occupation, prefillContacts: true);
     }
 
-    private void ApplyOccupation(Occupation occupation)
+    private void ApplyOccupation(Occupation occupation, bool prefillContacts)
     {
         _selectedOccupation = occupation;
         Investigator.Occupation = occupation.Name;
         _occupationSkillNames = new HashSet<string>(occupation.Skills, StringComparer.OrdinalIgnoreCase);
+
+        // Seed the freeform Contacts field with the occupation's suggested contacts.
+        // Only when the user actively picks an occupation, never when restoring a draft,
+        // so we don't clobber edits the player has already made.
+        if (prefillContacts && occupation.SuggestedContacts.Length > 0)
+            Investigator.Contacts = string.Join(", ", occupation.SuggestedContacts);
+
         InitializeAllocations();
         InitializePersonalAllocations();
     }

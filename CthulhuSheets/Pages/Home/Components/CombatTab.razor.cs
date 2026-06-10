@@ -25,10 +25,20 @@ public partial class CombatTab
     private int? _dodgeRoll;
     private readonly Dictionary<Weapon, int> _weaponRolls = new();
 
-    private void RollDodge(int modifier = 0)
+    private async Task RollDodge(int modifier = 0)
     {
         var result = DiceRollService.RollPercentile(modifier);
         _dodgeRoll = result.Total;
+
+        var dodgeSkill = Investigator.Skills
+            .FirstOrDefault(s => s.Name.Equals("Dodge", StringComparison.OrdinalIgnoreCase));
+        if (dodgeSkill is not null
+            && result.Total <= dodgeSkill.EffectiveRegular
+            && !dodgeSkill.HasExperienceCheck)
+        {
+            dodgeSkill.HasExperienceCheck = true;
+            await PersistAsync();
+        }
     }
 
     private void RollWeapon(Weapon weapon, int modifier = 0)
