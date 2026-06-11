@@ -1,8 +1,10 @@
 <MudAppBar Color="Color.Primary" Fixed="true" Dense="true">
     <MudLink Typo="Typo.h5" Class="mr-4" Href="" Color="Color.Inherit" Underline="Underline.None">CthulhuSheets</MudLink>
     <MudSpacer />
+    <MudIconButton Icon="@Icons.Material.Filled.Groups" Color="Color.Inherit"
+                   OnClick="OnOpenRoster" Title="Your Investigators" />
     <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Inherit"
-                   OnClick="OnCreateNewCharacter" Title="Create New Character" />
+                   OnClick="OnCreateNewCharacter" Title="Create New Character" Class="ml-2" />
     <MudFileUpload T="IBrowserFile" FilesChanged="HandleFileSelected" Accept=".json" Class="ml-2">
         <CustomContent>
             <MudIconButton Icon="@Icons.Material.Filled.FileUpload" Color="Color.Inherit"
@@ -11,10 +13,5 @@
         <SelectedTemplate />
     </MudFileUpload>
     <MudIconButton Icon="@Icons.Material.Filled.FileDownload" Color="Color.Inherit"
-                   OnClick="OnFileDownload" Class="ml-2" Title="Download" />
-    @if (HasCharacter)
-    {
-        <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Inherit"
-                       OnClick="OnClearCharacter" Class="ml-2" Title="Delete Saved Character" />
-    }
+                   OnClick="OnFileDownload" Class="ml-2" Title="Download Active Character" />
 </MudAppBar>

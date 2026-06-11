@@ -1,0 +1,74 @@
+@page "/roster"
+
+<PageTitle>Your Investigators</PageTitle>
+
+<div class="roster-page pa-4">
+    <MudText Typo="Typo.h5" Class="mb-4">Your Investigators</MudText>
+
+    @if (!_entries.Any())
+    {
+        <MudText Typo="Typo.body1" Color="Color.Secondary" Class="mb-4">
+            No investigators saved yet. Create one to get started.
+        </MudText>
+        <MudStack Row="true" Spacing="2">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.Add"
+                       OnClick="NavigateToCreate">
+                Create New Investigator
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Secondary"
+                       OnClick="LoadSampleAsync">
+                Load Sample Investigator
+            </MudButton>
+        </MudStack>
+    }
+    else
+    {
+        <MudGrid Spacing="3">
+            @foreach (var entry in _entries)
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudCard Class="roster-card" Elevation="2">
+                        @if (_portraits.TryGetValue(entry.Id, out var portrait) && !string.IsNullOrEmpty(portrait))
+                        {
+                            <img src="@portrait" alt="@entry.Name" class="roster-portrait" />
+                        }
+                        else
+                        {
+                            <div class="roster-portrait-placeholder">
+                                <MudIcon Icon="@Icons.Material.Filled.Person" Size="Size.Large" Color="Color.Secondary" />
+                            </div>
+                        }
+                        <MudCardContent Class="pb-0">
+                            <MudText Typo="Typo.h6">@(entry.Name ?? "Unnamed Investigator")</MudText>
+                            <MudText Typo="Typo.body2" Color="Color.Secondary">@(entry.Occupation ?? "Unknown Occupation")</MudText>
+                            <MudText Typo="Typo.caption" Color="Color.Tertiary">Edited @FormatTimestamp(entry.LastModified)</MudText>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small"
+                                       OnClick="() => OpenCharacterAsync(entry.Id)">
+                                Open
+                            </MudButton>
+                            <MudButton Variant="Variant.Text" Color="Color.Error" Size="Size.Small"
+                                       OnClick="() => DeleteCharacterAsync(entry.Id, entry.Name)">
+                                Delete
+                            </MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudGrid>
+
+        <MudStack Row="true" Spacing="2" Class="mt-6">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.Add"
+                       OnClick="NavigateToCreate">
+                Create New Investigator
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Secondary"
+                       OnClick="LoadSampleAsync">
+                Load Sample Investigator
+            </MudButton>
+        </MudStack>
+    }
+</div>

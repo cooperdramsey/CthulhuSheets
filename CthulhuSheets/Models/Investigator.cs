@@ -2,6 +2,8 @@ namespace CthulhuSheets.Models;
 
 public class Investigator
 {
+    public Guid Id { get; set; }
+
     // Basic Info
     [Required(ErrorMessage = "Name is required")]
     public string? Name { get; set; }

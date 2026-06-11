@@ -1,5 +1,3 @@
-using CthulhuSheets.Shared;
-
 namespace CthulhuSheets.Layout;
 
 public partial class MainLayout : IDisposable
@@ -8,13 +6,13 @@ public partial class MainLayout : IDisposable
     [Inject] private ISnackbar Snackbar { get; set; } = default!;
     [Inject] private IJSRuntime JS { get; set; } = default!;
     [Inject] private NavigationManager Navigation { get; set; } = default!;
-    [Inject] private IDialogService DialogService { get; set; } = default!;
 
     protected override async Task OnInitializedAsync()
     {
         InvestigatorService.OnChanged += StateHasChanged;
         InvestigatorService.OnStorageError += ShowStorageError;
-        await InvestigatorService.TryRestoreAsync();
+        await InvestigatorService.InitializeAsync();
+        await InvestigatorService.RestoreActiveAsync();
     }
 
     public void Dispose()
@@ -29,12 +27,6 @@ public partial class MainLayout : IDisposable
         StateHasChanged();
     }
 
-    private Task HandleCreateNewCharacter()
-    {
-        Navigation.NavigateTo("create");
-        return Task.CompletedTask;
-    }
-
     private async Task HandleFileSelected(IBrowserFile file)
     {
         try
@@ -45,13 +37,9 @@ public partial class MainLayout : IDisposable
 
             if (investigator is not null)
             {
-                if (InvestigatorService.Current is not null && !await ConfirmReplaceAsync())
-                {
-                    Snackbar.Add("Import cancelled.", Severity.Info);
-                    return;
-                }
-                await InvestigatorService.LoadAsync(investigator);
+                await InvestigatorService.ImportAsync(investigator);
                 Snackbar.Add($"Loaded {investigator.Name ?? "investigator"}", Severity.Success);
+                Navigation.NavigateTo("");
             }
             else
             {
@@ -88,31 +76,7 @@ public partial class MainLayout : IDisposable
         await JS.InvokeVoidAsync("downloadFile", filename, json);
     }
 
-    private async Task HandleClearCharacter()
-    {
-        var dialog = await DialogService.ShowAsync<ConfirmDialog>("Delete saved character?", new DialogParameters<ConfirmDialog>
-        {
-            { x => x.Title, "Delete saved character?" },
-            { x => x.Message, "This permanently removes the saved character from this browser. Export a copy first if you want to keep it." },
-            { x => x.ConfirmText, "Delete" }
-        });
-        var result = await dialog.Result;
-        if (result is null || result.Canceled) return;
+    private void HandleOpenRoster() => Navigation.NavigateTo("roster");
 
-        await InvestigatorService.ClearAsync();
-        Snackbar.Add("Saved character cleared.", Severity.Info);
-        Navigation.NavigateTo("");
-    }
-
-    private async Task<bool> ConfirmReplaceAsync()
-    {
-        var dialog = await DialogService.ShowAsync<ConfirmDialog>("Replace saved character?", new DialogParameters<ConfirmDialog>
-        {
-            { x => x.Title, "Replace saved character?" },
-            { x => x.Message, "This will replace the currently saved character. Export a copy first if you want to keep it." },
-            { x => x.ConfirmText, "Replace" }
-        });
-        var result = await dialog.Result;
-        return result is not null && !result.Canceled;
-    }
+    private void HandleCreateNewCharacter() => Navigation.NavigateTo("create");
 }

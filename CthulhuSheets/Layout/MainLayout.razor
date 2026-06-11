@@ -3,8 +3,7 @@
 <NavBar OnCreateNewCharacter="HandleCreateNewCharacter"
         OnFileSelected="HandleFileSelected"
         OnFileDownload="HandleFileDownload"
-        HasCharacter="@(InvestigatorService.Current is not null)"
-        OnClearCharacter="HandleClearCharacter" />
+        OnOpenRoster="HandleOpenRoster" />
 
 <MudMainContent Class="pt-16">
     @Body
