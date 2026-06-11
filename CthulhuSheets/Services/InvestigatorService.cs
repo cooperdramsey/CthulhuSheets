@@ -1,17 +1,18 @@
+using CthulhuSheets.Services.Storage;
+
 namespace CthulhuSheets.Services;
 
-public class InvestigatorService(IJSRuntime js)
+public class InvestigatorService(
+    IndexedDbCharacterStore indexedDb,
+    LocalStorageCharacterStore localStorage)
 {
-    private const string RosterKey = "cthulhu-roster";
-    private const string LegacyKey = "cthulhu-investigator";
-
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNameCaseInsensitive = true,
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
     };
 
-    private static string CharacterKey(Guid id) => $"cthulhu-character-{id}";
+    private ICharacterStore _store = localStorage;
 
     public Investigator? Current { get; private set; }
     public Roster Roster { get; private set; } = new();
@@ -27,8 +28,19 @@ public class InvestigatorService(IJSRuntime js)
 
     public async Task InitializeAsync()
     {
+        if (await indexedDb.TryInitializeAsync())
+        {
+            _store = indexedDb;
+            await _store.RequestPersistAsync();
+        }
+        else
+        {
+            _store = localStorage;
+            await localStorage.TryInitializeAsync();
+        }
+
+        await MigrateFromLocalStorageAsync();
         await LoadRosterAsync();
-        await MigrateLegacyAsync();
         OnRosterChanged?.Invoke();
     }
 
@@ -37,12 +49,12 @@ public class InvestigatorService(IJSRuntime js)
         if (Roster.ActiveId is null) return;
 
         var id = Roster.ActiveId.Value;
-        var json = await js.InvokeAsync<string?>("localStorage.getItem", CharacterKey(id));
+        var json = await _store.GetCharacterJsonAsync(id);
         if (string.IsNullOrEmpty(json))
         {
             RemoveEntry(id);
             Roster.ActiveId = null;
-            await PersistRosterAsync();
+            await _store.SaveRosterAsync(Roster);
             return;
         }
 
@@ -55,8 +67,8 @@ public class InvestigatorService(IJSRuntime js)
         {
             RemoveEntry(id);
             Roster.ActiveId = null;
-            await js.InvokeVoidAsync("localStorage.removeItem", CharacterKey(id));
-            await PersistRosterAsync();
+            await _store.DeleteCharacterAsync(id);
+            await _store.SaveRosterAsync(Roster);
             OnStorageError?.Invoke("A saved character couldn't be read and was removed from the roster.");
         }
     }
@@ -70,7 +82,7 @@ public class InvestigatorService(IJSRuntime js)
         UpsertEntry(c);
         Roster.ActiveId = c.Id;
         Current = c;
-        await PersistRosterAsync();
+        await _store.SaveRosterAsync(Roster);
         OnChanged?.Invoke();
         OnRosterChanged?.Invoke();
     }
@@ -78,32 +90,25 @@ public class InvestigatorService(IJSRuntime js)
     public async Task ImportAsync(Investigator c)
     {
         if (c.Id == Guid.Empty)
-        {
             c.Id = Guid.NewGuid();
-        }
-        else if (!Roster.Entries.Any(e => e.Id == c.Id))
-        {
-            // keep the id as-is
-        }
-        // if id already in roster, overwrite in place
 
         await WriteCharacterAsync(c);
         UpsertEntry(c);
         Roster.ActiveId = c.Id;
         Current = c;
-        await PersistRosterAsync();
+        await _store.SaveRosterAsync(Roster);
         OnChanged?.Invoke();
         OnRosterChanged?.Invoke();
     }
 
     public async Task SelectAsync(Guid id)
     {
-        var json = await js.InvokeAsync<string?>("localStorage.getItem", CharacterKey(id));
+        var json = await _store.GetCharacterJsonAsync(id);
         if (string.IsNullOrEmpty(json))
         {
             RemoveEntry(id);
             if (Roster.ActiveId == id) Roster.ActiveId = null;
-            await PersistRosterAsync();
+            await _store.SaveRosterAsync(Roster);
             OnRosterChanged?.Invoke();
             return;
         }
@@ -112,15 +117,15 @@ public class InvestigatorService(IJSRuntime js)
         {
             Current = JsonSerializer.Deserialize<Investigator>(json, JsonOptions);
             Roster.ActiveId = id;
-            await PersistRosterAsync();
+            await _store.SaveRosterAsync(Roster);
             OnChanged?.Invoke();
         }
         catch (JsonException)
         {
             RemoveEntry(id);
             Roster.ActiveId = null;
-            await js.InvokeVoidAsync("localStorage.removeItem", CharacterKey(id));
-            await PersistRosterAsync();
+            await _store.DeleteCharacterAsync(id);
+            await _store.SaveRosterAsync(Roster);
             OnStorageError?.Invoke("That character couldn't be read and was removed.");
             OnRosterChanged?.Invoke();
         }
@@ -133,7 +138,7 @@ public class InvestigatorService(IJSRuntime js)
         {
             await WriteCharacterAsync(Current);
             UpsertEntry(Current);
-            await PersistRosterAsync();
+            await _store.SaveRosterAsync(Roster);
         }
         catch (JSException)
         {
@@ -143,89 +148,122 @@ public class InvestigatorService(IJSRuntime js)
 
     public async Task DeleteAsync(Guid id)
     {
-        await js.InvokeVoidAsync("localStorage.removeItem", CharacterKey(id));
+        await _store.DeleteCharacterAsync(id);
         RemoveEntry(id);
         if (Roster.ActiveId == id)
         {
             Roster.ActiveId = null;
             Current = null;
         }
-        await PersistRosterAsync();
+        await _store.SaveRosterAsync(Roster);
         OnChanged?.Invoke();
         OnRosterChanged?.Invoke();
     }
 
     public async Task<Investigator?> GetCharacterAsync(Guid id)
     {
-        var json = await js.InvokeAsync<string?>("localStorage.getItem", CharacterKey(id));
+        var json = await _store.GetCharacterJsonAsync(id);
         if (string.IsNullOrEmpty(json)) return null;
-        try
-        {
-            return JsonSerializer.Deserialize<Investigator>(json, JsonOptions);
-        }
-        catch (JsonException)
-        {
-            return null;
-        }
+        try { return JsonSerializer.Deserialize<Investigator>(json, JsonOptions); }
+        catch (JsonException) { return null; }
     }
 
-    // --- Legacy load (used by MainLayout for file-upload flow that already has an Investigator) ---
-
-    public async Task LoadAsync(Investigator investigator)
-    {
-        await ImportAsync(investigator);
-    }
+    public async Task LoadAsync(Investigator investigator) => await ImportAsync(investigator);
 
     // --- Private helpers ---
 
     private async Task LoadRosterAsync()
     {
-        var json = await js.InvokeAsync<string?>("localStorage.getItem", RosterKey);
-        if (string.IsNullOrEmpty(json)) return;
-        try
-        {
-            Roster = JsonSerializer.Deserialize<Roster>(json, JsonOptions) ?? new Roster();
-        }
-        catch (JsonException)
-        {
-            Roster = new Roster();
-        }
-    }
-
-    private async Task MigrateLegacyAsync()
-    {
-        if (Roster.Entries.Count > 0) return;
-
-        var json = await js.InvokeAsync<string?>("localStorage.getItem", LegacyKey);
-        if (string.IsNullOrEmpty(json)) return;
-
-        try
-        {
-            var investigator = JsonSerializer.Deserialize<Investigator>(json, JsonOptions);
-            if (investigator is not null)
-            {
-                investigator.Id = Guid.NewGuid();
-                await WriteCharacterAsync(investigator);
-                UpsertEntry(investigator);
-                Roster.ActiveId = investigator.Id;
-                await PersistRosterAsync();
-            }
-        }
-        catch (JsonException) { }
-
-        await js.InvokeVoidAsync("localStorage.removeItem", LegacyKey);
+        Roster = await _store.GetRosterAsync() ?? new Roster();
     }
 
     private async Task WriteCharacterAsync(Investigator c)
     {
         var json = JsonSerializer.Serialize(c, JsonOptions);
-        await js.InvokeVoidAsync("localStorage.setItem", CharacterKey(c.Id), json);
+        await _store.SaveCharacterJsonAsync(c.Id, json);
     }
 
-    private async Task PersistRosterAsync()
+    private async Task MigrateFromLocalStorageAsync()
     {
-        var json = JsonSerializer.Serialize(Roster, JsonOptions);
-        await js.InvokeVoidAsync("localStorage.setItem", RosterKey, json);
+        if (_store is not IndexedDbCharacterStore) return;
+
+        var idbRoster = await indexedDb.GetRosterAsync();
+        if (idbRoster is not null && idbRoster.Entries.Count > 0) return;
+
+        var lsRoster = await localStorage.GetRosterAsync();
+
+        if (lsRoster is not null && lsRoster.Entries.Count > 0)
+        {
+            await MigrateRosterAsync(lsRoster);
+            return;
+        }
+
+        var legacyJson = await localStorage.GetLegacyCharacterJsonAsync();
+        if (!string.IsNullOrEmpty(legacyJson))
+            await MigrateLegacyCharacterAsync(legacyJson);
+    }
+
+    private async Task MigrateRosterAsync(Roster lsRoster)
+    {
+        try
+        {
+            foreach (var entry in lsRoster.Entries)
+            {
+                var json = await localStorage.GetCharacterJsonAsync(entry.Id);
+                if (!string.IsNullOrEmpty(json))
+                    await indexedDb.SaveCharacterJsonAsync(entry.Id, json);
+            }
+            await indexedDb.SaveRosterAsync(lsRoster);
+
+            var verifiedRoster = await indexedDb.GetRosterAsync();
+            if (verifiedRoster is null || verifiedRoster.Entries.Count != lsRoster.Entries.Count)
+                throw new InvalidOperationException("IndexedDB migration verification failed.");
+
+            await localStorage.RemoveAllCthulhuKeysAsync();
+        }
+        catch (Exception)
+        {
+            OnStorageError?.Invoke("Character data migration to IndexedDB failed — your characters are safe and will retry next launch.");
+        }
+    }
+
+    private async Task MigrateLegacyCharacterAsync(string legacyJson)
+    {
+        try
+        {
+            var investigator = JsonSerializer.Deserialize<Investigator>(legacyJson, JsonOptions);
+            if (investigator is null) return;
+
+            investigator.Id = Guid.NewGuid();
+            var json = JsonSerializer.Serialize(investigator, JsonOptions);
+
+            var entry = new RosterEntry
+            {
+                Id = investigator.Id,
+                Name = investigator.Name,
+                Occupation = investigator.Occupation,
+                LastModified = DateTimeOffset.UtcNow
+            };
+
+            var roster = new Roster
+            {
+                ActiveId = investigator.Id,
+                Entries = [entry]
+            };
+
+            await indexedDb.SaveCharacterJsonAsync(investigator.Id, json);
+            await indexedDb.SaveRosterAsync(roster);
+
+            var verifiedRoster = await indexedDb.GetRosterAsync();
+            if (verifiedRoster is null || verifiedRoster.Entries.Count == 0)
+                throw new InvalidOperationException("Legacy migration verification failed.");
+
+            await localStorage.RemoveAllCthulhuKeysAsync();
+        }
+        catch (Exception)
+        {
+            OnStorageError?.Invoke("Character data migration to IndexedDB failed — your characters are safe and will retry next launch.");
+        }
     }
 
     private void UpsertEntry(Investigator c)
