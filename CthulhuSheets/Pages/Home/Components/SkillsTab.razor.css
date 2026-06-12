@@ -36,6 +36,23 @@
     max-width: 280px;
 }
 
+.skills-min-filter {
+    width: 80px;
+    flex-shrink: 0;
+}
+
+.skill-sort-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--mud-palette-text-secondary);
+}
+
+.skill-sort-item--active {
+    color: var(--mud-palette-primary);
+    font-weight: 600;
+}
+
 .skill-grid {
     display: grid;
     grid-template-columns: 2fr 40px 50px 46px 46px auto;

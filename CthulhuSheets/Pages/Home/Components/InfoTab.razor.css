@@ -1,5 +1,16 @@
 /* ── Info tab ───────────────────────────────────────── */
 
+.info-identity-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.info-identity-row > * {
+    flex: 1 1 120px;
+}
+
 .info-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;

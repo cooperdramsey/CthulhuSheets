@@ -22,6 +22,40 @@
                       Class="skills-filter"
                       Immediate="true"
                       Clearable="true" />
+        <MudMenu Icon="@Icons.Material.Filled.Sort"
+                 Color="@(_sortMode == SortMode.Alpha ? Color.Default : Color.Primary)"
+                 Size="Size.Small"
+                 Dense="true"
+                 AnchorOrigin="Origin.BottomLeft"
+                 Title="Sort skills">
+            <MudMenuItem OnClick="@(() => _sortMode = SortMode.Alpha)">
+                <div class="skill-sort-item @(_sortMode == SortMode.Alpha ? "skill-sort-item--active" : "")">
+                    <MudIcon Icon="@Icons.Material.Filled.SortByAlpha" Size="Size.Small" />
+                    A → Z
+                </div>
+            </MudMenuItem>
+            <MudMenuItem OnClick="@(() => _sortMode = SortMode.RegularDesc)">
+                <div class="skill-sort-item @(_sortMode == SortMode.RegularDesc ? "skill-sort-item--active" : "")">
+                    <MudIcon Icon="@Icons.Material.Filled.KeyboardDoubleArrowDown" Size="Size.Small" />
+                    Highest value first
+                </div>
+            </MudMenuItem>
+            <MudMenuItem OnClick="@(() => _sortMode = SortMode.RegularAsc)">
+                <div class="skill-sort-item @(_sortMode == SortMode.RegularAsc ? "skill-sort-item--active" : "")">
+                    <MudIcon Icon="@Icons.Material.Filled.KeyboardDoubleArrowUp" Size="Size.Small" />
+                    Lowest value first
+                </div>
+            </MudMenuItem>
+        </MudMenu>
+        <MudNumericField T="int?"
+                         @bind-Value="_minRegular"
+                         Placeholder="Min ≥"
+                         Variant="Variant.Outlined"
+                         Margin="Margin.Dense"
+                         Min="0"
+                         Max="100"
+                         HideSpinButtons="true"
+                         Class="skills-min-filter" />
         @if (_skillsEditMode)
         {
             <MudButton Variant="Variant.Outlined"

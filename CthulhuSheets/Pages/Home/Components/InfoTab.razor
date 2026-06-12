@@ -1,3 +1,23 @@
+<div class="info-identity-row">
+    <MudNumericField T="int?"
+                     @bind-Value="Investigator.Age"
+                     @bind-Value:after="PersistAsync"
+                     Label="Age"
+                     Variant="Variant.Outlined"
+                     Margin="Margin.Dense"
+                     HideSpinButtons="true" />
+    <MudTextField @bind-Value="Investigator.Birthplace"
+                  @bind-Value:after="PersistAsync"
+                  Label="Birthplace"
+                  Variant="Variant.Outlined"
+                  Margin="Margin.Dense" />
+    <MudTextField @bind-Value="Investigator.Residence"
+                  @bind-Value:after="PersistAsync"
+                  Label="Residence"
+                  Variant="Variant.Outlined"
+                  Margin="Margin.Dense" />
+</div>
+
 <div class="info-grid">
     <MudTextField @bind-Value="Investigator.MyStory"
                   @bind-Value:after="PersistAsync"

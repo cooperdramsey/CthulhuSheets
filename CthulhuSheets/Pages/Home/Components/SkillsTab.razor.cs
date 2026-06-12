@@ -12,18 +12,36 @@ public partial class SkillsTab
 
     private Task PersistAsync() => InvestigatorService.PersistAsync();
 
+    private enum SortMode { Alpha, RegularDesc, RegularAsc }
+
     private string _skillFilter = string.Empty;
     private bool _skillsEditMode;
     private readonly Dictionary<Skill, int> _lastSkillRolls = new();
+    private SortMode _sortMode = SortMode.Alpha;
+    private int? _minRegular = null;
 
     private record ImprovementResult(string SkillName, int Roll, int OldValue, bool Improved, int NewValue);
     private List<ImprovementResult> _improvementResults = [];
 
-    private IEnumerable<Skill> VisibleSkills =>
-        (string.IsNullOrWhiteSpace(_skillFilter)
-            ? Investigator.Skills
-            : Investigator.Skills.Where(s => s.Name.Contains(_skillFilter, StringComparison.OrdinalIgnoreCase)))
-        .OrderBy(s => s.Name);
+    private IEnumerable<Skill> VisibleSkills
+    {
+        get
+        {
+            var skills = string.IsNullOrWhiteSpace(_skillFilter)
+                ? Investigator.Skills.AsEnumerable()
+                : Investigator.Skills.Where(s => s.Name.Contains(_skillFilter, StringComparison.OrdinalIgnoreCase));
+
+            if (_minRegular.HasValue && _minRegular.Value > 0)
+                skills = skills.Where(s => s.EffectiveRegular >= _minRegular.Value);
+
+            return _sortMode switch
+            {
+                SortMode.RegularDesc => skills.OrderByDescending(s => s.EffectiveRegular).ThenBy(s => s.Name),
+                SortMode.RegularAsc  => skills.OrderBy(s => s.EffectiveRegular).ThenBy(s => s.Name),
+                _                    => skills.OrderBy(s => s.Name),
+            };
+        }
+    }
 
     private async Task AddSkill()
     {

@@ -4,9 +4,9 @@
         @foreach (var group in DiceRollService.GroupHistory)
         {
             var g = group;
-            <div class="dice-chip dice-chip--dismissible" @onclick="() => DiceRollService.RemoveGroup(g)">
-                <strong>@group.Total</strong>
+            <div class="dice-chip dice-chip--dismissible @(_fadingGroups.Contains(g) ? "dice-chip--fading" : "")" @onclick="() => DiceRollService.RemoveGroup(g)">
                 <span class="dice-chip-meta">@group.Expression</span>
+                <strong>@group.Total</strong>
             </div>
         }
     </div>

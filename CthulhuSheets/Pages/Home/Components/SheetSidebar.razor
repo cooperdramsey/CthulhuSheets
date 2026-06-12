@@ -13,38 +13,6 @@
                     PlaceholderText=""
                     OnChanged="PersistAsync" />
 
-    @if (Investigator.Age.HasValue
-         || !string.IsNullOrWhiteSpace(Investigator.Birthplace)
-         || !string.IsNullOrWhiteSpace(Investigator.Residence))
-    {
-        <div class="sidebar-details">
-            @if (Investigator.Age.HasValue)
-            {
-                <div class="detail-row">
-                    <MudIcon Icon="@Icons.Material.Filled.Cake" Size="Size.Small" Color="Color.Secondary" />
-                    <span class="detail-label">Age</span>
-                    <span class="detail-value">@Investigator.Age</span>
-                </div>
-            }
-            @if (!string.IsNullOrWhiteSpace(Investigator.Birthplace))
-            {
-                <div class="detail-row">
-                    <MudIcon Icon="@Icons.Material.Filled.Public" Size="Size.Small" Color="Color.Secondary" />
-                    <span class="detail-label">Birthplace</span>
-                    <span class="detail-value">@Investigator.Birthplace</span>
-                </div>
-            }
-            @if (!string.IsNullOrWhiteSpace(Investigator.Residence))
-            {
-                <div class="detail-row">
-                    <MudIcon Icon="@Icons.Material.Filled.Home" Size="Size.Small" Color="Color.Secondary" />
-                    <span class="detail-label">Residence</span>
-                    <span class="detail-value">@Investigator.Residence</span>
-                </div>
-            }
-        </div>
-    }
-
     <div class="sidebar-pools">
         <div class="pool-item">
             <div class="pool-label">

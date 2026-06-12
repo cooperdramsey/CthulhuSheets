@@ -9,6 +9,8 @@ public partial class DiceFab : IDisposable
     private bool _menuOpen;
     private readonly Dictionary<int, int> _selectedCounts = [];
     private int _bonusPenaltyDice;
+    private readonly Dictionary<DiceGroup, CancellationTokenSource> _expiryTokens = [];
+    private readonly HashSet<DiceGroup> _fadingGroups = [];
 
     private string BonusPenaltyLabel => _bonusPenaltyDice switch
     {
@@ -28,7 +30,46 @@ public partial class DiceFab : IDisposable
 
     protected override void OnInitialized()
     {
-        DiceRollService.OnRollHistoryChanged += StateHasChanged;
+        DiceRollService.OnRollHistoryChanged += HandleHistoryChanged;
+    }
+
+    private void HandleHistoryChanged()
+    {
+        foreach (var group in DiceRollService.GroupHistory)
+        {
+            if (!_expiryTokens.ContainsKey(group))
+                StartExpiry(group);
+        }
+        foreach (var key in _expiryTokens.Keys.ToList())
+        {
+            if (!DiceRollService.GroupHistory.Contains(key))
+            {
+                _expiryTokens[key].Cancel();
+                _expiryTokens.Remove(key);
+                _fadingGroups.Remove(key);
+            }
+        }
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void StartExpiry(DiceGroup group)
+    {
+        var cts = new CancellationTokenSource();
+        _expiryTokens[group] = cts;
+        _ = ExpireGroupAsync(group, cts.Token);
+    }
+
+    private async Task ExpireGroupAsync(DiceGroup group, CancellationToken ct)
+    {
+        try
+        {
+            await Task.Delay(9500, ct);
+            _fadingGroups.Add(group);
+            await InvokeAsync(StateHasChanged);
+            await Task.Delay(500, ct);
+            DiceRollService.RemoveGroup(group);
+        }
+        catch (TaskCanceledException) { }
     }
 
     private void DecrementBonusPenalty() => _bonusPenaltyDice = Math.Max(-2, _bonusPenaltyDice - 1);
@@ -59,7 +100,6 @@ public partial class DiceFab : IDisposable
 
     private void RollSelection()
     {
-        // Apply bonus/penalty when selection is purely d100 dice
         if (_bonusPenaltyDice != 0 && _selectedCounts.Count == 1 && _selectedCounts.ContainsKey(100))
         {
             var d100Count = _selectedCounts[100];
@@ -76,6 +116,8 @@ public partial class DiceFab : IDisposable
 
     public void Dispose()
     {
-        DiceRollService.OnRollHistoryChanged -= StateHasChanged;
+        DiceRollService.OnRollHistoryChanged -= HandleHistoryChanged;
+        foreach (var cts in _expiryTokens.Values)
+            cts.Cancel();
     }
 }
