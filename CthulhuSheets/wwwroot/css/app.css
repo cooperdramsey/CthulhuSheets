@@ -1,3 +1,25 @@
+:root {
+    /* Spacing — padding / margin / gap */
+    --space-2xs: 2px;   /* micro: tight internal rows (was 1–3px) */
+    --space-xs: 4px;    /* tiny */
+    --space-sm: 8px;    /* small */
+    --space-md: 12px;   /* standard — default gap between peer elements */
+    --space-lg: 16px;   /* large — card padding, grid gaps */
+    --space-xl: 20px;   /* extra large */
+    --space-2xl: 24px;  /* massive — section / content padding */
+
+    /* Border radius */
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 10px;
+    --radius-xl: 12px;
+
+    /* Icon sizes */
+    --icon-sm: 16px;
+    --icon-md: 20px;
+    --icon-lg: 24px;
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }

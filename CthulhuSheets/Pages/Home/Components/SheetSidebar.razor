@@ -200,8 +200,16 @@
     <MudDivider />
 
     <div class="sidebar-stats">
-        <MudText Typo="Typo.overline">Other Stats</MudText>
-        @if (StatsEditMode)
+        <div class="sidebar-stats-header">
+            <MudText Typo="Typo.overline">Other Stats</MudText>
+            <MudTooltip Text="@(_editingOtherStats ? "Done" : "Edit")">
+                <MudIconButton Icon="@(_editingOtherStats ? Icons.Material.Filled.EditOff : Icons.Material.Filled.Edit)"
+                               Color="@(_editingOtherStats ? Color.Primary : Color.Default)"
+                               Size="Size.Small"
+                               OnClick="() => _editingOtherStats = !_editingOtherStats" />
+            </MudTooltip>
+        </div>
+        @if (_editingOtherStats)
         {
             <MudNumericField T="int?"
                              @bind-Value="Investigator.MovementRate"

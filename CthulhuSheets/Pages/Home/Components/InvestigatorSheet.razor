@@ -1,5 +1,5 @@
 <div class="sheet-container">
-    <SheetSidebar Investigator="@Investigator" StatsEditMode="@_statsEditMode" />
+    <SheetSidebar Investigator="@Investigator" />
 
     <div class="sheet-main">
         <nav class="tab-rail" aria-label="Character sheet sections">
@@ -17,9 +17,7 @@
             @switch (_activeTab)
             {
                 case "Stats":
-                    <StatsTab Investigator="@Investigator"
-                              EditMode="@_statsEditMode"
-                              OnToggleEditMode="() => _statsEditMode = !_statsEditMode" />
+                    <StatsTab Investigator="@Investigator" />
                     break;
                 case "Skills":
                     <SkillsTab Investigator="@Investigator" />

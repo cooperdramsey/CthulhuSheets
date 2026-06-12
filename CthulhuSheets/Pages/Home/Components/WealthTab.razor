@@ -76,21 +76,23 @@
                            Size="Size.Small"
                            OnClick="AddAsset" />
         </div>
-        @for (int i = 0; i < Investigator.Wealth.Assets.Count; i++)
-        {
-            var index = i;
-            <div class="asset-row">
-                <MudTextField Value="Investigator.Wealth.Assets[index]"
-                              ValueChanged="async (string v) => { Investigator.Wealth.Assets[index] = v; await PersistAsync(); }"
-                              Variant="Variant.Outlined"
-                              Margin="Margin.Dense"
-                              Placeholder="Asset"
-                              Class="asset-field" />
-                <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                               Color="Color.Error"
-                               Size="Size.Small"
-                               OnClick="() => RemoveAsset(index)" />
-            </div>
-        }
+        <div class="wealth-assets-list">
+            @for (int i = 0; i < Investigator.Wealth.Assets.Count; i++)
+            {
+                var index = i;
+                <div class="asset-row">
+                    <MudTextField Value="Investigator.Wealth.Assets[index]"
+                                  ValueChanged="async (string v) => { Investigator.Wealth.Assets[index] = v; await PersistAsync(); }"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense"
+                                  Placeholder="Asset"
+                                  Class="asset-field" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                   Color="Color.Error"
+                                   Size="Size.Small"
+                                   OnClick="() => RemoveAsset(index)" />
+                </div>
+            }
+        </div>
     </div>
 </div>

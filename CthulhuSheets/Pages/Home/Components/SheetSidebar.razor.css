@@ -69,6 +69,12 @@
     gap: 6px;
 }
 
+.sidebar-stats-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .stat-row {
     display: flex;
     justify-content: space-between;

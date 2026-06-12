@@ -24,10 +24,16 @@
     justify-content: space-between;
 }
 
+.items-gear-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+}
+
 .asset-row {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--space-xs);
 }
 
 .asset-field {

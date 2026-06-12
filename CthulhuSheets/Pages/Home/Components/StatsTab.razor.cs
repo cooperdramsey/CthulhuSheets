@@ -5,12 +5,6 @@ public partial class StatsTab
     [Parameter, EditorRequired]
     public Investigator Investigator { get; set; } = default!;
 
-    [Parameter]
-    public bool EditMode { get; set; }
-
-    [Parameter]
-    public EventCallback OnToggleEditMode { get; set; }
-
     [Inject] private InvestigatorService InvestigatorService { get; set; } = default!;
     [Inject] private DiceRollService DiceRollService { get; set; } = default!;
 
@@ -22,6 +16,13 @@ public partial class StatsTab
     {
         CharacteristicHelper.RecomputeDerived(Investigator);
         await PersistAsync();
+    }
+
+    private string? _editingStatName;
+
+    private void ToggleEditStat(string statName)
+    {
+        _editingStatName = _editingStatName == statName ? null : statName;
     }
 
     private readonly Dictionary<string, int> _lastRolls = new();

@@ -19,21 +19,23 @@
                            Size="Size.Small"
                            OnClick="AddGearItem" />
         </div>
-        @for (int i = 0; i < Investigator.GearAndPossessions.Count; i++)
-        {
-            var index = i;
-            <div class="asset-row">
-                <MudTextField Value="Investigator.GearAndPossessions[index]"
-                              ValueChanged="async (string v) => { Investigator.GearAndPossessions[index] = v; await PersistAsync(); }"
-                              Variant="Variant.Outlined"
-                              Margin="Margin.Dense"
-                              Placeholder="Item"
-                              Class="asset-field" />
-                <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                               Color="Color.Error"
-                               Size="Size.Small"
-                               OnClick="() => RemoveGearItem(index)" />
-            </div>
-        }
+        <div class="items-gear-list">
+            @for (int i = 0; i < Investigator.GearAndPossessions.Count; i++)
+            {
+                var index = i;
+                <div class="asset-row">
+                    <MudTextField Value="Investigator.GearAndPossessions[index]"
+                                  ValueChanged="async (string v) => { Investigator.GearAndPossessions[index] = v; await PersistAsync(); }"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense"
+                                  Placeholder="Item"
+                                  Class="asset-field" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                   Color="Color.Error"
+                                   Size="Size.Small"
+                                   OnClick="() => RemoveGearItem(index)" />
+                </div>
+            }
+        </div>
     </div>
 </div>
