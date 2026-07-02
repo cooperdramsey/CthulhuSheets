@@ -95,28 +95,53 @@
                                   Variant="Variant.Outlined"
                                   Margin="Margin.Dense"
                                   Placeholder="Name" />
-                    <MudNumericField T="int?"
-                                     @bind-Value="weapon.SkillRegular"
-                                     @bind-Value:after="PersistAsync"
-                                     Variant="Variant.Outlined"
-                                     Margin="Margin.Dense"
-                                     HideSpinButtons="true"
-                                     Placeholder="—" />
-                    <div class="weapon-derived-val">
-                        <span>@(weapon.SkillHalf?.ToString() ?? "—")</span>
-                        @if (hasRoll && weapon.SkillHalf.HasValue)
+                    <div class="weapon-skill-cell">
+                        @if (LinkedSkill(weapon) is Skill linkedSkill)
                         {
-                            <MudIcon Icon="@(weaponRoll <= weapon.SkillHalf ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
-                                     Color="@(weaponRoll <= weapon.SkillHalf ? Color.Success : Color.Error)"
+                            <MudTooltip Text="@($"Linked to {linkedSkill.Name} — value follows the Skills tab")">
+                                <span class="weapon-derived-val">@linkedSkill.EffectiveRegular</span>
+                            </MudTooltip>
+                        }
+                        else
+                        {
+                            <MudNumericField T="int?"
+                                             @bind-Value="weapon.SkillRegular"
+                                             @bind-Value:after="PersistAsync"
+                                             Variant="Variant.Outlined"
+                                             Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             Placeholder="—" />
+                        }
+                        <MudMenu Icon="@(weapon.SkillName is null ? Icons.Material.Filled.LinkOff : Icons.Material.Filled.Link)"
+                                 Size="Size.Small"
+                                 Dense="true"
+                                 MaxHeight="300"
+                                 AnchorOrigin="Origin.BottomLeft"
+                                 Title="Link this weapon to a skill">
+                            <MudMenuItem OnClick="() => LinkWeaponSkill(weapon, null)">Manual value</MudMenuItem>
+                            @foreach (var sheetSkill in Investigator.Skills.Where(s => !string.IsNullOrWhiteSpace(s.Name)).OrderBy(s => s.Name))
+                            {
+                                <MudMenuItem OnClick="() => LinkWeaponSkill(weapon, sheetSkill.Name)">
+                                    @sheetSkill.Name (@sheetSkill.EffectiveRegular)
+                                </MudMenuItem>
+                            }
+                        </MudMenu>
+                    </div>
+                    <div class="weapon-derived-val">
+                        <span>@(WeaponSkillHalf(weapon)?.ToString() ?? "—")</span>
+                        @if (hasRoll && WeaponSkillHalf(weapon) is int wHalf)
+                        {
+                            <MudIcon Icon="@(weaponRoll <= wHalf ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
+                                     Color="@(weaponRoll <= wHalf ? Color.Success : Color.Error)"
                                      Size="Size.Small" Class="roll-check-icon" />
                         }
                     </div>
                     <div class="weapon-derived-val">
-                        <span>@(weapon.SkillFifth?.ToString() ?? "—")</span>
-                        @if (hasRoll && weapon.SkillFifth.HasValue)
+                        <span>@(WeaponSkillFifth(weapon)?.ToString() ?? "—")</span>
+                        @if (hasRoll && WeaponSkillFifth(weapon) is int wFifth)
                         {
-                            <MudIcon Icon="@(weaponRoll <= weapon.SkillFifth ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
-                                     Color="@(weaponRoll <= weapon.SkillFifth ? Color.Success : Color.Error)"
+                            <MudIcon Icon="@(weaponRoll <= wFifth ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
+                                     Color="@(weaponRoll <= wFifth ? Color.Success : Color.Error)"
                                      Size="Size.Small" Class="roll-check-icon" />
                         }
                     </div>
@@ -154,7 +179,7 @@
                                     OnRoll="mod => RollWeapon(weapon, mod)" />
                         @if (hasRoll)
                         {
-                            <span class="weapon-roll-result @(weapon.SkillRegular.HasValue ? (weaponRoll <= weapon.SkillRegular ? "success" : "fail") : "")">
+                            <span class="weapon-roll-result @(WeaponSkillValue(weapon) is int wSkill ? (weaponRoll <= wSkill ? "success" : "fail") : "")">
                                 @weaponRoll
                             </span>
                         }

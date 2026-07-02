@@ -65,11 +65,13 @@ public class InvestigatorService(
         }
         catch (JsonException)
         {
-            RemoveEntry(id);
+            // Never delete the stored JSON on a parse failure — a schema change
+            // could make every save unreadable and deleting would destroy them.
+            // Deactivate it and leave the data intact for a future app version.
             Roster.ActiveId = null;
-            await _store.DeleteCharacterAsync(id);
             await _store.SaveRosterAsync(Roster);
-            OnStorageError?.Invoke("A saved character couldn't be read and was removed from the roster.");
+            OnStorageError?.Invoke(
+                "A saved character couldn't be read. Its data was left untouched — it may load again after an app update.");
         }
     }
 
@@ -122,12 +124,9 @@ public class InvestigatorService(
         }
         catch (JsonException)
         {
-            RemoveEntry(id);
-            Roster.ActiveId = null;
-            await _store.DeleteCharacterAsync(id);
-            await _store.SaveRosterAsync(Roster);
-            OnStorageError?.Invoke("That character couldn't be read and was removed.");
-            OnRosterChanged?.Invoke();
+            // Keep the stored JSON — see RestoreActiveAsync.
+            OnStorageError?.Invoke(
+                "That character couldn't be read. Its data was left untouched — it may load again after an app update.");
         }
     }
 

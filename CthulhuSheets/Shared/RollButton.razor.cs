@@ -14,6 +14,15 @@ public partial class RollButton
     [Parameter]
     public Color Color { get; set; } = Color.Primary;
 
+    /// <summary>
+    /// Whether the right-click bonus/penalty-dice popup is available. Disable
+    /// for rolls the rules never modify with bonus/penalty dice (e.g. Sanity
+    /// rolls, ch_8 — the sole exception, Self-Help with the key connection,
+    /// is handled narratively by the Keeper).
+    /// </summary>
+    [Parameter]
+    public bool AllowModifier { get; set; } = true;
+
     [Inject] private IJSRuntime JSRuntime { get; set; } = default!;
 
     private bool _open;
@@ -43,6 +52,8 @@ public partial class RollButton
 
     private async Task OpenPopover(MouseEventArgs e)
     {
+        if (!AllowModifier) return;
+
         _modifier = 0;
 
         var vw = await JSRuntime.InvokeAsync<double>("eval", "window.innerWidth");

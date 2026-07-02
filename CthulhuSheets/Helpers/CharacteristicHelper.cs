@@ -1,3 +1,5 @@
+using CthulhuSheets.Data;
+
 namespace CthulhuSheets.Helpers;
 
 public static class CharacteristicHelper
@@ -134,6 +136,18 @@ public static class CharacteristicHelper
                 <= 444 => ("4d6", 5),
                 _ => ("5d6", 6)
             };
+        }
+
+        // Characteristic-derived skill bases (Dodge = ½DEX, Language (Own) = EDU)
+        // must track the characteristics they derive from, or they go stale when
+        // DEX/EDU change after the skill list is populated (age modifiers applied
+        // on a revisit, or a play-time characteristic edit). Only the base is
+        // refreshed; an explicitly set skill value (points allocated) is untouched.
+        foreach (var skill in investigator.Skills)
+        {
+            var refreshed = DefaultSkills.ComputeBase(skill.Name, skill.BaseValue, investigator);
+            if (refreshed != skill.BaseValue)
+                skill.BaseValue = refreshed;
         }
     }
 }

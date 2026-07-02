@@ -20,7 +20,7 @@ public partial class SkillsTab
     private SortMode _sortMode = SortMode.Alpha;
     private int? _minRegular = null;
 
-    private record ImprovementResult(string SkillName, int Roll, int OldValue, bool Improved, int NewValue);
+    private record ImprovementResult(string SkillName, int Roll, int OldValue, bool Improved, int NewValue, int SanityGained = 0);
     private List<ImprovementResult> _improvementResults = [];
 
     private IEnumerable<Skill> VisibleSkills
@@ -66,7 +66,9 @@ public partial class SkillsTab
         var result = DiceRollService.RollPercentile(modifier);
         _lastSkillRolls[skill] = result.Total;
 
+        // No experience check when a bonus die was used (ch_5 development phase).
         if (result.Total <= skill.EffectiveRegular
+            && modifier <= 0
             && !skill.HasExperienceCheck
             && !NonImprovableSkills.Contains(skill.Name))
         {
@@ -94,7 +96,20 @@ public partial class SkillsTab
                 var gain = DiceRollService.Roll(10);
                 var newVal = current + gain;
                 skill.Regular = newVal;
-                _improvementResults.Add(new(skill.Name, roll, current, true, newVal));
+
+                // Reaching 90%+ during the development phase grants +2D6 Sanity
+                // (ch_5), never above the 99 − Cthulhu Mythos maximum (ch_8).
+                var sanityGained = 0;
+                if (current < 90 && newVal >= 90)
+                {
+                    sanityGained = DiceRollService.Roll(6) + DiceRollService.Roll(6);
+                    var sanMax = Math.Max(0, 99 - MythosValue);
+                    var newSan = Math.Min(sanMax, (Investigator.Sanity.Current ?? 0) + sanityGained);
+                    sanityGained = Math.Max(0, newSan - (Investigator.Sanity.Current ?? 0));
+                    Investigator.Sanity.Current = newSan;
+                }
+
+                _improvementResults.Add(new(skill.Name, roll, current, true, newVal, sanityGained));
             }
             else
             {
@@ -106,6 +121,11 @@ public partial class SkillsTab
 
         await PersistAsync();
     }
+
+    private int MythosValue =>
+        Investigator.Skills
+            .FirstOrDefault(s => s.Name.Equals("Cthulhu Mythos", StringComparison.OrdinalIgnoreCase))
+            ?.EffectiveRegular ?? 0;
 
     private async Task LoadDefaultSkills()
     {

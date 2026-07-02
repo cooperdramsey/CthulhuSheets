@@ -445,7 +445,12 @@ public partial class CreationCharacteristicsStep
 
         if (bracket.PhysicalDeduction > 0 && bracket.PhysicalTargets.Length > 0)
         {
-            _deductionPool = bracket.PhysicalDeduction;
+            // The pool can't exceed what the target stats can actually absorb
+            // (a stat can't go below 0) — e.g. an 80s investigator with low
+            // STR/CON/DEX may not be able to soak the full −80.
+            var absorbable = bracket.PhysicalTargets
+                .Sum(t => GetCharacteristicByName(t).Regular ?? 0);
+            _deductionPool = Math.Min(bracket.PhysicalDeduction, absorbable);
             _deductionTargets = bracket.PhysicalTargets;
             _deductions = bracket.PhysicalTargets.ToDictionary(t => t, _ => 0);
             _deductionsPending = true;
@@ -460,7 +465,9 @@ public partial class CreationCharacteristicsStep
 
     private void OnDeductionChanged(string target, int value)
     {
-        _deductions[target] = Math.Max(0, value);
+        // A stat can't be deducted below 0.
+        var available = GetCharacteristicByName(target).Regular ?? 0;
+        _deductions[target] = Math.Clamp(value, 0, available);
     }
 
     private void ConfirmDeductions()

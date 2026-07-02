@@ -55,13 +55,13 @@
         </div>
     }
     <div class="wealth-stats">
-        <MudNumericField T="int?"
+        <MudNumericField T="decimal?"
                          @bind-Value="Investigator.Wealth.SpendingLevel"
                          @bind-Value:after="PersistAsync"
                          Label="Spending Level"
                          Variant="Variant.Outlined"
                          HideSpinButtons="true" />
-        <MudNumericField T="int?"
+        <MudNumericField T="decimal?"
                          @bind-Value="Investigator.Wealth.Cash"
                          @bind-Value:after="PersistAsync"
                          Label="Cash"

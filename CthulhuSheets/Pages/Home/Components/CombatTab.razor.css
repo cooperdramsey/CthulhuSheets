@@ -86,9 +86,16 @@
 
 .weapon-grid {
     display: grid;
-    grid-template-columns: 2fr 55px 46px 46px 1.1fr 62px 1fr 55px 55px auto auto;
-    gap: 4px 8px;
+    grid-template-columns: 2fr 96px 46px 46px 1.1fr 62px 1fr 55px 55px auto auto;
+    gap: var(--space-xs) var(--space-sm);
     align-items: center;
+}
+
+.weapon-skill-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2xs);
 }
 
 .weapon-col-header {

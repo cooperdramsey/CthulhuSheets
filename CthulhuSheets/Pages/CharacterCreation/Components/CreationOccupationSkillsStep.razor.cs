@@ -10,6 +10,7 @@ public partial class CreationOccupationSkillsStep
     private string _skillFilter = string.Empty;
     private bool _defaultsLoaded;
     private Occupation? _selectedOccupation;
+    private SkillPointFormula? _chosenFormulaOption;
     private HashSet<string> _occupationSkillNames = new(StringComparer.OrdinalIgnoreCase);
 
     // Custom occupation fields
@@ -41,12 +42,21 @@ public partial class CreationOccupationSkillsStep
             : Investigator.Skills.Where(s => s.Name.Contains(_skillFilter, StringComparison.OrdinalIgnoreCase)))
         .OrderBy(s => s.Name);
 
-    private int OccupationSkillPoints => _selectedOccupation?.ComputeSkillPoints(Investigator) ?? 0;
+    private int OccupationSkillPoints =>
+        _selectedOccupation?.ComputeSkillPoints(Investigator, _chosenFormulaOption) ?? 0;
 
-    private string SkillPointsFormula =>
-        _selectedOccupation is null
-            ? string.Empty
-            : string.Join(" + ", _selectedOccupation.SkillPointFormulas.Select(f => $"{f.Characteristic} × {f.Multiplier}"));
+    private string SkillPointsFormula
+    {
+        get
+        {
+            if (_selectedOccupation is null) return string.Empty;
+            var parts = _selectedOccupation.SkillPointFormulas
+                .Select(f => $"{f.Characteristic} × {f.Multiplier}");
+            if (_chosenFormulaOption is not null)
+                parts = parts.Append($"{_chosenFormulaOption.Characteristic} × {_chosenFormulaOption.Multiplier}");
+            return string.Join(" + ", parts);
+        }
+    }
 
     // ── Allocation properties ────────────────────────
 
@@ -130,6 +140,12 @@ public partial class CreationOccupationSkillsStep
         Investigator.Occupation = occupation.Name;
         _occupationSkillNames = new HashSet<string>(occupation.Skills, StringComparer.OrdinalIgnoreCase);
 
+        // Book formulas like "EDU × 2 + either DEX × 2 or STR × 2" let the player
+        // pick the second characteristic; preselect the highest-value option.
+        _chosenFormulaOption = occupation.SkillPointFormulaOptions.Length > 0
+            ? occupation.SkillPointFormulaOptions.MaxBy(o => Occupation.Evaluate(o, Investigator))
+            : null;
+
         // Seed the freeform Contacts field with the occupation's suggested contacts.
         // Only when the user actively picks an occupation, never when restoring a draft,
         // so we don't clobber edits the player has already made.
@@ -143,11 +159,14 @@ public partial class CreationOccupationSkillsStep
     private void ClearOccupation()
     {
         _selectedOccupation = null;
+        _chosenFormulaOption = null;
         Investigator.Occupation = null;
         _occupationSkillNames.Clear();
         _allocations.Clear();
         _personalAllocations.Clear();
     }
+
+    private void SelectFormulaOption(SkillPointFormula option) => _chosenFormulaOption = option;
 
     // ── Custom occupation ────────────────────────────
 

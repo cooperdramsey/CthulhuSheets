@@ -190,6 +190,24 @@
                             <strong>Skill Points:</strong> @SkillPointsFormula = <strong>@OccupationSkillPoints</strong>
                         </MudText>
                     </div>
+                    @if (_selectedOccupation.SkillPointFormulaOptions.Length > 0)
+                    {
+                        <div class="occupation-detail-row">
+                            <MudIcon Icon="@Icons.Material.Filled.AltRoute" Size="Size.Small" Color="Color.Primary" />
+                            <MudText Typo="Typo.body2"><strong>Choose:</strong></MudText>
+                            @foreach (var option in _selectedOccupation.SkillPointFormulaOptions)
+                            {
+                                var isChosen = option == _chosenFormulaOption;
+                                <MudChip T="string"
+                                         Size="Size.Small"
+                                         Variant="@(isChosen ? Variant.Filled : Variant.Outlined)"
+                                         Color="@(isChosen ? Color.Primary : Color.Default)"
+                                         OnClick="() => SelectFormulaOption(option)">
+                                    @option.Characteristic × @option.Multiplier (@Occupation.Evaluate(option, Investigator))
+                                </MudChip>
+                            }
+                        </div>
+                    }
                     <div class="occupation-detail-row">
                         <MudIcon Icon="@Icons.Material.Filled.CreditCard" Size="Size.Small" Color="Color.Primary" />
                         <MudText Typo="Typo.body2">

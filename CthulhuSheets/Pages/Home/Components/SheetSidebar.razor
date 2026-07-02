@@ -69,8 +69,10 @@
                 <MudIcon Icon="@Icons.Material.Filled.Psychology" Size="Size.Small" Color="Color.Info" />
                 <MudText Typo="Typo.overline">Sanity</MudText>
                 <div class="luck-roll-actions">
+                    @* Sanity rolls never take bonus/penalty dice (ch_8). *@
                     <RollButton Size="Size.Small"
                                 Color="Color.Primary"
+                                AllowModifier="false"
                                 OnRoll="mod => RollSanity(mod)" />
                     @if (_sanityRoll.HasValue)
                     {
@@ -95,6 +97,8 @@
                                  @bind-Value="Investigator.Sanity.Current"
                                  @bind-Value:after="PersistAsync"
                                  Label="Cur"
+                                 Min="0"
+                                 Max="@SanMax"
                                  Variant="Variant.Outlined"
                                  Margin="Margin.Dense"
                                  HideSpinButtons="true"

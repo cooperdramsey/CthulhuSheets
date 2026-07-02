@@ -103,7 +103,13 @@
                     <span class="skill-improvement-name">@result.SkillName</span>
                     @if (result.Improved)
                     {
-                        <span>rolled @result.Roll vs @result.OldValue → <strong>+@(result.NewValue - result.OldValue)</strong> (now @result.NewValue)</span>
+                        <span>
+                            rolled @result.Roll vs @result.OldValue → <strong>+@(result.NewValue - result.OldValue)</strong> (now @result.NewValue)
+                            @if (result.SanityGained > 0)
+                            {
+                                <em> — reached 90%+: <strong>+@result.SanityGained Sanity</strong> (2D6)</em>
+                            }
+                        </span>
                         <MudIcon Icon="@Icons.Material.Filled.TrendingUp" Size="Size.Small" Color="Color.Success" />
                     }
                     else

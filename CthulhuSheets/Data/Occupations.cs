@@ -19,7 +19,8 @@ public static class Occupations
             Skills = ["Art/Craft", "History", "Listen", "Language (Other)", "Psychology", "Spot Hidden", "Charm", "Persuade"],
             CreditRatingMin = 9, CreditRatingMax = 50,
             SuggestedContacts = ["Art galleries", "Patrons", "Fellow artists"],
-            SkillPointFormulas = [new("EDU", 2), new("DEX", 2)]
+            SkillPointFormulas = [new("EDU", 2)],
+            SkillPointFormulaOptions = [new("POW", 2), new("DEX", 2)]
         },
         new()
         {
@@ -27,7 +28,8 @@ public static class Occupations
             Skills = ["Climb", "Jump", "Fighting (Brawl)", "Ride", "Swim", "Throw", "Dodge", "Spot Hidden"],
             CreditRatingMin = 9, CreditRatingMax = 70,
             SuggestedContacts = ["Sports clubs", "Agents", "Sponsors"],
-            SkillPointFormulas = [new("EDU", 2), new("DEX", 2)]
+            SkillPointFormulas = [new("EDU", 2)],
+            SkillPointFormulaOptions = [new("DEX", 2), new("STR", 2)]
         },
         new()
         {
@@ -51,7 +53,8 @@ public static class Occupations
             Skills = ["Art/Craft", "Disguise", "Fighting (Brawl)", "Firearms (Handgun)", "Intimidate", "Locksmith", "Sleight of Hand", "Spot Hidden"],
             CreditRatingMin = 5, CreditRatingMax = 65,
             SuggestedContacts = ["Fences", "Corrupt police", "Street criminals"],
-            SkillPointFormulas = [new("EDU", 2), new("DEX", 2)]
+            SkillPointFormulas = [new("EDU", 2)],
+            SkillPointFormulaOptions = [new("DEX", 2), new("STR", 2)]
         },
         new()
         {
@@ -75,7 +78,8 @@ public static class Occupations
             Skills = ["Climb", "Jump", "Listen", "Navigate", "Stealth", "Survival", "Dodge", "Fast Talk"],
             CreditRatingMin = 0, CreditRatingMax = 5,
             SuggestedContacts = ["Other hobos", "Lots of random people from lots of places"],
-            SkillPointFormulas = [new("EDU", 2), new("DEX", 2)]
+            SkillPointFormulas = [new("EDU", 2)],
+            SkillPointFormulaOptions = [new("APP", 2), new("DEX", 2), new("STR", 2)]
         },
         new()
         {
@@ -99,7 +103,8 @@ public static class Occupations
             Skills = ["Art/Craft", "Drive Auto", "Mechanical Repair", "Natural World", "Navigate", "Ride", "Survival", "Track"],
             CreditRatingMin = 9, CreditRatingMax = 30,
             SuggestedContacts = ["Local farming community", "Feed store owners"],
-            SkillPointFormulas = [new("EDU", 2), new("DEX", 2)]
+            SkillPointFormulas = [new("EDU", 2)],
+            SkillPointFormulaOptions = [new("DEX", 2), new("STR", 2)]
         },
         new()
         {
@@ -131,7 +136,8 @@ public static class Occupations
             Skills = ["Accounting", "Firearms (Handgun)", "Firearms (Rifle/Shotgun)", "Navigate", "First Aid", "Intimidate", "Persuade", "Psychology"],
             CreditRatingMin = 20, CreditRatingMax = 70,
             SuggestedContacts = ["Military", "Government", "Veterans"],
-            SkillPointFormulas = [new("EDU", 2), new("DEX", 2)]
+            SkillPointFormulas = [new("EDU", 2)],
+            SkillPointFormulaOptions = [new("DEX", 2), new("STR", 2)]
         },
         new()
         {
@@ -147,7 +153,8 @@ public static class Occupations
             Skills = ["Art/Craft", "Charm", "Listen", "Persuade", "Psychology", "Sleight of Hand", "Fast Talk", "Spot Hidden"],
             CreditRatingMin = 9, CreditRatingMax = 30,
             SuggestedContacts = ["Unions", "Music halls", "Orchestras", "Band mates"],
-            SkillPointFormulas = [new("EDU", 2), new("DEX", 2)]
+            SkillPointFormulas = [new("EDU", 2)],
+            SkillPointFormulaOptions = [new("DEX", 2), new("POW", 2)]
         },
         new()
         {
@@ -171,7 +178,8 @@ public static class Occupations
             Skills = ["Art/Craft", "Disguise", "Firearms (Handgun)", "Law", "Listen", "Persuade", "Psychology", "Spot Hidden"],
             CreditRatingMin = 20, CreditRatingMax = 50,
             SuggestedContacts = ["Law enforcement", "Street level", "Underworld"],
-            SkillPointFormulas = [new("EDU", 2), new("DEX", 2)]
+            SkillPointFormulas = [new("EDU", 2)],
+            SkillPointFormulaOptions = [new("DEX", 2), new("STR", 2)]
         },
         new()
         {
@@ -179,7 +187,8 @@ public static class Occupations
             Skills = ["Art/Craft", "Disguise", "Fast Talk", "Firearms (Handgun)", "Law", "Library Use", "Psychology", "Spot Hidden"],
             CreditRatingMin = 9, CreditRatingMax = 30,
             SuggestedContacts = ["Law enforcement", "Clients", "Lawyers"],
-            SkillPointFormulas = [new("EDU", 2), new("DEX", 2)]
+            SkillPointFormulas = [new("EDU", 2)],
+            SkillPointFormulaOptions = [new("DEX", 2), new("STR", 2)]
         },
         new()
         {
@@ -195,7 +204,17 @@ public static class Occupations
             Skills = ["Climb", "Dodge", "Fighting (Brawl)", "Firearms (Rifle/Shotgun)", "First Aid", "Stealth", "Survival", "Swim"],
             CreditRatingMin = 9, CreditRatingMax = 30,
             SuggestedContacts = ["Military", "Veterans", "Suppliers"],
-            SkillPointFormulas = [new("EDU", 2), new("DEX", 2)]
+            SkillPointFormulas = [new("EDU", 2)],
+            SkillPointFormulaOptions = [new("DEX", 2), new("STR", 2)]
+        },
+        new()
+        {
+            Name = "Zealot",
+            Skills = ["History", "Intimidate", "Persuade", "Psychology", "Stealth", "Occult", "Listen", "Fast Talk"],
+            CreditRatingMin = 0, CreditRatingMax = 30,
+            SuggestedContacts = ["Religious groups", "Fellow believers", "Community activists"],
+            SkillPointFormulas = [new("EDU", 2)],
+            SkillPointFormulaOptions = [new("APP", 2), new("POW", 2)]
         },
         new()
         {
@@ -593,7 +612,7 @@ public static class Occupations
         {
             Name = "Hacker",
             Skills = ["Computer Use", "Electrical Repair", "Fast Talk", "Library Use", "Language (Other)", "Science", "Spot Hidden", "Persuade"],
-            CreditRatingMin = 5, CreditRatingMax = 20,
+            CreditRatingMin = 10, CreditRatingMax = 70,
             SuggestedContacts = ["Other hackers, usually anonymously"],
             SkillPointFormulas = [new("EDU", 4)]
         },
@@ -761,9 +780,10 @@ public static class Occupations
         {
             Name = "Police Officer",
             Skills = ["Fighting (Brawl)", "Drive Auto", "Firearms (Handgun)", "Law", "Persuade", "Spot Hidden", "First Aid", "Track"],
-            CreditRatingMin = 20, CreditRatingMax = 50,
+            CreditRatingMin = 9, CreditRatingMax = 30,
             SuggestedContacts = ["Law enforcement", "Local shopkeeps", "Street scene", "Possibly organized crime"],
-            SkillPointFormulas = [new("EDU", 2), new("DEX", 2)]
+            SkillPointFormulas = [new("EDU", 2)],
+            SkillPointFormulaOptions = [new("DEX", 2), new("STR", 2)]
         },
         new()
         {
@@ -985,9 +1005,10 @@ public static class Occupations
         {
             Name = "Tribal Member",
             Skills = ["Charm", "Listen", "Natural World", "Occult", "Language (Other)", "Spot Hidden", "Swim", "Throw"],
-            CreditRatingMin = 0, CreditRatingMax = 20,
+            CreditRatingMin = 0, CreditRatingMax = 15,
             SuggestedContacts = ["Other tribal members of varied professions"],
-            SkillPointFormulas = [new("EDU", 2), new("DEX", 2)]
+            SkillPointFormulas = [new("EDU", 2)],
+            SkillPointFormulaOptions = [new("DEX", 2), new("STR", 2)]
         },
         new()
         {

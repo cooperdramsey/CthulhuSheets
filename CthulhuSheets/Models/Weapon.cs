@@ -1,11 +1,7 @@
-using System.Text.Json.Serialization;
-
 namespace CthulhuSheets.Models;
 
 public class Weapon
 {
-    private int? _skillRegular;
-
     public string? Name { get; set; }
     public string? Damage { get; set; }
     public int? NumberOfAttacks { get; set; }
@@ -13,20 +9,14 @@ public class Weapon
     public int? Ammo { get; set; }
     public int? Malfunction { get; set; }
 
-    public int? SkillRegular
-    {
-        get => _skillRegular;
-        set
-        {
-            _skillRegular = value;
-            SkillHalf = value.HasValue ? value.Value / 2 : null;
-            SkillFifth = value.HasValue ? value.Value / 5 : null;
-        }
-    }
+    /// <summary>
+    /// Name of the sheet skill this weapon rolls against (e.g. "Firearms (Handgun)").
+    /// When set, the weapon's skill value is read live from that skill so it can
+    /// never drift from the Skills tab; null means <see cref="SkillRegular"/> is
+    /// used as a manually entered value.
+    /// </summary>
+    public string? SkillName { get; set; }
 
-    [JsonIgnore]
-    public int? SkillHalf { get; private set; }
-
-    [JsonIgnore]
-    public int? SkillFifth { get; private set; }
+    /// <summary>Manually entered skill value, used when no skill is linked.</summary>
+    public int? SkillRegular { get; set; }
 }
