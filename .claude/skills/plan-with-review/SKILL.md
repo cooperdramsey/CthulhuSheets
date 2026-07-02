@@ -43,7 +43,12 @@ Read the requirements. Locate the parts of the app the feature will touch — us
 the code map in the `rules-review` skill (`CthulhuSheets/Models/`, `Helpers/`,
 `Data/`, `Pages/.../Components/`, `Services/`) as a starting index. Read the
 condensed rules for any mechanic in scope **before** drafting, so the plan is
-grounded in both the real code and the real rules.
+grounded in both the real code and the real rules. Also ground the plan in the
+project's conventions: `CLAUDE.md` (design tokens for all spacing/radius/icon
+CSS, MudBlazor palette colors, scoped `.razor.css` per component), the
+partial-class pattern (`X.razor` markup + `X.razor.cs` logic), and any prior
+plans in `plans/` as format precedent. A plan that reinvents an existing system
+or ignores house style fails review later — reuse first.
 
 ### 2. Clarify assumptions — at least twice, always
 Before finalizing the plan you **must** call `AskUserQuestion` **at least two
@@ -67,13 +72,26 @@ Never collapse an unresolved ambiguity into a silent assumption. If you truly
 must record one, list it explicitly in the plan's "Assumptions" section and flag
 it in the review.
 
-### 3. Draft the plan
+### 3. Evaluate approaches before committing
+Don't design around the first idea. Sketch the main implementation approaches
+that could satisfy the confirmed requirements, weigh them against the existing
+architecture (reuse of current models/services/components, effort, risk,
+extensibility, rules fidelity), and pick the strongest. Record the alternatives
+considered and why they lost — the plan documents the trade-off so it never has
+to be re-litigated during implementation.
+
+### 4. Draft the plan
 Write the plan to `plans/<feature-slug>.md` using the structure below. Break the
 work into **discrete, ordered, individually-implementable steps** — each step
 small enough to do and verify on its own, naming the concrete files/types to
-touch and the exact rule or formula it must satisfy.
+touch and the exact rule or formula it must satisfy. If the feature changes any
+**persisted model** (anything reachable from `Investigator` or `Roster` — these
+round-trip as JSON through `ICharacterStore` to IndexedDB/localStorage), the
+plan must include an explicit step for saved-character compatibility: how
+existing saves deserialize after the change, and a migration or default if they
+wouldn't.
 
-### 4. Review the plan (two passes)
+### 5. Review the plan (two passes)
 Once drafted, review the plan itself:
 
 1. **Rules review.** Invoke the `rules-review` skill **pointed at the plan
@@ -87,18 +105,18 @@ Once drafted, review the plan itself:
    depends on a later one), validation gaps, and anything the plan silently
    assumed. 
 
-### 5. Present findings + remediations for approval
+### 6. Present findings + remediations for approval
 Present **everything found** in both passes to the user. For each finding give:
 the issue, where in the plan it is, why it matters, and a **concrete proposed
 remediation**. Do not fix anything yet — wait for the user's approval. If nothing
 was found, say so plainly and still show the user the review was done.
 
-### 6. Remediate on approval
+### 7. Remediate on approval
 After the user approves, apply the approved remediations to the plan file. If the
 user's response opens new ambiguity, clarify again (AskUserQuestion) rather than
 assume.
 
-### 7. Save and summarize
+### 8. Save and summarize
 Ensure the final, remediated plan is saved at `plans/<feature-slug>.md`. Then
 present the user a **summary**: the feature, the key decisions settled during
 clarification, the ordered steps at a glance, what the review found and how it
@@ -117,6 +135,9 @@ The input requirements, verbatim or faithfully restated.
 
 ## Decisions (resolved via clarification)
 Each decision settled with the user, and the choice made.
+
+## Alternatives considered
+The approaches evaluated, the one chosen, and why the others were rejected.
 
 ## Assumptions
 Any remaining assumptions, explicitly flagged. Ideally empty.

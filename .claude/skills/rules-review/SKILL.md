@@ -35,7 +35,7 @@ Map the area under review to its chapter:
 | Success levels (Regular/Hard/Extreme/Critical/Fumble), pushing rolls, bonus & penalty dice, opposed rolls, Luck spending | `ch_5_game_system.md` |
 | Weapons, damage, attacks/round, firearms, HP loss / major wound / dying, healing, MOV in combat | `ch_6_combat.md` |
 | Starting SAN (= POW), SAN max (99 − Cthulhu Mythos), SAN loss/recovery, insanity thresholds | `ch_8_sanity.md` |
-| Magic points, spellcasting, tome study | `ch_9_magic.md`, `ch_11`, `ch_12` |
+| Magic points, spellcasting, tome study | `ch_9_magic.md`, `ch_11_tomes_of_eldritch_lore.md`, `ch_12_spells.md` |
 | Equipment / cash / spending level by Credit Rating | `ch_3` + `references/rules_condensed/appendix_equipment.md` |
 
 If a rule the code depends on isn't in the condensed file, check the fuller
@@ -47,15 +47,28 @@ Start from these, then follow references:
 
 - **Models:** `CthulhuSheets/Models/` — `Characteristic.cs`, `Skill.cs`,
   `HitPoints.cs`, `MagicPoints.cs`, `Luck.cs`, `Sanity.cs`, `Wealth.cs`,
-  `Weapon.cs`, `Occupation.cs`, `Investigator.cs`.
-- **Derived-stat logic:** `CthulhuSheets/Helpers/CharacteristicHelper.cs`.
-- **Static rules data:** `CthulhuSheets/Data/Occupations.cs`.
+  `Weapon.cs`, `Occupation.cs`, `Investigator.cs`; plus roster/metadata models
+  (`Roster.cs`, `RosterEntry.cs`, `FellowInvestigator.cs`) — rarely
+  rules-bearing but part of the persisted shape.
+- **Derived-stat logic:** `CthulhuSheets/Helpers/CharacteristicHelper.cs`
+  (point-buy constants, EDU improvement, Luck roll, `RecomputeDerived`).
+- **Static rules data:** `CthulhuSheets/Data/Occupations.cs` and
+  `CthulhuSheets/Data/DefaultSkills.cs` — the canonical skill list with printed
+  base values (characteristic-derived bases like Dodge/Language (Own) are
+  computed per-investigator, not stored). Both are prime audit targets: a wrong
+  number here silently corrupts every character.
 - **Creation flow / validation:** `CthulhuSheets/Pages/CharacterCreation/Components/`
   (`CreationCharacteristicsStep`, `CreationOccupationSkillsStep`,
   `CreationWealthStep`, etc.).
 - **Play-time computation:** `CthulhuSheets/Pages/Home/Components/`
-  (`StatsTab`, `SkillsTab`, `CombatTab`, `WealthTab`) and
+  (`StatsTab`, `SkillsTab`, `CombatTab`, `WealthTab`, `InfoTab`, `ItemsTab`,
+  `SheetSidebar`, `InvestigatorSheet`, `DiceFab`) and
   `CthulhuSheets/Services/DiceRollService.cs`.
+- **Persistence:** `CthulhuSheets/Services/InvestigatorService.cs` and
+  `CthulhuSheets/Services/Storage/` (`ICharacterStore`,
+  `IndexedDbCharacterStore`, `LocalStorageCharacterStore`) — characters
+  round-trip as JSON; `CthulhuSheets/Pages/Roster/` manages multiple
+  characters. Not rules logic, but in scope for the quality axis below.
 
 Note the partial-class pattern: a feature is usually split across
 `X.razor` (markup) + `X.razor.cs` (logic). Check the `.razor.cs` for formulas.
@@ -106,7 +119,17 @@ condensed files for the area in scope.
      clean? Look for bugs and unhandled edge cases (null/zero/min/max inputs),
      logic duplicated across components that can drift, dead or unreachable
      branches, and over-complex expressions of a simple rule. Flag quality issues
-     even where the output happens to be right today.
+     even where the output happens to be right today. Two project-specific
+     checks:
+     - **Persistence compatibility** — characters are serialized to
+       IndexedDB/localStorage as JSON via `ICharacterStore`. If the diff changes
+       a persisted model (anything reachable from `Investigator` or `Roster`),
+       verify previously saved characters still deserialize sanely (renamed or
+       retyped properties, non-nullable additions with no default, removed enum
+       values). Flag any change that would break or silently zero a saved sheet.
+     - **Styling tokens** — if the diff touches a `.razor.css`, spacing /
+       border-radius / icon sizes must use the design tokens from `CLAUDE.md`
+       (`--space-*`, `--radius-*`, `--icon-*`), not new raw px values.
 5. **Report findings** (format below). Cite the rule and the code location.
 6. Only edit code if the user asked for fixes; otherwise stop at the report.
 
@@ -133,6 +156,9 @@ and the highest-priority fixes. Reference code as clickable `path:line` links.
 
 - The condensed rules win ties. If a condensed file looks wrong or incomplete,
   check `references/rules_md/` before flagging the code, and say which you used.
+- `references/` is gitignored (copyrighted source) and exists only on this
+  machine. If `references/rules_condensed/` is missing, **stop and tell the
+  user** — do not review against rules recalled from memory.
 - Don't invent rules from memory — cite the file. CoC editions differ; this app
   targets 7e.
 - Verify line numbers by reading the file; never guess a location.
