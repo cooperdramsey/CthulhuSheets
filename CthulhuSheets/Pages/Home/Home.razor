@@ -1,6 +1,13 @@
 @page "/"
 
-<PageTitle>Home</PageTitle>
+@if (InvestigatorService.Current is not null)
+{
+    <PageTitle>@(string.IsNullOrWhiteSpace(InvestigatorService.Current.Name) ? "Unnamed Investigator" : InvestigatorService.Current.Name)</PageTitle>
+}
+else
+{
+    <PageTitle>Home</PageTitle>
+}
 
 @if (InvestigatorService.Current is not null)
 {
