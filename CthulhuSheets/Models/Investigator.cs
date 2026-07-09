@@ -53,6 +53,7 @@ public class Investigator
 
     // Background
     public string? MyStory { get; set; }
+    public string? KeyConnection { get; set; }
     public string? PersonalDescription { get; set; }
     public string? IdeologyBeliefs { get; set; }
     public string? SignificantPeople { get; set; }

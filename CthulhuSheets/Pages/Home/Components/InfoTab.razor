@@ -24,6 +24,13 @@
                   Label="My Story"
                   Variant="Variant.Outlined"
                   Lines="4" />
+    <MudTextField @bind-Value="Investigator.KeyConnection"
+                  @bind-Value:after="PersistAsync"
+                  Label="Key Connection"
+                  HelperText="Your single most important bond — aids Sanity recovery."
+                  Variant="Variant.Outlined"
+                  Lines="4"
+                  Class="info-full-width" />
     <MudTextField @bind-Value="Investigator.PersonalDescription"
                   @bind-Value:after="PersistAsync"
                   Label="Personal Description"

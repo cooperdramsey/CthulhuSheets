@@ -4,6 +4,10 @@
     gap: 16px;
 }
 
+.backstory-full-width {
+    grid-column: 1 / -1;
+}
+
 @media (max-width: 768px) {
     .backstory-grid {
         grid-template-columns: 1fr;

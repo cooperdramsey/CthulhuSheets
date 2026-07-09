@@ -6,6 +6,19 @@
 </div>
 
 <div class="backstory-grid">
+    <MudCard Outlined="true" Class="backstory-full-width">
+        <MudCardContent>
+            <MudText Typo="Typo.subtitle1" GutterBottom="true">Key Connection</MudText>
+            <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mb-2">
+                Choose the single most important person, place, or thing in your investigator's
+                life. This bond aids Sanity recovery and cannot be taken from you without a fight.
+            </MudText>
+            <MudTextField @bind-Value="Investigator.KeyConnection"
+                          Placeholder="The one bond that matters most…"
+                          Variant="Variant.Outlined"
+                          Lines="2" />
+        </MudCardContent>
+    </MudCard>
     <MudCard Outlined="true">
         <MudCardContent>
             <MudText Typo="Typo.subtitle1" GutterBottom="true">Personal Description</MudText>
