@@ -23,6 +23,9 @@ public partial class RollButton
     [Parameter]
     public bool AllowModifier { get; set; } = true;
 
+    [Parameter]
+    public bool Disabled { get; set; }
+
     [Inject] private IJSRuntime JSRuntime { get; set; } = default!;
 
     private bool _open;
@@ -52,7 +55,7 @@ public partial class RollButton
 
     private async Task OpenPopover(MouseEventArgs e)
     {
-        if (!AllowModifier) return;
+        if (!AllowModifier || Disabled) return;
 
         _modifier = 0;
 
@@ -76,7 +79,11 @@ public partial class RollButton
     private void Decrement() => _modifier = Math.Max(-2, _modifier - 1);
     private void Increment() => _modifier = Math.Min(2, _modifier + 1);
 
-    private async Task RollImmediate() => await OnRoll.InvokeAsync(0);
+    private async Task RollImmediate()
+    {
+        if (Disabled) return;
+        await OnRoll.InvokeAsync(0);
+    }
 
     private async Task ConfirmRoll()
     {

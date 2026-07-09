@@ -52,7 +52,28 @@ public class IndexedDbCharacterStore(IMagicIndexedDb db, IJSRuntime js) : IChara
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
     };
 
-    public async Task<bool> TryInitializeAsync()
+    // Magic.IndexedDb (v2.0.2) is not safe for overlapping queries: two calls
+    // racing on a cold PropertyMappingCache corrupt its type cache and throw
+    // Arg_NoDefCTor while deserializing results. Blazor WASM is single-threaded
+    // but async DB calls still interleave at await points, so serialize every
+    // store access through this gate to guarantee one operation at a time.
+    private readonly SemaphoreSlim _gate = new(1, 1);
+
+    private async Task<T> LockedAsync<T>(Func<Task<T>> op)
+    {
+        await _gate.WaitAsync();
+        try { return await op(); }
+        finally { _gate.Release(); }
+    }
+
+    private async Task LockedAsync(Func<Task> op)
+    {
+        await _gate.WaitAsync();
+        try { await op(); }
+        finally { _gate.Release(); }
+    }
+
+    public Task<bool> TryInitializeAsync() => LockedAsync(async () =>
     {
         try
         {
@@ -64,9 +85,9 @@ public class IndexedDbCharacterStore(IMagicIndexedDb db, IJSRuntime js) : IChara
         {
             return false;
         }
-    }
+    });
 
-    public async Task<Roster?> GetRosterAsync()
+    public Task<Roster?> GetRosterAsync() => LockedAsync<Roster?>(async () =>
     {
         try
         {
@@ -79,25 +100,18 @@ public class IndexedDbCharacterStore(IMagicIndexedDb db, IJSRuntime js) : IChara
         {
             return null;
         }
-    }
+    });
 
-    public async Task SaveRosterAsync(Roster roster)
+    public Task SaveRosterAsync(Roster roster) => LockedAsync(async () =>
     {
         var json = JsonSerializer.Serialize(roster, JsonOptions);
         var q = await db.Query<MetaRecord>();
-        var existing = await q.FirstOrDefaultAsync(x => x.Key == RosterMetaKey);
-        if (existing is not null)
-        {
-            existing.Json = json;
-            await q.UpdateAsync(existing);
-        }
-        else
-        {
-            await q.AddAsync(new MetaRecord { Key = RosterMetaKey, Json = json });
-        }
-    }
+        // Upsert via bulkPut (UpdateRangeAsync) — never a read-before-write. See
+        // SaveCharacterJsonAsync for why the cursor read is avoided.
+        await q.UpdateRangeAsync(new[] { new MetaRecord { Key = RosterMetaKey, Json = json } });
+    });
 
-    public async Task<string?> GetCharacterJsonAsync(Guid id)
+    public Task<string?> GetCharacterJsonAsync(Guid id) => LockedAsync<string?>(async () =>
     {
         try
         {
@@ -109,32 +123,30 @@ public class IndexedDbCharacterStore(IMagicIndexedDb db, IJSRuntime js) : IChara
         {
             return null;
         }
-    }
+    });
 
-    public async Task SaveCharacterJsonAsync(Guid id, string json)
+    public Task SaveCharacterJsonAsync(Guid id, string json) => LockedAsync(async () =>
     {
         var key = id.ToString("N");
         var q = await db.Query<CharacterRecord>();
-        var existing = await q.FirstOrDefaultAsync(x => x.Id == key);
-        if (existing is not null)
-        {
-            existing.Json = json;
-            await q.UpdateAsync(existing);
-        }
-        else
-        {
-            await q.AddAsync(new CharacterRecord { Id = key, Json = json });
-        }
-    }
+        // Upsert via bulkPut (UpdateRangeAsync) so we never issue a streaming
+        // read-before-write. The previous cursor-based FirstOrDefaultAsync held an
+        // IndexedDB transaction open across the JS<->.NET interop boundary, which
+        // Dexie aborts with PrematureCommitError (surfacing as Arg_NoDefCTor while
+        // deserializing the streamed result). bulkPut is a single insert-or-replace
+        // with no read — storage robustness only, not a data-model change.
+        await q.UpdateRangeAsync(new[] { new CharacterRecord { Id = key, Json = json } });
+    });
 
-    public async Task DeleteCharacterAsync(Guid id)
+    public Task DeleteCharacterAsync(Guid id) => LockedAsync(async () =>
     {
         var key = id.ToString("N");
         var q = await db.Query<CharacterRecord>();
-        var existing = await q.FirstOrDefaultAsync(x => x.Id == key);
-        if (existing is not null)
-            await q.DeleteAsync(existing);
-    }
+        // Delete by key with no read-before-write (see SaveCharacterJsonAsync).
+        // DeleteAsync formats the key from the record and calls table.delete(key),
+        // which is a harmless no-op if the key is absent — so no existence check.
+        await q.DeleteAsync(new CharacterRecord { Id = key });
+    });
 
     public async Task RequestPersistAsync()
     {

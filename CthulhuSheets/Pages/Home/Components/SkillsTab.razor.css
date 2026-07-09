@@ -159,11 +159,33 @@
 .skill-exp-check {
     width: 13px;
     height: 13px;
-    margin-right: 4px;
+    margin-right: var(--space-xs);
     cursor: pointer;
     accent-color: var(--mud-palette-primary);
     vertical-align: middle;
     flex-shrink: 0;
+}
+
+.skill-combined-check {
+    width: 13px;
+    height: 13px;
+    margin-right: var(--space-xs);
+    cursor: pointer;
+    accent-color: var(--mud-palette-primary);
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+.skill-row--selected {
+    background: rgba(var(--mud-palette-primary-rgb), 0.12);
+    border-radius: var(--radius-sm);
+    padding-left: var(--space-xs);
+}
+
+.skills-combined-readout {
+    color: var(--mud-palette-text-secondary);
+    font-size: 0.75rem;
+    white-space: nowrap;
 }
 
 .skill-improvement-results {

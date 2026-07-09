@@ -81,11 +81,43 @@
                 </MudButton>
             </MudTooltip>
         }
+        @if (!_skillsEditMode)
+        {
+            <MudTooltip Text="@(_combinedSelectMode ? "Done" : "Combined roll")">
+                <MudIconButton Icon="@Icons.Material.Filled.PlaylistAddCheck"
+                               Color="@(_combinedSelectMode ? Color.Primary : Color.Default)"
+                               Size="Size.Small"
+                               OnClick="ToggleCombinedSelectMode" />
+            </MudTooltip>
+        }
+        @if (_combinedSelectMode)
+        {
+            <RollButton AllowModifier="true"
+                        Size="Size.Small"
+                        Color="Color.Primary"
+                        Disabled="@(_combinedSelection.Count < 2)"
+                        OnRoll="async mod => await RollCombined(mod)" />
+            <span class="skills-combined-readout">
+                @{
+                    var visibleSkillSet = VisibleSkills.ToHashSet();
+                    var hiddenCount = _combinedSelection.Count(s => !visibleSkillSet.Contains(s));
+                }
+                @_combinedSelection.Count selected
+                @if (hiddenCount > 0)
+                {
+                    @($" ({hiddenCount} hidden)")
+                }
+                @if (_lastCombinedRoll.HasValue)
+                {
+                    @($" · rolled {_lastCombinedRoll.Value}")
+                }
+            </span>
+        }
         <MudTooltip Text="@(_skillsEditMode ? "Done Editing" : "Edit Skills")">
             <MudIconButton Icon="@(_skillsEditMode ? Icons.Material.Filled.EditOff : Icons.Material.Filled.Edit)"
                            Color="@(_skillsEditMode ? Color.Primary : Color.Default)"
                            Size="Size.Small"
-                           OnClick="() => _skillsEditMode = !_skillsEditMode" />
+                           OnClick="ToggleEditMode" />
         </MudTooltip>
     </div>
     @if (_improvementResults.Count > 0)
@@ -169,8 +201,18 @@
                         }
                         else
                         {
-                            <div class="skill-name-val">
-                                @if (!NonImprovableSkills.Contains(skill.Name))
+                            <div class="skill-name-val @(_combinedSelectMode && _combinedSelection.Contains(skill) ? "skill-row--selected" : "")">
+                                @if (_combinedSelectMode)
+                                {
+                                    <MudTooltip Text="Include in combined roll">
+                                        <input type="checkbox"
+                                               class="skill-combined-check"
+                                               aria-label="Include in combined roll"
+                                               checked="@_combinedSelection.Contains(skill)"
+                                               @onchange="e => { if ((bool)e.Value!) _combinedSelection.Add(skill); else _combinedSelection.Remove(skill); }" />
+                                    </MudTooltip>
+                                }
+                                @if (!NonImprovableSkills.Contains(skill.Name) && !_combinedSelectMode)
                                 {
                                     <MudTooltip Text="@(skill.HasExperienceCheck ? "Clear experience check" : "Mark for experience check")">
                                         <input type="checkbox"

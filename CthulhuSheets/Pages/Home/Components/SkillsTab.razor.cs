@@ -19,6 +19,9 @@ public partial class SkillsTab
     private readonly Dictionary<Skill, int> _lastSkillRolls = new();
     private SortMode _sortMode = SortMode.Alpha;
     private int? _minRegular = null;
+    private bool _combinedSelectMode;
+    private readonly HashSet<Skill> _combinedSelection = new();
+    private int? _lastCombinedRoll;
 
     private record ImprovementResult(string SkillName, int Roll, int OldValue, bool Improved, int NewValue, int SanityGained = 0);
     private List<ImprovementResult> _improvementResults = [];
@@ -66,15 +69,67 @@ public partial class SkillsTab
         var result = DiceRollService.RollPercentile(modifier);
         _lastSkillRolls[skill] = result.Total;
 
-        // No experience check when a bonus die was used (ch_5 development phase).
-        if (result.Total <= skill.EffectiveRegular
+        if (TryMarkExperienceCheck(skill, result.Total, modifier))
+            await PersistAsync();
+    }
+
+    // No experience check when a bonus die was used (ch_5 development phase).
+    // Shared by single-skill and combined rolls so both paths tick identically.
+    private bool TryMarkExperienceCheck(Skill skill, int roll, int modifier)
+    {
+        if (roll <= skill.EffectiveRegular
             && modifier <= 0
             && !skill.HasExperienceCheck
             && !NonImprovableSkills.Contains(skill.Name))
         {
             skill.HasExperienceCheck = true;
-            await PersistAsync();
+            return true;
         }
+
+        return false;
+    }
+
+    private void ToggleEditMode()
+    {
+        _skillsEditMode = !_skillsEditMode;
+        if (_skillsEditMode)
+        {
+            _combinedSelectMode = false;
+            _combinedSelection.Clear();
+            _lastCombinedRoll = null;
+        }
+    }
+
+    private void ToggleCombinedSelectMode()
+    {
+        _combinedSelectMode = !_combinedSelectMode;
+        if (_combinedSelectMode)
+        {
+            _skillsEditMode = false;
+        }
+        else
+        {
+            _combinedSelection.Clear();
+            _lastCombinedRoll = null;
+        }
+    }
+
+    private async Task RollCombined(int modifier)
+    {
+        if (_combinedSelection.Count < 2) return;
+
+        var result = DiceRollService.RollPercentile(modifier);
+        _lastCombinedRoll = result.Total;
+
+        var tickedAny = false;
+        foreach (var skill in _combinedSelection.ToList())
+        {
+            _lastSkillRolls[skill] = result.Total;
+            tickedAny |= TryMarkExperienceCheck(skill, result.Total, modifier);
+        }
+
+        if (tickedAny)
+            await PersistAsync();
     }
 
     private async Task ImproveSkills()
