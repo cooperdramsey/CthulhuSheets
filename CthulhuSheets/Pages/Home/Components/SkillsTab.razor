@@ -212,7 +212,7 @@
                                                @onchange="e => { if ((bool)e.Value!) _combinedSelection.Add(skill); else _combinedSelection.Remove(skill); }" />
                                     </MudTooltip>
                                 }
-                                @if (!NonImprovableSkills.Contains(skill.Name) && !_combinedSelectMode)
+                                @if (!SkillRules.NonImprovableSkills.Contains(skill.Name) && !_combinedSelectMode)
                                 {
                                     <MudTooltip Text="@(skill.HasExperienceCheck ? "Clear experience check" : "Mark for experience check")">
                                         <input type="checkbox"

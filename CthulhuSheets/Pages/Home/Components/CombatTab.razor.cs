@@ -24,6 +24,9 @@ public partial class CombatTab
 
     private int? _dodgeRoll;
     private readonly Dictionary<Weapon, int> _weaponRolls = new();
+    private bool _weaponsEditMode;
+
+    private void ToggleWeaponsEditMode() => _weaponsEditMode = !_weaponsEditMode;
 
     private async Task RollDodge(int modifier = 0)
     {
@@ -43,10 +46,20 @@ public partial class CombatTab
         }
     }
 
-    private void RollWeapon(Weapon weapon, int modifier = 0)
+    private async Task RollWeapon(Weapon weapon, int modifier = 0)
     {
         var result = DiceRollService.RollPercentile(modifier);
         _weaponRolls[weapon] = result.Total;
+
+        // A successful roll on a linked weapon ticks that skill's experience
+        // check, matching the Skills tab (ch_5 development phase); manual/
+        // unlinked weapons have no skill object and never tick.
+        var linkedSkill = LinkedSkill(weapon);
+        if (linkedSkill is not null && SkillRules.ShouldMarkExperienceCheck(linkedSkill, result.Total, modifier))
+        {
+            linkedSkill.HasExperienceCheck = true;
+            await PersistAsync();
+        }
     }
 
     // ── Weapon ↔ skill linkage ───────────────────────

@@ -84,11 +84,25 @@
     justify-content: space-between;
 }
 
+.combat-weapons-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.weapons-empty-hint {
+    padding: var(--space-sm) 0;
+}
+
 .weapon-grid {
     display: grid;
-    grid-template-columns: 2fr 96px 46px 46px 1.1fr 62px 1fr 55px 55px auto auto;
+    grid-template-columns: 2fr 50px 46px 46px 70px 1.1fr 62px 1fr 55px 55px auto;
     gap: var(--space-xs) var(--space-sm);
     align-items: center;
+}
+
+.weapon-grid--edit {
+    grid-template-columns: 2fr 96px 46px 46px 70px 1.1fr 62px 1fr 55px 55px auto;
 }
 
 .weapon-skill-cell {
@@ -104,27 +118,57 @@
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--mud-palette-text-secondary);
-    padding: 0 4px 4px;
+    padding: 0 var(--space-xs) var(--space-xs);
 }
 
 .weapon-col-center {
     text-align: center;
 }
 
+.weapon-plain-val {
+    font-size: 0.82rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: var(--space-xs);
+    line-height: 1.4;
+}
+
+.weapon-val-cell {
+    display: grid;
+    grid-template-columns: 1fr 1rem;
+    align-items: center;
+    gap: var(--space-2xs);
+}
+
+.weapon-val--regular {
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--mud-palette-text-primary);
+}
+
 .weapon-derived-val {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 2px;
+    gap: var(--space-2xs);
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--mud-palette-text-secondary);
 }
 
+.weapon-roll-icon-placeholder {
+    display: block;
+    width: 1rem;
+    height: 1rem;
+}
+
 .weapon-roll-cell {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: var(--space-xs);
 }
 
 .weapon-roll-result {

@@ -59,11 +59,6 @@ public partial class SkillsTab
         await PersistAsync();
     }
 
-    // Credit Rating and Cthulhu Mythos are never ticked or improved via experience
-    // (ch_4 Skill List; ch_5 Investigator Development Phase).
-    private static readonly HashSet<string> NonImprovableSkills =
-        new(StringComparer.OrdinalIgnoreCase) { "Credit Rating", "Cthulhu Mythos" };
-
     private async Task RollSkill(Skill skill, int modifier = 0)
     {
         var result = DiceRollService.RollPercentile(modifier);
@@ -73,14 +68,10 @@ public partial class SkillsTab
             await PersistAsync();
     }
 
-    // No experience check when a bonus die was used (ch_5 development phase).
     // Shared by single-skill and combined rolls so both paths tick identically.
     private bool TryMarkExperienceCheck(Skill skill, int roll, int modifier)
     {
-        if (roll <= skill.EffectiveRegular
-            && modifier <= 0
-            && !skill.HasExperienceCheck
-            && !NonImprovableSkills.Contains(skill.Name))
+        if (SkillRules.ShouldMarkExperienceCheck(skill, roll, modifier))
         {
             skill.HasExperienceCheck = true;
             return true;
@@ -136,7 +127,7 @@ public partial class SkillsTab
     {
         _improvementResults.Clear();
         var checkedSkills = Investigator.Skills
-            .Where(s => s.HasExperienceCheck && !NonImprovableSkills.Contains(s.Name))
+            .Where(s => s.HasExperienceCheck && !SkillRules.NonImprovableSkills.Contains(s.Name))
             .ToList();
 
         foreach (var skill in checkedSkills)

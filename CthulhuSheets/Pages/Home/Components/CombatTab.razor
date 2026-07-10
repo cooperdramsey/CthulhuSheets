@@ -43,7 +43,7 @@
                                  Color="@(_dodgeRoll <= DodgeHard ? Color.Success : Color.Error)"
                                  Size="Size.Small" Class="roll-check-icon" />
                     }
-                    <span class="combat-dodge-label">Hard</span>
+                    <span class="combat-dodge-label">Half</span>
                 </div>
                 <span class="combat-dodge-sep">/</span>
                 <div class="combat-dodge-tier">
@@ -54,7 +54,7 @@
                                  Color="@(_dodgeRoll <= DodgeExtreme ? Color.Success : Color.Error)"
                                  Size="Size.Small" Class="roll-check-icon" />
                     }
-                    <span class="combat-dodge-label">Ext</span>
+                    <span class="combat-dodge-label">Fifth</span>
                 </div>
             </div>
             <div class="roll-action">
@@ -68,126 +68,171 @@
     <div class="combat-weapons-section">
         <div class="combat-weapons-header">
             <MudText Typo="Typo.h6">Weapons</MudText>
-            <MudIconButton Icon="@Icons.Material.Filled.Add"
-                           Color="Color.Primary"
-                           Size="Size.Small"
-                           OnClick="AddWeapon" />
+            <div class="combat-weapons-header-actions">
+                @if (_weaponsEditMode)
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.Add"
+                                   Color="Color.Primary"
+                                   Size="Size.Small"
+                                   OnClick="AddWeapon" />
+                }
+                <MudTooltip Text="@(_weaponsEditMode ? "Done Editing" : "Edit Weapons")">
+                    <MudIconButton Icon="@(_weaponsEditMode ? Icons.Material.Filled.EditOff : Icons.Material.Filled.Edit)"
+                                   Color="@(_weaponsEditMode ? Color.Primary : Color.Default)"
+                                   Size="Size.Small"
+                                   OnClick="ToggleWeaponsEditMode" />
+                </MudTooltip>
+            </div>
         </div>
-        @if (Investigator.Weapons.Count > 0)
+        @if (Investigator.Weapons.Count == 0 && !_weaponsEditMode)
         {
-            <div class="weapon-grid">
+            <MudText Typo="Typo.body2" Color="Color.Secondary" Class="weapons-empty-hint">
+                No weapons — tap Edit to add one.
+            </MudText>
+        }
+        else
+        {
+            <div class="weapon-grid @(_weaponsEditMode ? "weapon-grid--edit" : "")">
                 <span class="weapon-col-header">Name</span>
-                <span class="weapon-col-header weapon-col-center">Skill</span>
-                <span class="weapon-col-header weapon-col-center">Hard</span>
-                <span class="weapon-col-header weapon-col-center">Ext</span>
+                <span class="weapon-col-header weapon-col-center">Regular</span>
+                <span class="weapon-col-header weapon-col-center">Half</span>
+                <span class="weapon-col-header weapon-col-center">Fifth</span>
+                <span></span>
                 <span class="weapon-col-header">Damage</span>
                 <span class="weapon-col-header weapon-col-center">Atk/Rnd</span>
                 <span class="weapon-col-header">Range</span>
                 <span class="weapon-col-header weapon-col-center">Ammo</span>
                 <span class="weapon-col-header weapon-col-center">Malf</span>
                 <span></span>
-                <span></span>
                 @foreach (var weapon in Investigator.Weapons)
                 {
                     var hasRoll = _weaponRolls.TryGetValue(weapon, out var weaponRoll);
-                    <MudTextField @bind-Value="weapon.Name"
-                                  @bind-Value:after="PersistAsync"
-                                  Variant="Variant.Outlined"
-                                  Margin="Margin.Dense"
-                                  Placeholder="Name" />
-                    <div class="weapon-skill-cell">
-                        @if (LinkedSkill(weapon) is Skill linkedSkill)
-                        {
-                            <MudTooltip Text="@($"Linked to {linkedSkill.Name} — value follows the Skills tab")">
-                                <span class="weapon-derived-val">@linkedSkill.EffectiveRegular</span>
-                            </MudTooltip>
-                        }
-                        else
-                        {
-                            <MudNumericField T="int?"
-                                             @bind-Value="weapon.SkillRegular"
-                                             @bind-Value:after="PersistAsync"
-                                             Variant="Variant.Outlined"
-                                             Margin="Margin.Dense"
-                                             HideSpinButtons="true"
-                                             Placeholder="—" />
-                        }
-                        <MudMenu Icon="@(weapon.SkillName is null ? Icons.Material.Filled.LinkOff : Icons.Material.Filled.Link)"
-                                 Size="Size.Small"
-                                 Dense="true"
-                                 MaxHeight="300"
-                                 AnchorOrigin="Origin.BottomLeft"
-                                 Title="Link this weapon to a skill">
-                            <MudMenuItem OnClick="() => LinkWeaponSkill(weapon, null)">Manual value</MudMenuItem>
-                            @foreach (var sheetSkill in Investigator.Skills.Where(s => !string.IsNullOrWhiteSpace(s.Name)).OrderBy(s => s.Name))
+                    @if (_weaponsEditMode)
+                    {
+                        <MudTextField @bind-Value="weapon.Name"
+                                      @bind-Value:after="PersistAsync"
+                                      Variant="Variant.Outlined"
+                                      Margin="Margin.Dense"
+                                      Placeholder="Name" />
+                        <div class="weapon-skill-cell">
+                            @if (LinkedSkill(weapon) is Skill linkedSkill)
                             {
-                                <MudMenuItem OnClick="() => LinkWeaponSkill(weapon, sheetSkill.Name)">
-                                    @sheetSkill.Name (@sheetSkill.EffectiveRegular)
-                                </MudMenuItem>
+                                <MudTooltip Text="@($"Linked to {linkedSkill.Name} — value follows the Skills tab")">
+                                    <span class="weapon-derived-val">@linkedSkill.EffectiveRegular</span>
+                                </MudTooltip>
                             }
-                        </MudMenu>
-                    </div>
-                    <div class="weapon-derived-val">
-                        <span>@(WeaponSkillHalf(weapon)?.ToString() ?? "—")</span>
-                        @if (hasRoll && WeaponSkillHalf(weapon) is int wHalf)
-                        {
-                            <MudIcon Icon="@(weaponRoll <= wHalf ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
-                                     Color="@(weaponRoll <= wHalf ? Color.Success : Color.Error)"
-                                     Size="Size.Small" Class="roll-check-icon" />
-                        }
-                    </div>
-                    <div class="weapon-derived-val">
-                        <span>@(WeaponSkillFifth(weapon)?.ToString() ?? "—")</span>
-                        @if (hasRoll && WeaponSkillFifth(weapon) is int wFifth)
-                        {
-                            <MudIcon Icon="@(weaponRoll <= wFifth ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
-                                     Color="@(weaponRoll <= wFifth ? Color.Success : Color.Error)"
-                                     Size="Size.Small" Class="roll-check-icon" />
-                        }
-                    </div>
-                    <MudTextField @bind-Value="weapon.Damage"
-                                  @bind-Value:after="PersistAsync"
-                                  Variant="Variant.Outlined"
-                                  Margin="Margin.Dense"
-                                  Placeholder="e.g. 1d6+db" />
-                    <MudNumericField T="int?"
-                                     @bind-Value="weapon.NumberOfAttacks"
-                                     @bind-Value:after="PersistAsync"
-                                     Variant="Variant.Outlined"
-                                     Margin="Margin.Dense"
-                                     HideSpinButtons="true" />
-                    <MudTextField @bind-Value="weapon.Range"
-                                  @bind-Value:after="PersistAsync"
-                                  Variant="Variant.Outlined"
-                                  Margin="Margin.Dense"
-                                  Placeholder="e.g. Touch" />
-                    <MudNumericField T="int?"
-                                     @bind-Value="weapon.Ammo"
-                                     @bind-Value:after="PersistAsync"
-                                     Variant="Variant.Outlined"
-                                     Margin="Margin.Dense"
-                                     HideSpinButtons="true" />
-                    <MudNumericField T="int?"
-                                     @bind-Value="weapon.Malfunction"
-                                     @bind-Value:after="PersistAsync"
-                                     Variant="Variant.Outlined"
-                                     Margin="Margin.Dense"
-                                     HideSpinButtons="true" />
-                    <div class="weapon-roll-cell">
-                        <RollButton Size="Size.Small"
-                                    Color="Color.Primary"
-                                    OnRoll="mod => RollWeapon(weapon, mod)" />
-                        @if (hasRoll)
-                        {
-                            <span class="weapon-roll-result @(WeaponSkillValue(weapon) is int wSkill ? (weaponRoll <= wSkill ? "success" : "fail") : "")">
-                                @weaponRoll
-                            </span>
-                        }
-                    </div>
-                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                                   Color="Color.Error"
-                                   Size="Size.Small"
-                                   OnClick="() => RemoveWeapon(weapon)" />
+                            else
+                            {
+                                <MudNumericField T="int?"
+                                                 @bind-Value="weapon.SkillRegular"
+                                                 @bind-Value:after="PersistAsync"
+                                                 Variant="Variant.Outlined"
+                                                 Margin="Margin.Dense"
+                                                 HideSpinButtons="true"
+                                                 Placeholder="—" />
+                            }
+                            <MudMenu Icon="@(weapon.SkillName is null ? Icons.Material.Filled.LinkOff : Icons.Material.Filled.Link)"
+                                     Size="Size.Small"
+                                     Dense="true"
+                                     MaxHeight="300"
+                                     AnchorOrigin="Origin.BottomLeft"
+                                     Title="Link this weapon to a skill">
+                                <MudMenuItem OnClick="() => LinkWeaponSkill(weapon, null)">Manual value</MudMenuItem>
+                                @foreach (var sheetSkill in Investigator.Skills.Where(s => !string.IsNullOrWhiteSpace(s.Name)).OrderBy(s => s.Name))
+                                {
+                                    <MudMenuItem OnClick="() => LinkWeaponSkill(weapon, sheetSkill.Name)">
+                                        @sheetSkill.Name (@sheetSkill.EffectiveRegular)
+                                    </MudMenuItem>
+                                }
+                            </MudMenu>
+                        </div>
+                        <div class="weapon-derived-val">@(WeaponSkillHalf(weapon)?.ToString() ?? "—")</div>
+                        <div class="weapon-derived-val">@(WeaponSkillFifth(weapon)?.ToString() ?? "—")</div>
+                        <span></span>
+                        <MudTextField @bind-Value="weapon.Damage"
+                                      @bind-Value:after="PersistAsync"
+                                      Variant="Variant.Outlined"
+                                      Margin="Margin.Dense"
+                                      Placeholder="e.g. 1d6+db" />
+                        <MudNumericField T="int?"
+                                         @bind-Value="weapon.NumberOfAttacks"
+                                         @bind-Value:after="PersistAsync"
+                                         Variant="Variant.Outlined"
+                                         Margin="Margin.Dense"
+                                         HideSpinButtons="true" />
+                        <MudTextField @bind-Value="weapon.Range"
+                                      @bind-Value:after="PersistAsync"
+                                      Variant="Variant.Outlined"
+                                      Margin="Margin.Dense"
+                                      Placeholder="e.g. Touch" />
+                        <MudNumericField T="int?"
+                                         @bind-Value="weapon.Ammo"
+                                         @bind-Value:after="PersistAsync"
+                                         Variant="Variant.Outlined"
+                                         Margin="Margin.Dense"
+                                         HideSpinButtons="true" />
+                        <MudNumericField T="int?"
+                                         @bind-Value="weapon.Malfunction"
+                                         @bind-Value:after="PersistAsync"
+                                         Variant="Variant.Outlined"
+                                         Margin="Margin.Dense"
+                                         HideSpinButtons="true" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                       Color="Color.Error"
+                                       Size="Size.Small"
+                                       OnClick="() => RemoveWeapon(weapon)" />
+                    }
+                    else
+                    {
+                        <div class="weapon-plain-val">@(string.IsNullOrWhiteSpace(weapon.Name) ? "—" : weapon.Name)</div>
+                        <div class="weapon-val-cell">
+                            <span class="weapon-val--regular">@(WeaponSkillValue(weapon)?.ToString() ?? "—")</span>
+                            @if (hasRoll && WeaponSkillValue(weapon) is int wSkill)
+                            {
+                                <MudIcon Icon="@(weaponRoll <= wSkill ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
+                                         Color="@(weaponRoll <= wSkill ? Color.Success : Color.Error)"
+                                         Size="Size.Small" Class="roll-check-icon" />
+                            }
+                            else { <span class="weapon-roll-icon-placeholder"></span> }
+                        </div>
+                        <div class="weapon-val-cell">
+                            <span class="weapon-derived-val">@(WeaponSkillHalf(weapon)?.ToString() ?? "—")</span>
+                            @if (hasRoll && WeaponSkillHalf(weapon) is int wHalf)
+                            {
+                                <MudIcon Icon="@(weaponRoll <= wHalf ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
+                                         Color="@(weaponRoll <= wHalf ? Color.Success : Color.Error)"
+                                         Size="Size.Small" Class="roll-check-icon" />
+                            }
+                            else { <span class="weapon-roll-icon-placeholder"></span> }
+                        </div>
+                        <div class="weapon-val-cell">
+                            <span class="weapon-derived-val">@(WeaponSkillFifth(weapon)?.ToString() ?? "—")</span>
+                            @if (hasRoll && WeaponSkillFifth(weapon) is int wFifth)
+                            {
+                                <MudIcon Icon="@(weaponRoll <= wFifth ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
+                                         Color="@(weaponRoll <= wFifth ? Color.Success : Color.Error)"
+                                         Size="Size.Small" Class="roll-check-icon" />
+                            }
+                            else { <span class="weapon-roll-icon-placeholder"></span> }
+                        </div>
+                        <div class="weapon-roll-cell">
+                            <RollButton Size="Size.Small"
+                                        Color="Color.Primary"
+                                        OnRoll="async mod => await RollWeapon(weapon, mod)" />
+                            @if (hasRoll)
+                            {
+                                <span class="weapon-roll-result @(WeaponSkillValue(weapon) is int wSkill2 ? (weaponRoll <= wSkill2 ? "success" : "fail") : "")">
+                                    @weaponRoll
+                                </span>
+                            }
+                        </div>
+                        <div class="weapon-plain-val">@(weapon.Damage ?? "—")</div>
+                        <div class="weapon-plain-val weapon-col-center">@(weapon.NumberOfAttacks?.ToString() ?? "—")</div>
+                        <div class="weapon-plain-val">@(weapon.Range ?? "—")</div>
+                        <div class="weapon-plain-val weapon-col-center">@(weapon.Ammo?.ToString() ?? "—")</div>
+                        <div class="weapon-plain-val weapon-col-center">@(weapon.Malfunction?.ToString() ?? "—")</div>
+                        <span></span>
+                    }
                 }
             </div>
         }
