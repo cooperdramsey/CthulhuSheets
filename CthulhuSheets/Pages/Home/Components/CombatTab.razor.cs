@@ -33,12 +33,10 @@ public partial class CombatTab
         var result = DiceRollService.RollPercentile(modifier);
         _dodgeRoll = result.Total;
 
-        // No experience check when a bonus die was used (ch_5 development phase).
+        // Ticks the Dodge experience check via the shared predicate so it stays
+        // identical to every other roll path (ch_5 development phase).
         var dodgeSkill = Investigator.FindSkill(WellKnownSkills.Dodge);
-        if (dodgeSkill is not null
-            && result.Total <= dodgeSkill.EffectiveRegular
-            && modifier <= 0
-            && !dodgeSkill.HasExperienceCheck)
+        if (dodgeSkill is not null && SkillRules.ShouldMarkExperienceCheck(dodgeSkill, result.Total, modifier))
         {
             dodgeSkill.HasExperienceCheck = true;
             await PersistAsync();
