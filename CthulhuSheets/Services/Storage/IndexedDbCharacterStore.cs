@@ -40,6 +40,20 @@ public class MetaRecord : MagicTableTool<MetaRecord>, IMagicTable<MetaRecord.Dbs
     public List<IMagicCompoundIndex>? GetCompoundIndexes() => null;
 }
 
+public class PortraitRecord : MagicTableTool<PortraitRecord>, IMagicTable<PortraitRecord.Dbs>
+{
+    public sealed class Dbs { public readonly IndexedDbSet Cthulhu = CthulhuDbContext.Cthulhu; }
+    public Dbs Databases { get; } = new();
+
+    public string Id { get; set; } = string.Empty;
+    public string DataUrl { get; set; } = string.Empty;
+
+    public IMagicCompoundKey GetKeys() => CreatePrimaryKey(x => x.Id, false);
+    public string GetTableName() => "portraits";
+    public IndexedDbSet GetDefaultDatabase() => CthulhuDbContext.Cthulhu;
+    public List<IMagicCompoundIndex>? GetCompoundIndexes() => null;
+}
+
 // --- Store implementation ---
 
 public class IndexedDbCharacterStore(IMagicIndexedDb db, IJSRuntime js) : ICharacterStore
@@ -92,7 +106,10 @@ public class IndexedDbCharacterStore(IMagicIndexedDb db, IJSRuntime js) : IChara
         try
         {
             var q = await db.Query<MetaRecord>();
-            var record = await q.FirstOrDefaultAsync(x => x.Key == RosterMetaKey);
+            // Materialize with Where(...).ToListAsync(), not the streaming
+            // FirstOrDefaultAsync cursor — see GetCharacterJsonAsync.
+            var records = await q.Where(x => x.Key == RosterMetaKey).ToListAsync();
+            var record = records.FirstOrDefault();
             if (record is null) return null;
             return JsonSerializer.Deserialize<Roster>(record.Json, JsonOptions);
         }
@@ -115,9 +132,17 @@ public class IndexedDbCharacterStore(IMagicIndexedDb db, IJSRuntime js) : IChara
     {
         try
         {
+            var key = id.ToString("N");
             var q = await db.Query<CharacterRecord>();
-            var record = await q.FirstOrDefaultAsync(x => x.Id == id.ToString("N"));
-            return record?.Json;
+            // Materialize with Where(...).ToListAsync() (bulk fetch) instead of the
+            // streaming FirstOrDefaultAsync cursor. A cursor read holds the IndexedDB
+            // transaction open across the JS<->.NET interop boundary; on a large
+            // record Dexie aborts it with PrematureCommitError (surfacing as
+            // "Error handling streamed JS"), which this catch would swallow to null
+            // and silently drop the character. ToListAsync returns the whole match
+            // set in one shot with no open cursor. See SaveCharacterJsonAsync.
+            var records = await q.Where(x => x.Id == key).ToListAsync();
+            return records.FirstOrDefault()?.Json;
         }
         catch
         {
@@ -146,6 +171,49 @@ public class IndexedDbCharacterStore(IMagicIndexedDb db, IJSRuntime js) : IChara
         // DeleteAsync formats the key from the record and calls table.delete(key),
         // which is a harmless no-op if the key is absent — so no existence check.
         await q.DeleteAsync(new CharacterRecord { Id = key });
+    });
+
+    public Task<string?> GetPortraitAsync(Guid id) => LockedAsync<string?>(async () =>
+    {
+        try
+        {
+            var key = id.ToString("N");
+            var q = await db.Query<PortraitRecord>();
+            // Materialize with Where(...).ToListAsync(), not the streaming
+            // FirstOrDefaultAsync cursor — see GetCharacterJsonAsync. Portrait
+            // records are large (base64 data URLs), so the cursor-commit race is
+            // guaranteed here.
+            var records = await q.Where(x => x.Id == key).ToListAsync();
+            return records.FirstOrDefault()?.DataUrl;
+        }
+        catch
+        {
+            return null;
+        }
+    });
+
+    public Task SavePortraitAsync(Guid id, string? dataUrl) => LockedAsync(async () =>
+    {
+        var key = id.ToString("N");
+        var q = await db.Query<PortraitRecord>();
+        if (string.IsNullOrEmpty(dataUrl))
+        {
+            // Delete by key with no read-before-write (see SaveCharacterJsonAsync).
+            await q.DeleteAsync(new PortraitRecord { Id = key });
+            return;
+        }
+
+        // Upsert via bulkPut (UpdateRangeAsync) — never a read-before-write (see
+        // SaveCharacterJsonAsync).
+        await q.UpdateRangeAsync(new[] { new PortraitRecord { Id = key, DataUrl = dataUrl } });
+    });
+
+    public Task DeletePortraitAsync(Guid id) => LockedAsync(async () =>
+    {
+        var key = id.ToString("N");
+        var q = await db.Query<PortraitRecord>();
+        // Delete by key with no read-before-write (see SaveCharacterJsonAsync).
+        await q.DeleteAsync(new PortraitRecord { Id = key });
     });
 
     public async Task RequestPersistAsync()

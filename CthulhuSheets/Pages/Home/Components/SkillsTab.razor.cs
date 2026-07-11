@@ -149,7 +149,7 @@ public partial class SkillsTab
                 if (current < 90 && newVal >= 90)
                 {
                     sanityGained = DiceRollService.Roll(6) + DiceRollService.Roll(6);
-                    var sanMax = Math.Max(0, 99 - MythosValue);
+                    var sanMax = SanityRules.MaxSanity(Investigator);
                     var newSan = Math.Min(sanMax, (Investigator.Sanity.Current ?? 0) + sanityGained);
                     sanityGained = Math.Max(0, newSan - (Investigator.Sanity.Current ?? 0));
                     Investigator.Sanity.Current = newSan;
@@ -167,11 +167,6 @@ public partial class SkillsTab
 
         await PersistAsync();
     }
-
-    private int MythosValue =>
-        Investigator.Skills
-            .FirstOrDefault(s => s.Name.Equals("Cthulhu Mythos", StringComparison.OrdinalIgnoreCase))
-            ?.EffectiveRegular ?? 0;
 
     private async Task LoadDefaultSkills()
     {

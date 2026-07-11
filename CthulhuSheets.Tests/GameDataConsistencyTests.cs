@@ -79,4 +79,12 @@ public class GameDataConsistencyTests
         Assert.True(problems.Count == 0,
             "Occupation skill-list problems:\n" + string.Join("\n", problems));
     }
+
+    [Fact]
+    public void WellKnownSkills_AllExistInDefaultSkills()
+    {
+        var names = DefaultSkills.All.Select(s => s.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        foreach (var wk in new[] { WellKnownSkills.CthulhuMythos, WellKnownSkills.CreditRating, WellKnownSkills.Dodge, WellKnownSkills.LanguageOwn })
+            Assert.Contains(wk, names);
+    }
 }

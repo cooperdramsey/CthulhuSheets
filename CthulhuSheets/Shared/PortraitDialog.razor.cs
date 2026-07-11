@@ -29,7 +29,7 @@ public partial class PortraitDialog
         _fileError = null;
         try
         {
-            using var stream = e.File.OpenReadStream(maxAllowedSize: 5 * 1024 * 1024);
+            using var stream = e.File.OpenReadStream(maxAllowedSize: Portraits.MaxBytes);
             using var ms = new MemoryStream();
             await stream.CopyToAsync(ms);
             var dataUrl = $"data:{e.File.ContentType};base64,{Convert.ToBase64String(ms.ToArray())}";
@@ -43,7 +43,7 @@ public partial class PortraitDialog
         }
         catch (IOException)
         {
-            _fileError = "File exceeds the 5 MB limit.";
+            _fileError = $"File exceeds the {Portraits.MaxBytes / (1024 * 1024)} MB limit.";
             _candidate = null;
             _fileName = null;
         }

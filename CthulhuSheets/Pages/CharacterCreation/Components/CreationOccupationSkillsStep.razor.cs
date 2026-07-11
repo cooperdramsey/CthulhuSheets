@@ -67,7 +67,7 @@ public partial class CreationOccupationSkillsStep
     private int PointsRemaining => OccupationSkillPoints - PointsAllocated;
 
     private int CreditRatingGrandTotal =>
-        GetSkillBase("Credit Rating") + _allocations.GetValueOrDefault("Credit Rating") + _personalAllocations.GetValueOrDefault("Credit Rating");
+        GetSkillBase(WellKnownSkills.CreditRating) + _allocations.GetValueOrDefault(WellKnownSkills.CreditRating) + _personalAllocations.GetValueOrDefault(WellKnownSkills.CreditRating);
 
     private int PersonalInterestPoints => (Investigator.Intelligence.Regular ?? 0) * 2;
     private int PersonalPointsAllocated => _personalAllocations.Values.Sum();
@@ -277,11 +277,11 @@ public partial class CreationOccupationSkillsStep
 
     private void InitializeAllocations()
     {
-        _allocations = new(StringComparer.OrdinalIgnoreCase) { ["Credit Rating"] = 0 };
+        _allocations = new(StringComparer.OrdinalIgnoreCase) { [WellKnownSkills.CreditRating] = 0 };
         foreach (var name in _occupationSkillNames)
         {
-            if (name.Equals("Cthulhu Mythos", StringComparison.OrdinalIgnoreCase)) continue;
-            if (name.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase)) continue;
+            if (name.Equals(WellKnownSkills.CthulhuMythos, StringComparison.OrdinalIgnoreCase)) continue;
+            if (name.Equals(WellKnownSkills.CreditRating, StringComparison.OrdinalIgnoreCase)) continue;
             _allocations[name] = 0;
         }
     }
@@ -299,14 +299,14 @@ public partial class CreationOccupationSkillsStep
         // Re-clamp any allocation whose grand total now exceeds the cap.
         foreach (var name in _allocations.Keys.ToList())
         {
-            if (name.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase)) continue;
+            if (name.Equals(WellKnownSkills.CreditRating, StringComparison.OrdinalIgnoreCase)) continue;
             var ceiling = StartingSkillCap - GetSkillBase(name) - _personalAllocations.GetValueOrDefault(name);
             if (_allocations[name] > ceiling)
                 _allocations[name] = Math.Max(0, ceiling);
         }
         foreach (var name in _personalAllocations.Keys.ToList())
         {
-            if (name.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase)) continue;
+            if (name.Equals(WellKnownSkills.CreditRating, StringComparison.OrdinalIgnoreCase)) continue;
             var ceiling = StartingSkillCap - GetSkillBase(name) - _allocations.GetValueOrDefault(name);
             if (_personalAllocations[name] > ceiling)
                 _personalAllocations[name] = Math.Max(0, ceiling);
@@ -327,7 +327,7 @@ public partial class CreationOccupationSkillsStep
         var personalAlloc = _personalAllocations.GetValueOrDefault(skillName);
         var baseVal = GetSkillBase(skillName);
 
-        if (skillName.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase))
+        if (skillName.Equals(WellKnownSkills.CreditRating, StringComparison.OrdinalIgnoreCase))
         {
             var crMax = (_selectedOccupation?.CreditRatingMax ?? 99) - baseVal - personalAlloc;
             return Math.Max(0, Math.Min(availablePool, crMax));
@@ -348,7 +348,7 @@ public partial class CreationOccupationSkillsStep
         foreach (var skill in Investigator.Skills)
         {
             if (string.IsNullOrWhiteSpace(skill.Name)) continue;
-            if (skill.Name.Equals("Cthulhu Mythos", StringComparison.OrdinalIgnoreCase)) continue;
+            if (skill.Name.Equals(WellKnownSkills.CthulhuMythos, StringComparison.OrdinalIgnoreCase)) continue;
             _personalAllocations[skill.Name] = 0;
         }
     }
@@ -365,7 +365,7 @@ public partial class CreationOccupationSkillsStep
         var occAlloc = _allocations.GetValueOrDefault(skillName);
         var baseVal = GetSkillBase(skillName);
 
-        if (skillName.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase))
+        if (skillName.Equals(WellKnownSkills.CreditRating, StringComparison.OrdinalIgnoreCase))
         {
             var crMax = (_selectedOccupation?.CreditRatingMax ?? 99) - baseVal - occAlloc;
             return Math.Max(0, Math.Min(availablePool, crMax));

@@ -1,3 +1,4 @@
+using System.Text.Json.Nodes;
 using CthulhuSheets.Services.Storage;
 
 namespace CthulhuSheets.Services;
@@ -61,6 +62,7 @@ public class InvestigatorService(
         try
         {
             Current = JsonSerializer.Deserialize<Investigator>(json, JsonOptions);
+            if (Current is not null) await HydratePortraitAsync(id, Current, json);
             OnChanged?.Invoke();
         }
         catch (JsonException)
@@ -81,6 +83,7 @@ public class InvestigatorService(
     {
         c.Id = Guid.NewGuid();
         await WriteCharacterAsync(c);
+        await _store.SavePortraitAsync(c.Id, c.PortraitDataUrl);
         UpsertEntry(c);
         Roster.ActiveId = c.Id;
         Current = c;
@@ -95,6 +98,7 @@ public class InvestigatorService(
             c.Id = Guid.NewGuid();
 
         await WriteCharacterAsync(c);
+        await _store.SavePortraitAsync(c.Id, c.PortraitDataUrl);
         UpsertEntry(c);
         Roster.ActiveId = c.Id;
         Current = c;
@@ -118,6 +122,7 @@ public class InvestigatorService(
         try
         {
             Current = JsonSerializer.Deserialize<Investigator>(json, JsonOptions);
+            if (Current is not null) await HydratePortraitAsync(id, Current, json);
             Roster.ActiveId = id;
             await _store.SaveRosterAsync(Roster);
             OnChanged?.Invoke();
@@ -148,6 +153,7 @@ public class InvestigatorService(
     public async Task DeleteAsync(Guid id)
     {
         await _store.DeleteCharacterAsync(id);
+        await _store.DeletePortraitAsync(id);
         RemoveEntry(id);
         if (Roster.ActiveId == id)
         {
@@ -159,15 +165,24 @@ public class InvestigatorService(
         OnRosterChanged?.Invoke();
     }
 
-    public async Task<Investigator?> GetCharacterAsync(Guid id)
+    public async Task LoadAsync(Investigator investigator) => await ImportAsync(investigator);
+
+    public async Task SavePortraitAsync(string? dataUrl)
     {
-        var json = await _store.GetCharacterJsonAsync(id);
-        if (string.IsNullOrEmpty(json)) return null;
-        try { return JsonSerializer.Deserialize<Investigator>(json, JsonOptions); }
-        catch (JsonException) { return null; }
+        if (Current is null) return;
+        Current.PortraitDataUrl = dataUrl;
+        try
+        {
+            await _store.SavePortraitAsync(Current.Id, dataUrl);
+        }
+        catch (JSException)
+        {
+            OnStorageError?.Invoke("Couldn't save your portrait — browser storage is full. Try a smaller image.");
+        }
+        OnChanged?.Invoke();
     }
 
-    public async Task LoadAsync(Investigator investigator) => await ImportAsync(investigator);
+    public Task<string?> GetPortraitAsync(Guid id) => _store.GetPortraitAsync(id);
 
     // --- Private helpers ---
 
@@ -176,10 +191,58 @@ public class InvestigatorService(
         Roster = await _store.GetRosterAsync() ?? new Roster();
     }
 
+    // Writes only the character JSON (portrait is [JsonIgnore] at rest). The
+    // portrait record is written separately on create/import and on an explicit
+    // portrait change (SavePortraitAsync) — never on a field-edit PersistAsync,
+    // so editing a stat no longer rewrites the whole base64 portrait.
     private async Task WriteCharacterAsync(Investigator c)
     {
         var json = JsonSerializer.Serialize(c, JsonOptions);
         await _store.SaveCharacterJsonAsync(c.Id, json);
+    }
+
+    // Reads an inline "portraitDataUrl" out of a raw character JSON (pre-Phase-B
+    // saves and imported/exported files carry it inline). Returns null if absent
+    // or malformed. Shared by the lazy-migration path and the import/sample UI.
+    public static string? ExtractInlinePortrait(string json)
+    {
+        try
+        {
+            var node = JsonNode.Parse(json);
+            return node?["portraitDataUrl"]?.GetValue<string?>();
+        }
+        catch { return null; }
+    }
+
+    // Lazy-migrates a character JSON that still has the portrait embedded
+    // inline (pre-Phase-B save) by splitting it into the portrait store and
+    // re-saving the now-stripped character JSON. Never throws — a failure to
+    // re-save just means the inline portrait stays in the old JSON and the
+    // migration retries on next load.
+    private async Task HydratePortraitAsync(Guid id, Investigator investigator, string json)
+    {
+        var inline = ExtractInlinePortrait(json);
+        try
+        {
+            if (!string.IsNullOrEmpty(inline))
+            {
+                investigator.PortraitDataUrl = inline;
+                await _store.SavePortraitAsync(id, inline);
+                await _store.SaveCharacterJsonAsync(id, JsonSerializer.Serialize(investigator, JsonOptions));
+            }
+            else
+            {
+                investigator.PortraitDataUrl = await _store.GetPortraitAsync(id);
+            }
+        }
+        catch
+        {
+            // Portrait hydration/migration is best-effort and must never fail a
+            // character load. On a storage error the in-memory portrait is set
+            // from the inline value if we had one (so the UI still shows it), and
+            // the inline JSON is left intact so the split retries on next load.
+            investigator.PortraitDataUrl ??= inline;
+        }
     }
 
     private async Task MigrateFromLocalStorageAsync()
@@ -211,6 +274,14 @@ public class InvestigatorService(
                 var json = await localStorage.GetCharacterJsonAsync(entry.Id);
                 if (!string.IsNullOrEmpty(json))
                     await indexedDb.SaveCharacterJsonAsync(entry.Id, json);
+
+                // Portraits written by the new code live in a separate localStorage
+                // key, not inside the character JSON — copy them across before the
+                // wipe below, else they're lost. (Old inline portraits ride along in
+                // the character JSON above and get lazy-split on first load.)
+                var portrait = await localStorage.GetPortraitAsync(entry.Id);
+                if (!string.IsNullOrEmpty(portrait))
+                    await indexedDb.SavePortraitAsync(entry.Id, portrait);
             }
             await indexedDb.SaveRosterAsync(lsRoster);
 
@@ -234,6 +305,10 @@ public class InvestigatorService(
             if (investigator is null) return;
 
             investigator.Id = Guid.NewGuid();
+            // PortraitDataUrl is [JsonIgnore], so deserialize dropped any inline
+            // portrait — recover it from the raw legacy JSON and persist it to the
+            // separate portrait record, else the migration wipe destroys it.
+            var portrait = ExtractInlinePortrait(legacyJson);
             var json = JsonSerializer.Serialize(investigator, JsonOptions);
 
             var entry = new RosterEntry
@@ -251,6 +326,7 @@ public class InvestigatorService(
             };
 
             await indexedDb.SaveCharacterJsonAsync(investigator.Id, json);
+            await indexedDb.SavePortraitAsync(investigator.Id, portrait);
             await indexedDb.SaveRosterAsync(roster);
 
             var verifiedRoster = await indexedDb.GetRosterAsync();

@@ -1,3 +1,5 @@
+using System.Text.Json.Nodes;
+
 namespace CthulhuSheets.Layout;
 
 public partial class MainLayout : IDisposable
@@ -31,12 +33,15 @@ public partial class MainLayout : IDisposable
     {
         try
         {
-            await using var stream = file.OpenReadStream(maxAllowedSize: 1_048_576);
+            await using var stream = file.OpenReadStream(maxAllowedSize: Shared.Portraits.MaxBytes);
+            using var reader = new StreamReader(stream);
+            var raw = await reader.ReadToEndAsync();
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            var investigator = await JsonSerializer.DeserializeAsync<Investigator>(stream, options);
+            var investigator = JsonSerializer.Deserialize<Investigator>(raw, options);
 
             if (investigator is not null)
             {
+                investigator.PortraitDataUrl = InvestigatorService.ExtractInlinePortrait(raw);
                 await InvestigatorService.ImportAsync(investigator);
                 Snackbar.Add($"Loaded {investigator.Name ?? "investigator"}", Severity.Success);
                 Navigation.NavigateTo("");
@@ -49,6 +54,10 @@ public partial class MainLayout : IDisposable
         catch (JsonException)
         {
             Snackbar.Add("Invalid JSON — could not parse character file.", Severity.Error);
+        }
+        catch (IOException)
+        {
+            Snackbar.Add($"File too large (max {Shared.Portraits.MaxBytes / (1024 * 1024)} MB).", Severity.Error);
         }
         catch (Exception ex)
         {
@@ -71,6 +80,12 @@ public partial class MainLayout : IDisposable
         };
 
         var json = JsonSerializer.Serialize(InvestigatorService.Current, options);
+        if (!string.IsNullOrEmpty(InvestigatorService.Current.PortraitDataUrl))
+        {
+            var node = JsonNode.Parse(json)!.AsObject();
+            node["portraitDataUrl"] = InvestigatorService.Current.PortraitDataUrl;
+            json = node.ToJsonString(options);
+        }
         var filename = $"{InvestigatorService.Current.Name?.Replace(' ', '-') ?? "investigator"}.json";
 
         await JS.InvokeVoidAsync("downloadFile", filename, json);

@@ -12,6 +12,7 @@ public class LocalStorageCharacterStore(IJSRuntime js) : ICharacterStore
     };
 
     internal static string CharacterKey(Guid id) => $"cthulhu-character-{id}";
+    internal static string PortraitKey(Guid id) => $"cthulhu-portrait-{id}";
     internal const string LegacyStorageKey = LegacyKey;
 
     public async Task<bool> TryInitializeAsync()
@@ -60,6 +61,27 @@ public class LocalStorageCharacterStore(IJSRuntime js) : ICharacterStore
     public async Task DeleteCharacterAsync(Guid id)
     {
         await js.InvokeVoidAsync("localStorage.removeItem", CharacterKey(id));
+    }
+
+    public async Task<string?> GetPortraitAsync(Guid id)
+    {
+        return await js.InvokeAsync<string?>("localStorage.getItem", PortraitKey(id));
+    }
+
+    public async Task SavePortraitAsync(Guid id, string? dataUrl)
+    {
+        if (string.IsNullOrEmpty(dataUrl))
+        {
+            await js.InvokeVoidAsync("localStorage.removeItem", PortraitKey(id));
+            return;
+        }
+
+        await js.InvokeVoidAsync("localStorage.setItem", PortraitKey(id), dataUrl);
+    }
+
+    public async Task DeletePortraitAsync(Guid id)
+    {
+        await js.InvokeVoidAsync("localStorage.removeItem", PortraitKey(id));
     }
 
     public async Task<string?> GetLegacyCharacterJsonAsync()

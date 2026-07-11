@@ -68,8 +68,8 @@ public static class DefaultSkills
     /// </summary>
     public static int ComputeBase(string name, int printedBase, Investigator investigator) => name switch
     {
-        "Dodge"          => investigator.Dexterity.Half ?? 0,
-        "Language (Own)" => investigator.Education.Regular ?? 0,
-        _                => printedBase
+        WellKnownSkills.Dodge       => investigator.Dexterity.Half ?? 0,
+        WellKnownSkills.LanguageOwn => investigator.Education.Regular ?? 0,
+        _                           => printedBase
     };
 }

@@ -1,3 +1,5 @@
+using CthulhuSheets.Data;
+
 namespace CthulhuSheets.Pages.CharacterCreation.Components;
 
 public partial class CreationWealthStep
@@ -6,9 +8,7 @@ public partial class CreationWealthStep
     public Investigator Investigator { get; set; } = default!;
 
     private int CreditRating =>
-        Investigator.Skills
-            .FirstOrDefault(s => s.Name.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase))
-            ?.Regular ?? 0;
+        Investigator.FindSkill(WellKnownSkills.CreditRating)?.Regular ?? 0;
 
     private WealthTier CurrentTier => GetTier(CreditRating);
 

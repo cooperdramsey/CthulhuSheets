@@ -1,3 +1,4 @@
+@using CthulhuSheets.Data
 <div class="skills-step">
 
     <div class="skills-step-header">
@@ -346,11 +347,11 @@
                 @foreach (var skill in skillList)
                 {
                     var isOccSkill = IsOccupationSkill(skill);
-                    var isCthulhu = skill.Name.Equals("Cthulhu Mythos", StringComparison.OrdinalIgnoreCase);
+                    var isCthulhu = skill.Name.Equals(WellKnownSkills.CthulhuMythos, StringComparison.OrdinalIgnoreCase);
                     var occAlloc = _allocations.GetValueOrDefault(skill.Name);
                     var personalAlloc = _personalAllocations.GetValueOrDefault(skill.Name);
                     var total = skill.BaseValue + occAlloc + personalAlloc;
-                    var isCR = skill.Name.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase);
+                    var isCR = skill.Name.Equals(WellKnownSkills.CreditRating, StringComparison.OrdinalIgnoreCase);
                     var capVal = isCR ? (_selectedOccupation?.CreditRatingMax ?? 99) : 75;
 
                     <div class="skill-step-name-cell @(isOccSkill ? "skill-step-occupation" : "")">

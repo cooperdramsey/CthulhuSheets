@@ -31,8 +31,7 @@ public partial class Roster : IDisposable
         _portraits.Clear();
         foreach (var entry in _entries)
         {
-            var character = await InvestigatorService.GetCharacterAsync(entry.Id);
-            _portraits[entry.Id] = character?.PortraitDataUrl;
+            _portraits[entry.Id] = await InvestigatorService.GetPortraitAsync(entry.Id);
         }
     }
 
@@ -74,6 +73,7 @@ public partial class Roster : IDisposable
         var investigator = JsonSerializer.Deserialize<Investigator>(json, JsonOptions);
         if (investigator is not null)
         {
+            investigator.PortraitDataUrl = InvestigatorService.ExtractInlinePortrait(json);
             await InvestigatorService.AddAsync(investigator);
             Navigation.NavigateTo("");
         }

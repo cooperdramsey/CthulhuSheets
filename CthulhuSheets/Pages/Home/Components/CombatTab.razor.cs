@@ -1,3 +1,5 @@
+using CthulhuSheets.Data;
+
 namespace CthulhuSheets.Pages.Home.Components;
 
 public partial class CombatTab
@@ -13,9 +15,7 @@ public partial class CombatTab
     // Dodge is a normal skill: use its (possibly improved) value, falling back to
     // its ½DEX base if the skill isn't on the sheet.
     private int? DodgeValue =>
-        Investigator.Skills
-            .FirstOrDefault(s => s.Name.Equals("Dodge", StringComparison.OrdinalIgnoreCase))
-            ?.EffectiveRegular
+        Investigator.FindSkill(WellKnownSkills.Dodge)?.EffectiveRegular
         ?? Investigator.Dexterity.Half;
 
     private int? DodgeRegular => DodgeValue;
@@ -34,8 +34,7 @@ public partial class CombatTab
         _dodgeRoll = result.Total;
 
         // No experience check when a bonus die was used (ch_5 development phase).
-        var dodgeSkill = Investigator.Skills
-            .FirstOrDefault(s => s.Name.Equals("Dodge", StringComparison.OrdinalIgnoreCase));
+        var dodgeSkill = Investigator.FindSkill(WellKnownSkills.Dodge);
         if (dodgeSkill is not null
             && result.Total <= dodgeSkill.EffectiveRegular
             && modifier <= 0

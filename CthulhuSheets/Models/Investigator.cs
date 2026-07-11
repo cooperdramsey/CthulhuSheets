@@ -15,6 +15,7 @@ public class Investigator
     [Required(ErrorMessage = "Residence is required")]
     public string? Residence { get; set; }
     public int? Age { get; set; }
+    [JsonIgnore]
     public string? PortraitDataUrl { get; set; }
 
     // Characteristics

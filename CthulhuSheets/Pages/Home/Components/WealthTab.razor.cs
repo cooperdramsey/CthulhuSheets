@@ -1,3 +1,5 @@
+using CthulhuSheets.Data;
+
 namespace CthulhuSheets.Pages.Home.Components;
 
 public partial class WealthTab
@@ -10,9 +12,7 @@ public partial class WealthTab
 
     private Task PersistAsync() => InvestigatorService.PersistAsync();
 
-    private Skill? CreditRating =>
-        Investigator.Skills.FirstOrDefault(s =>
-            s.Name.Equals("Credit Rating", StringComparison.OrdinalIgnoreCase));
+    private Skill? CreditRating => Investigator.FindSkill(WellKnownSkills.CreditRating);
 
     private string? CreditRatingLabel => CreditRating is null ? null : CreditRating.EffectiveRegular switch
     {

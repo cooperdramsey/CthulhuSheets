@@ -12,6 +12,8 @@ public partial class SheetSidebar
 
     private Task PersistAsync() => InvestigatorService.PersistAsync();
 
+    private Task PersistPortraitAsync() => InvestigatorService.SavePortraitAsync(Investigator.PortraitDataUrl);
+
     private int? _luckRoll;
     private int? _sanityRoll;
 
@@ -38,13 +40,10 @@ public partial class SheetSidebar
             : null;
 
     // ── Sanity thresholds (derived; see ch_8) ────────
-    private int CthulhuMythos =>
-        Investigator.Skills
-            .FirstOrDefault(s => s.Name.Equals("Cthulhu Mythos", StringComparison.OrdinalIgnoreCase))
-            ?.EffectiveRegular ?? 0;
+    private int CthulhuMythos => SanityRules.MythosValue(Investigator);
 
     // Maximum Sanity = 99 − Cthulhu Mythos. Sanity can never be restored above this.
-    private int SanMax => Math.Max(0, 99 - CthulhuMythos);
+    private int SanMax => SanityRules.MaxSanity(Investigator);
 
     // Indefinite insanity triggers on losing ⅕ or more of current Sanity in one day.
     private int? IndefiniteLoss =>
