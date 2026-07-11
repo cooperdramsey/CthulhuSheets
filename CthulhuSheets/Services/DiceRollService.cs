@@ -7,7 +7,16 @@ public class DiceRollService
     private const int MaxGroupHistory = 5;
 
     private readonly List<DiceGroup> _groupHistory = [];
-    private readonly Random _random = new();
+    private readonly Random _random;
+
+    /// <summary>
+    /// Creates a dice service. Pass a seeded <see cref="Random"/> for deterministic
+    /// rolls (used by tests); defaults to a fresh non-seeded RNG for normal play and DI.
+    /// </summary>
+    public DiceRollService(Random? random = null)
+    {
+        _random = random ?? new();
+    }
 
     public IReadOnlyList<DiceGroup> GroupHistory => _groupHistory.AsReadOnly();
 
