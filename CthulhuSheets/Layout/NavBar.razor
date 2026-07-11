@@ -1,17 +1,25 @@
 <MudAppBar Color="Color.Primary" Fixed="true" Dense="true">
     <MudLink Typo="Typo.h5" Class="mr-4" Href="" Color="Color.Inherit" Underline="Underline.None">CthulhuSheets</MudLink>
     <MudSpacer />
-    <MudIconButton Icon="@Icons.Material.Filled.RecentActors" Color="Color.Inherit"
-                   OnClick="OnOpenRoster" Title="Your Investigators" />
-    <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Inherit"
-                   OnClick="OnCreateNewCharacter" Title="Create New Character" Class="ml-2" />
+    <MudTooltip Text="Your Investigators">
+        <MudIconButton Icon="@Icons.Material.Filled.RecentActors" Color="Color.Inherit"
+                       OnClick="OnOpenRoster" />
+    </MudTooltip>
+    <MudTooltip Text="Create New Character">
+        <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Inherit"
+                       OnClick="OnCreateNewCharacter" Class="ml-2" />
+    </MudTooltip>
     <MudFileUpload T="IBrowserFile" FilesChanged="HandleFileSelected" Accept=".json" Class="ml-2">
         <CustomContent>
-            <MudIconButton Icon="@Icons.Material.Filled.FileUpload" Color="Color.Inherit"
-                           OnClick="@context.OpenFilePickerAsync" Title="Upload Character" />
+            <MudTooltip Text="Upload Character">
+                <MudIconButton Icon="@Icons.Material.Filled.FileUpload" Color="Color.Inherit"
+                               OnClick="@context.OpenFilePickerAsync" />
+            </MudTooltip>
         </CustomContent>
         <SelectedTemplate />
     </MudFileUpload>
-    <MudIconButton Icon="@Icons.Material.Filled.FileDownload" Color="Color.Inherit"
-                   OnClick="OnFileDownload" Class="ml-2" Title="Download Active Character" />
+    <MudTooltip Text="Download Active Character">
+        <MudIconButton Icon="@Icons.Material.Filled.FileDownload" Color="Color.Inherit"
+                       OnClick="OnFileDownload" Class="ml-2" />
+    </MudTooltip>
 </MudAppBar>

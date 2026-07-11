@@ -2,6 +2,14 @@
 
 A Call of Cthulhu 7e investigator sheet app.
 
+## Verifying changes
+
+Always verify your changes before reporting them as done:
+
+- **`dotnet build`** must succeed with 0 warnings, 0 errors.
+- **`dotnet test`** must pass — run the full test suite to confirm nothing regressed, not just a
+  build. Do this for every change with runtime impact, even a small one.
+
 ## Tech & styling architecture
 
 - **Blazor WebAssembly + MudBlazor** (Material Design component library).

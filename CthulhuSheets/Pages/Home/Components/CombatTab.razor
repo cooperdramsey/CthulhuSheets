@@ -131,12 +131,12 @@
                                                  HideSpinButtons="true"
                                                  Placeholder="—" />
                             }
+                            <MudTooltip Text="Link this weapon to a skill">
                             <MudMenu Icon="@(weapon.SkillName is null ? Icons.Material.Filled.LinkOff : Icons.Material.Filled.Link)"
                                      Size="Size.Small"
                                      Dense="true"
                                      MaxHeight="300"
-                                     AnchorOrigin="Origin.BottomLeft"
-                                     Title="Link this weapon to a skill">
+                                     AnchorOrigin="Origin.BottomLeft">
                                 <MudMenuItem OnClick="() => LinkWeaponSkill(weapon, null)">Manual value</MudMenuItem>
                                 @foreach (var sheetSkill in Investigator.Skills.Where(s => !string.IsNullOrWhiteSpace(s.Name)).OrderBy(s => s.Name))
                                 {
@@ -145,6 +145,7 @@
                                     </MudMenuItem>
                                 }
                             </MudMenu>
+                            </MudTooltip>
                         </div>
                         <div class="weapon-derived-val">@(WeaponSkillHalf(weapon)?.ToString() ?? "—")</div>
                         <div class="weapon-derived-val">@(WeaponSkillFifth(weapon)?.ToString() ?? "—")</div>

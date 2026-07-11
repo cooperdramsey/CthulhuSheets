@@ -197,12 +197,13 @@
 
                 @if (_method == CreationMethod.Roll)
                 {
-                    <MudIconButton Icon="@Icons.Material.Filled.Casino"
-                                   Size="Size.Small"
-                                   Color="Color.Primary"
-                                   Disabled="BaseLocked"
-                                   OnClick="@(() => RollSingle(def))"
-                                   Title="@($"Roll {stat.Name}")" />
+                    <MudTooltip Text="@($"Roll {stat.Name}")">
+                        <MudIconButton Icon="@Icons.Material.Filled.Casino"
+                                       Size="Size.Small"
+                                       Color="Color.Primary"
+                                       Disabled="BaseLocked"
+                                       OnClick="@(() => RollSingle(def))" />
+                    </MudTooltip>
                 }
             </div>
         }
