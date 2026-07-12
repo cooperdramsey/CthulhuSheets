@@ -18,6 +18,7 @@ builder.Services.AddMudServices();
 builder.Services.AddScoped<DiceRollService>();
 builder.Services.AddScoped<IndexedDbCharacterStore>();
 builder.Services.AddScoped<LocalStorageCharacterStore>();
+builder.Services.AddScoped<StorageMigrator>();
 builder.Services.AddScoped<InvestigatorService>();
 
 await builder.Build().RunAsync();

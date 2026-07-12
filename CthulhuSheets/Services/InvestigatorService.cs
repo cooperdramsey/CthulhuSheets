@@ -5,7 +5,8 @@ namespace CthulhuSheets.Services;
 
 public class InvestigatorService(
     IndexedDbCharacterStore indexedDb,
-    LocalStorageCharacterStore localStorage)
+    LocalStorageCharacterStore localStorage,
+    StorageMigrator migrator)
 {
     private ICharacterStore _store = localStorage;
 
@@ -27,6 +28,12 @@ public class InvestigatorService(
         {
             _store = indexedDb;
             await _store.RequestPersistAsync();
+
+            // One-time localStorage -> IndexedDB migration runs only when
+            // IndexedDB is the active store.
+            var outcome = await migrator.MigrateIfNeededAsync();
+            if (outcome.Failed)
+                OnStorageError?.Invoke(outcome.Message!);
         }
         else
         {
@@ -34,7 +41,6 @@ public class InvestigatorService(
             await localStorage.TryInitializeAsync();
         }
 
-        await MigrateFromLocalStorageAsync();
         await LoadRosterAsync();
         OnRosterChanged?.Invoke();
     }
@@ -73,22 +79,15 @@ public class InvestigatorService(
 
     // --- Character operations ---
 
-    public async Task AddAsync(Investigator c)
-    {
-        c.Id = Guid.NewGuid();
-        await WriteCharacterAsync(c);
-        await _store.SavePortraitAsync(c.Id, c.PortraitDataUrl);
-        UpsertEntry(c);
-        Roster.ActiveId = c.Id;
-        Current = c;
-        await _store.SaveRosterAsync(Roster);
-        OnChanged?.Invoke();
-        OnRosterChanged?.Invoke();
-    }
+    // Creating a new character always assigns a fresh id.
+    public Task AddAsync(Investigator c) => SaveNewAsync(c, assignFreshId: true);
 
-    public async Task ImportAsync(Investigator c)
+    // Importing keeps the file's id, assigning one only if it's empty.
+    public Task ImportAsync(Investigator c) => SaveNewAsync(c, assignFreshId: false);
+
+    private async Task SaveNewAsync(Investigator c, bool assignFreshId)
     {
-        if (c.Id == Guid.Empty)
+        if (assignFreshId || c.Id == Guid.Empty)
             c.Id = Guid.NewGuid();
 
         await WriteCharacterAsync(c);
@@ -158,8 +157,6 @@ public class InvestigatorService(
         OnChanged?.Invoke();
         OnRosterChanged?.Invoke();
     }
-
-    public async Task LoadAsync(Investigator investigator) => await ImportAsync(investigator);
 
     public async Task SavePortraitAsync(string? dataUrl)
     {
@@ -236,102 +233,6 @@ public class InvestigatorService(
             // from the inline value if we had one (so the UI still shows it), and
             // the inline JSON is left intact so the split retries on next load.
             investigator.PortraitDataUrl ??= inline;
-        }
-    }
-
-    private async Task MigrateFromLocalStorageAsync()
-    {
-        if (_store is not IndexedDbCharacterStore) return;
-
-        var idbRoster = await indexedDb.GetRosterAsync();
-        if (idbRoster is not null && idbRoster.Entries.Count > 0) return;
-
-        var lsRoster = await localStorage.GetRosterAsync();
-
-        if (lsRoster is not null && lsRoster.Entries.Count > 0)
-        {
-            await MigrateRosterAsync(lsRoster);
-            return;
-        }
-
-        var legacyJson = await localStorage.GetLegacyCharacterJsonAsync();
-        if (!string.IsNullOrEmpty(legacyJson))
-            await MigrateLegacyCharacterAsync(legacyJson);
-    }
-
-    private async Task MigrateRosterAsync(Roster lsRoster)
-    {
-        try
-        {
-            foreach (var entry in lsRoster.Entries)
-            {
-                var json = await localStorage.GetCharacterJsonAsync(entry.Id);
-                if (!string.IsNullOrEmpty(json))
-                    await indexedDb.SaveCharacterJsonAsync(entry.Id, json);
-
-                // Portraits written by the new code live in a separate localStorage
-                // key, not inside the character JSON — copy them across before the
-                // wipe below, else they're lost. (Old inline portraits ride along in
-                // the character JSON above and get lazy-split on first load.)
-                var portrait = await localStorage.GetPortraitAsync(entry.Id);
-                if (!string.IsNullOrEmpty(portrait))
-                    await indexedDb.SavePortraitAsync(entry.Id, portrait);
-            }
-            await indexedDb.SaveRosterAsync(lsRoster);
-
-            var verifiedRoster = await indexedDb.GetRosterAsync();
-            if (verifiedRoster is null || verifiedRoster.Entries.Count != lsRoster.Entries.Count)
-                throw new InvalidOperationException("IndexedDB migration verification failed.");
-
-            await localStorage.RemoveAllCthulhuKeysAsync();
-        }
-        catch (Exception)
-        {
-            OnStorageError?.Invoke("Character data migration to IndexedDB failed — your characters are safe and will retry next launch.");
-        }
-    }
-
-    private async Task MigrateLegacyCharacterAsync(string legacyJson)
-    {
-        try
-        {
-            var investigator = JsonSerializer.Deserialize<Investigator>(legacyJson, CthulhuJson.Options);
-            if (investigator is null) return;
-
-            investigator.Id = Guid.NewGuid();
-            // PortraitDataUrl is [JsonIgnore], so deserialize dropped any inline
-            // portrait — recover it from the raw legacy JSON and persist it to the
-            // separate portrait record, else the migration wipe destroys it.
-            var portrait = ExtractInlinePortrait(legacyJson);
-            var json = JsonSerializer.Serialize(investigator, CthulhuJson.Options);
-
-            var entry = new RosterEntry
-            {
-                Id = investigator.Id,
-                Name = investigator.Name,
-                Occupation = investigator.Occupation,
-                LastModified = DateTimeOffset.UtcNow
-            };
-
-            var roster = new Roster
-            {
-                ActiveId = investigator.Id,
-                Entries = [entry]
-            };
-
-            await indexedDb.SaveCharacterJsonAsync(investigator.Id, json);
-            await indexedDb.SavePortraitAsync(investigator.Id, portrait);
-            await indexedDb.SaveRosterAsync(roster);
-
-            var verifiedRoster = await indexedDb.GetRosterAsync();
-            if (verifiedRoster is null || verifiedRoster.Entries.Count == 0)
-                throw new InvalidOperationException("Legacy migration verification failed.");
-
-            await localStorage.RemoveAllCthulhuKeysAsync();
-        }
-        catch (Exception)
-        {
-            OnStorageError?.Invoke("Character data migration to IndexedDB failed — your characters are safe and will retry next launch.");
         }
     }
 
