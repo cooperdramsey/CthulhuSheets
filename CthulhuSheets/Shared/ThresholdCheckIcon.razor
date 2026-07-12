@@ -1,0 +1,19 @@
+@if (Roll is int r && Threshold is int t)
+{
+    <MudIcon Icon="@(r <= t ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
+             Color="@(r <= t ? Color.Success : Color.Error)"
+             Size="@Size"
+             Class="@Class" />
+}
+else if (!string.IsNullOrEmpty(PlaceholderClass))
+{
+    <span class="@PlaceholderClass"></span>
+}
+
+@code {
+    [Parameter] public int? Roll { get; set; }
+    [Parameter] public int? Threshold { get; set; }
+    [Parameter] public Size Size { get; set; } = Size.Small;
+    [Parameter] public string? Class { get; set; }
+    [Parameter] public string? PlaceholderClass { get; set; }
+}

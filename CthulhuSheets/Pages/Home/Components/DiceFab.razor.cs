@@ -12,14 +12,7 @@ public partial class DiceFab : IDisposable
     private readonly Dictionary<DiceGroup, CancellationTokenSource> _expiryTokens = [];
     private readonly HashSet<DiceGroup> _fadingGroups = [];
 
-    private string BonusPenaltyLabel => _bonusPenaltyDice switch
-    {
-        2  => "+2 Bonus",
-        1  => "+1 Bonus",
-        0  => "Normal",
-        -1 => "-1 Penalty",
-        _  => "-2 Penalty"
-    };
+    private string BonusPenaltyLabel => DiceModifierFormat.BonusPenaltyLabel(_bonusPenaltyDice);
 
     private string BonusPenaltyClass => _bonusPenaltyDice switch
     {

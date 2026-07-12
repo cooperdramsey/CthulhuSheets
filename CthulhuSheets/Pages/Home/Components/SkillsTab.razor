@@ -233,36 +233,15 @@
                             <div class="skill-val">@skill.BaseValue</div>
                             <div class="skill-val-cell">
                                 <span class="skill-val skill-val--regular">@skill.EffectiveRegular</span>
-                                @if (hasSkillRoll)
-                                {
-                                    <MudIcon Icon="@(skillRoll <= skill.EffectiveRegular ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
-                                             Color="@(skillRoll <= skill.EffectiveRegular ? Color.Success : Color.Error)"
-                                             Size="Size.Small"
-                                             Class="char-check-icon" />
-                                }
-                                else { <span class="skill-roll-icon-placeholder"></span> }
+                                <ThresholdCheckIcon Roll="@(hasSkillRoll ? skillRoll : (int?)null)" Threshold="skill.EffectiveRegular" Class="char-check-icon" PlaceholderClass="skill-roll-icon-placeholder" />
                             </div>
                             <div class="skill-val-cell">
                                 <span class="skill-derived-val">@(skill.Half?.ToString() ?? "—")</span>
-                                @if (hasSkillRoll && skill.Half.HasValue)
-                                {
-                                    <MudIcon Icon="@(skillRoll <= skill.Half.Value ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
-                                             Color="@(skillRoll <= skill.Half.Value ? Color.Success : Color.Error)"
-                                             Size="Size.Small"
-                                             Class="char-check-icon" />
-                                }
-                                else { <span class="skill-roll-icon-placeholder"></span> }
+                                <ThresholdCheckIcon Roll="@(hasSkillRoll ? skillRoll : (int?)null)" Threshold="skill.Half" Class="char-check-icon" PlaceholderClass="skill-roll-icon-placeholder" />
                             </div>
                             <div class="skill-val-cell">
                                 <span class="skill-derived-val">@(skill.Fifth?.ToString() ?? "—")</span>
-                                @if (hasSkillRoll && skill.Fifth.HasValue)
-                                {
-                                    <MudIcon Icon="@(skillRoll <= skill.Fifth.Value ? Icons.Material.Filled.Check : Icons.Material.Filled.Close)"
-                                             Color="@(skillRoll <= skill.Fifth.Value ? Color.Success : Color.Error)"
-                                             Size="Size.Small"
-                                             Class="char-check-icon" />
-                                }
-                                else { <span class="skill-roll-icon-placeholder"></span> }
+                                <ThresholdCheckIcon Roll="@(hasSkillRoll ? skillRoll : (int?)null)" Threshold="skill.Fifth" Class="char-check-icon" PlaceholderClass="skill-roll-icon-placeholder" />
                             </div>
                             <div class="skill-roll-cell">
                                 <RollButton Size="Size.Small"

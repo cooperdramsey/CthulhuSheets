@@ -45,15 +45,5 @@ public partial class StatsTab
         _lastRolls[stat.Name] = result.Total;
     }
 
-    private string? CheckIcon(string statName, int? threshold)
-    {
-        if (!threshold.HasValue || !_lastRolls.TryGetValue(statName, out var roll)) return null;
-        return roll <= threshold.Value ? Icons.Material.Filled.Check : Icons.Material.Filled.Close;
-    }
-
-    private Color CheckColor(string statName, int? threshold)
-    {
-        if (!threshold.HasValue || !_lastRolls.TryGetValue(statName, out var roll)) return Color.Default;
-        return roll <= threshold.Value ? Color.Success : Color.Error;
-    }
+    private int? LastRoll(string statName) => _lastRolls.TryGetValue(statName, out var r) ? r : null;
 }

@@ -58,42 +58,21 @@
                             <span class="char-value-label">Regular</span>
                             <span class="char-value-right">
                                 <span class="char-value-num">@(stat.Regular?.ToString() ?? "—")</span>
-                                @if (CheckIcon(stat.Name, stat.Regular) is { } regIcon)
-                                {
-                                    <MudIcon Icon="@regIcon" Color="@CheckColor(stat.Name, stat.Regular)" Size="Size.Small" Class="char-check-icon" />
-                                }
-                                else
-                                {
-                                    <span class="char-check-placeholder"></span>
-                                }
+                                <ThresholdCheckIcon Roll="LastRoll(stat.Name)" Threshold="stat.Regular" Class="char-check-icon" PlaceholderClass="char-check-placeholder" />
                             </span>
                         </div>
                         <div class="char-value-row">
                             <span class="char-value-label">Half</span>
                             <span class="char-value-right">
                                 <span class="char-value-num">@(stat.Half?.ToString() ?? "—")</span>
-                                @if (CheckIcon(stat.Name, stat.Half) is { } halfIcon)
-                                {
-                                    <MudIcon Icon="@halfIcon" Color="@CheckColor(stat.Name, stat.Half)" Size="Size.Small" Class="char-check-icon" />
-                                }
-                                else
-                                {
-                                    <span class="char-check-placeholder"></span>
-                                }
+                                <ThresholdCheckIcon Roll="LastRoll(stat.Name)" Threshold="stat.Half" Class="char-check-icon" PlaceholderClass="char-check-placeholder" />
                             </span>
                         </div>
                         <div class="char-value-row">
                             <span class="char-value-label">Fifth</span>
                             <span class="char-value-right">
                                 <span class="char-value-num">@(stat.Fifth?.ToString() ?? "—")</span>
-                                @if (CheckIcon(stat.Name, stat.Fifth) is { } fifthIcon)
-                                {
-                                    <MudIcon Icon="@fifthIcon" Color="@CheckColor(stat.Name, stat.Fifth)" Size="Size.Small" Class="char-check-icon" />
-                                }
-                                else
-                                {
-                                    <span class="char-check-placeholder"></span>
-                                }
+                                <ThresholdCheckIcon Roll="LastRoll(stat.Name)" Threshold="stat.Fifth" Class="char-check-icon" PlaceholderClass="char-check-placeholder" />
                             </span>
                         </div>
                     }

@@ -37,14 +37,7 @@ public partial class RollButton
     private const double PopupWidth = 180;
     private const double PopupHeight = 165;
 
-    private string ModifierLabel => _modifier switch
-    {
-        2  => "+2 Bonus",
-        1  => "+1 Bonus",
-        0  => "Normal",
-        -1 => "-1 Penalty",
-        _  => "-2 Penalty"
-    };
+    private string ModifierLabel => DiceModifierFormat.BonusPenaltyLabel(_modifier);
 
     private string ModifierClass => _modifier switch
     {
