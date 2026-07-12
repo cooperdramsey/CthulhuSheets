@@ -43,8 +43,7 @@ public partial class MainLayout : IDisposable
             await using var stream = file.OpenReadStream(maxAllowedSize: Shared.Portraits.MaxBytes);
             using var reader = new StreamReader(stream);
             var raw = await reader.ReadToEndAsync();
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            var investigator = JsonSerializer.Deserialize<Investigator>(raw, options);
+            var investigator = JsonSerializer.Deserialize<Investigator>(raw, CthulhuJson.Options);
 
             if (investigator is not null)
             {
@@ -80,18 +79,12 @@ public partial class MainLayout : IDisposable
             return;
         }
 
-        var options = new JsonSerializerOptions
-        {
-            WriteIndented = true,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        };
-
-        var json = JsonSerializer.Serialize(InvestigatorService.Current, options);
+        var json = JsonSerializer.Serialize(InvestigatorService.Current, CthulhuJson.Export);
         if (!string.IsNullOrEmpty(InvestigatorService.Current.PortraitDataUrl))
         {
             var node = JsonNode.Parse(json)!.AsObject();
             node["portraitDataUrl"] = InvestigatorService.Current.PortraitDataUrl;
-            json = node.ToJsonString(options);
+            json = node.ToJsonString(CthulhuJson.Export);
         }
         var filename = $"{InvestigatorService.Current.Name?.Replace(' ', '-') ?? "investigator"}.json";
 

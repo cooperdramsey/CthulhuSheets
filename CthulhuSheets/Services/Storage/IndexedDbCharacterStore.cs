@@ -60,12 +60,6 @@ public class IndexedDbCharacterStore(IMagicIndexedDb db, IJSRuntime js) : IChara
 {
     private const string RosterMetaKey = "roster";
 
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        PropertyNameCaseInsensitive = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-    };
-
     // Magic.IndexedDb (v2.0.2) is not safe for overlapping queries: two calls
     // racing on a cold PropertyMappingCache corrupt its type cache and throw
     // Arg_NoDefCTor while deserializing results. Blazor WASM is single-threaded
@@ -111,7 +105,7 @@ public class IndexedDbCharacterStore(IMagicIndexedDb db, IJSRuntime js) : IChara
             var records = await q.Where(x => x.Key == RosterMetaKey).ToListAsync();
             var record = records.FirstOrDefault();
             if (record is null) return null;
-            return JsonSerializer.Deserialize<Roster>(record.Json, JsonOptions);
+            return JsonSerializer.Deserialize<Roster>(record.Json, CthulhuJson.Options);
         }
         catch
         {
@@ -121,7 +115,7 @@ public class IndexedDbCharacterStore(IMagicIndexedDb db, IJSRuntime js) : IChara
 
     public Task SaveRosterAsync(Roster roster) => LockedAsync(async () =>
     {
-        var json = JsonSerializer.Serialize(roster, JsonOptions);
+        var json = JsonSerializer.Serialize(roster, CthulhuJson.Options);
         var q = await db.Query<MetaRecord>();
         // Upsert via bulkPut (UpdateRangeAsync) — never a read-before-write. See
         // SaveCharacterJsonAsync for why the cursor read is avoided.

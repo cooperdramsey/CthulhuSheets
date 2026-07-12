@@ -10,12 +10,6 @@ public partial class Roster : IDisposable
     [Inject] private IDialogService DialogService { get; set; } = default!;
     [Inject] private HttpClient Http { get; set; } = default!;
 
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        PropertyNameCaseInsensitive = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-    };
-
     private IEnumerable<RosterEntry> _entries = [];
     private readonly Dictionary<Guid, string?> _portraits = [];
 
@@ -70,7 +64,7 @@ public partial class Roster : IDisposable
     private async Task LoadSampleAsync()
     {
         var json = await Http.GetStringAsync("samples/Dr.-Eleanor-Whitmore.json");
-        var investigator = JsonSerializer.Deserialize<Investigator>(json, JsonOptions);
+        var investigator = JsonSerializer.Deserialize<Investigator>(json, CthulhuJson.Options);
         if (investigator is not null)
         {
             investigator.PortraitDataUrl = InvestigatorService.ExtractInlinePortrait(json);

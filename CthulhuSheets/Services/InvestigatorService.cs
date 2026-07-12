@@ -7,12 +7,6 @@ public class InvestigatorService(
     IndexedDbCharacterStore indexedDb,
     LocalStorageCharacterStore localStorage)
 {
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        PropertyNameCaseInsensitive = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-    };
-
     private ICharacterStore _store = localStorage;
 
     public Investigator? Current { get; private set; }
@@ -61,7 +55,7 @@ public class InvestigatorService(
 
         try
         {
-            Current = JsonSerializer.Deserialize<Investigator>(json, JsonOptions);
+            Current = JsonSerializer.Deserialize<Investigator>(json, CthulhuJson.Options);
             if (Current is not null) await HydratePortraitAsync(id, Current, json);
             OnChanged?.Invoke();
         }
@@ -121,7 +115,7 @@ public class InvestigatorService(
 
         try
         {
-            Current = JsonSerializer.Deserialize<Investigator>(json, JsonOptions);
+            Current = JsonSerializer.Deserialize<Investigator>(json, CthulhuJson.Options);
             if (Current is not null) await HydratePortraitAsync(id, Current, json);
             Roster.ActiveId = id;
             await _store.SaveRosterAsync(Roster);
@@ -197,7 +191,7 @@ public class InvestigatorService(
     // so editing a stat no longer rewrites the whole base64 portrait.
     private async Task WriteCharacterAsync(Investigator c)
     {
-        var json = JsonSerializer.Serialize(c, JsonOptions);
+        var json = JsonSerializer.Serialize(c, CthulhuJson.Options);
         await _store.SaveCharacterJsonAsync(c.Id, json);
     }
 
@@ -228,7 +222,7 @@ public class InvestigatorService(
             {
                 investigator.PortraitDataUrl = inline;
                 await _store.SavePortraitAsync(id, inline);
-                await _store.SaveCharacterJsonAsync(id, JsonSerializer.Serialize(investigator, JsonOptions));
+                await _store.SaveCharacterJsonAsync(id, JsonSerializer.Serialize(investigator, CthulhuJson.Options));
             }
             else
             {
@@ -301,7 +295,7 @@ public class InvestigatorService(
     {
         try
         {
-            var investigator = JsonSerializer.Deserialize<Investigator>(legacyJson, JsonOptions);
+            var investigator = JsonSerializer.Deserialize<Investigator>(legacyJson, CthulhuJson.Options);
             if (investigator is null) return;
 
             investigator.Id = Guid.NewGuid();
@@ -309,7 +303,7 @@ public class InvestigatorService(
             // portrait — recover it from the raw legacy JSON and persist it to the
             // separate portrait record, else the migration wipe destroys it.
             var portrait = ExtractInlinePortrait(legacyJson);
-            var json = JsonSerializer.Serialize(investigator, JsonOptions);
+            var json = JsonSerializer.Serialize(investigator, CthulhuJson.Options);
 
             var entry = new RosterEntry
             {

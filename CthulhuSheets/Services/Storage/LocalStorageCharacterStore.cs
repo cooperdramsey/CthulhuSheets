@@ -5,12 +5,6 @@ public class LocalStorageCharacterStore(IJSRuntime js) : ICharacterStore
     private const string RosterKey = "cthulhu-roster";
     private const string LegacyKey = "cthulhu-investigator";
 
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        PropertyNameCaseInsensitive = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-    };
-
     internal static string CharacterKey(Guid id) => $"cthulhu-character-{id}";
     internal static string PortraitKey(Guid id) => $"cthulhu-portrait-{id}";
     internal const string LegacyStorageKey = LegacyKey;
@@ -34,7 +28,7 @@ public class LocalStorageCharacterStore(IJSRuntime js) : ICharacterStore
         if (string.IsNullOrEmpty(json)) return null;
         try
         {
-            return JsonSerializer.Deserialize<Roster>(json, JsonOptions);
+            return JsonSerializer.Deserialize<Roster>(json, CthulhuJson.Options);
         }
         catch (JsonException)
         {
@@ -44,7 +38,7 @@ public class LocalStorageCharacterStore(IJSRuntime js) : ICharacterStore
 
     public async Task SaveRosterAsync(Roster roster)
     {
-        var json = JsonSerializer.Serialize(roster, JsonOptions);
+        var json = JsonSerializer.Serialize(roster, CthulhuJson.Options);
         await js.InvokeVoidAsync("localStorage.setItem", RosterKey, json);
     }
 
