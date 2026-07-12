@@ -23,7 +23,6 @@ public partial class SkillsTab
     private readonly HashSet<Skill> _combinedSelection = new();
     private int? _lastCombinedRoll;
 
-    private record ImprovementResult(string SkillName, int Roll, int OldValue, bool Improved, int NewValue, int SanityGained = 0);
     private List<ImprovementResult> _improvementResults = [];
 
     private IEnumerable<Skill> VisibleSkills
@@ -125,46 +124,7 @@ public partial class SkillsTab
 
     private async Task ImproveSkills()
     {
-        _improvementResults.Clear();
-        var checkedSkills = Investigator.Skills
-            .Where(s => s.HasExperienceCheck && !SkillRules.NonImprovableSkills.Contains(s.Name))
-            .ToList();
-
-        foreach (var skill in checkedSkills)
-        {
-            var current = skill.EffectiveRegular;
-            var roll = DiceRollService.Roll(100);
-
-            // Success if the roll beats the current value, or is over 95 (ch_5).
-            // Skills may exceed 100% via development, so no upper cap is applied.
-            if (roll > current || roll > 95)
-            {
-                var gain = DiceRollService.Roll(10);
-                var newVal = current + gain;
-                skill.Regular = newVal;
-
-                // Reaching 90%+ during the development phase grants +2D6 Sanity
-                // (ch_5), never above the 99 − Cthulhu Mythos maximum (ch_8).
-                var sanityGained = 0;
-                if (current < 90 && newVal >= 90)
-                {
-                    sanityGained = DiceRollService.Roll(6) + DiceRollService.Roll(6);
-                    var sanMax = SanityRules.MaxSanity(Investigator);
-                    var newSan = Math.Min(sanMax, (Investigator.Sanity.Current ?? 0) + sanityGained);
-                    sanityGained = Math.Max(0, newSan - (Investigator.Sanity.Current ?? 0));
-                    Investigator.Sanity.Current = newSan;
-                }
-
-                _improvementResults.Add(new(skill.Name, roll, current, true, newVal, sanityGained));
-            }
-            else
-            {
-                _improvementResults.Add(new(skill.Name, roll, current, false, current));
-            }
-
-            skill.HasExperienceCheck = false;
-        }
-
+        _improvementResults = DevelopmentPhase.Run(Investigator, DiceRollService).ToList();
         await PersistAsync();
     }
 
