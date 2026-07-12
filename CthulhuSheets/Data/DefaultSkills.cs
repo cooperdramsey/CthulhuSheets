@@ -72,4 +72,28 @@ public static class DefaultSkills
         WellKnownSkills.LanguageOwn => investigator.Education.Regular ?? 0,
         _                           => printedBase
     };
+
+    /// <summary>
+    /// Seeds every standard skill not already on the investigator (matched by name,
+    /// case-insensitively), computing each base via <see cref="ComputeBase"/> and
+    /// flagging it <c>IsDefault = true</c>. Single source of truth for both the
+    /// creation flow and the sheet's "Load Defaults". Returns the number added.
+    /// </summary>
+    public static int AddMissingTo(Investigator investigator)
+    {
+        var existing = investigator.Skills
+            .Select(s => s.Name)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var added = 0;
+        foreach (var (name, baseVal) in All)
+        {
+            if (existing.Contains(name)) continue;
+
+            var computedBase = ComputeBase(name, baseVal, investigator);
+            investigator.Skills.Add(new Skill { Name = name, BaseValue = computedBase, IsDefault = true });
+            added++;
+        }
+        return added;
+    }
 }

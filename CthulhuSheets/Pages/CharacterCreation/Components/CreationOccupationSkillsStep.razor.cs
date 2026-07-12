@@ -395,18 +395,5 @@ public partial class CreationOccupationSkillsStep
         PopulateDefaults();
     }
 
-    private void PopulateDefaults()
-    {
-        var existing = Investigator.Skills
-            .Select(s => s.Name)
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
-
-        foreach (var (name, baseVal) in DefaultSkills.All)
-        {
-            if (existing.Contains(name)) continue;
-
-            var computedBase = DefaultSkills.ComputeBase(name, baseVal, Investigator);
-            Investigator.Skills.Add(new Skill { Name = name, BaseValue = computedBase, IsDefault = true });
-        }
-    }
+    private void PopulateDefaults() => DefaultSkills.AddMissingTo(Investigator);
 }

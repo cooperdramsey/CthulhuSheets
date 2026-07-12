@@ -170,13 +170,7 @@ public partial class SkillsTab
 
     private async Task LoadDefaultSkills()
     {
-        var existing = Investigator.Skills.Select(s => s.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
-        foreach (var (name, baseVal) in DefaultSkills.All)
-        {
-            if (existing.Contains(name)) continue;
-            var computedBase = DefaultSkills.ComputeBase(name, baseVal, Investigator);
-            Investigator.Skills.Add(new Skill { Name = name, BaseValue = computedBase });
-        }
+        DefaultSkills.AddMissingTo(Investigator);
         await PersistAsync();
     }
 }
