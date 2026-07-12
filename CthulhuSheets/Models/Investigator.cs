@@ -28,6 +28,30 @@ public class Investigator
     public Characteristic Power { get; set; } = new() { Name = "POW" };
     public Characteristic Education { get; set; } = new() { Name = "EDU" };
 
+    // Canonical accessors over the eight characteristics (see ch_3). These read
+    // the fixed properties above and store nothing new, so they don't affect
+    // serialization — [JsonIgnore] on the enumerable mirrors the Half/Fifth/
+    // EffectiveRegular computed-member idiom already used on the models.
+    [JsonIgnore]
+    public IEnumerable<Characteristic> Characteristics =>
+        [Strength, Constitution, Size, Dexterity, Appearance, Intelligence, Power, Education];
+
+    // Resolves a characteristic by its abbreviation ("STR"…"EDU"), case-insensitively.
+    // Returns null for an unknown abbrev — callers decide whether to coalesce (→0)
+    // or throw, preserving their existing behavior.
+    public Characteristic? GetCharacteristic(string abbrev) => abbrev?.ToUpperInvariant() switch
+    {
+        "STR" => Strength,
+        "CON" => Constitution,
+        "SIZ" => Size,
+        "DEX" => Dexterity,
+        "APP" => Appearance,
+        "INT" => Intelligence,
+        "POW" => Power,
+        "EDU" => Education,
+        _ => null
+    };
+
     // Pools
     public HitPoints HitPoints { get; set; } = new();
     public MagicPoints MagicPoints { get; set; } = new();

@@ -356,35 +356,14 @@ public partial class CreationCharacteristicsStep
         _ => null
     };
 
-    private Characteristic GetCharacteristicByName(string name) => name switch
-    {
-        "STR" => Investigator.Strength,
-        "CON" => Investigator.Constitution,
-        "SIZ" => Investigator.Size,
-        "DEX" => Investigator.Dexterity,
-        "APP" => Investigator.Appearance,
-        "INT" => Investigator.Intelligence,
-        "POW" => Investigator.Power,
-        "EDU" => Investigator.Education,
-        _ => throw new ArgumentException($"Unknown characteristic: {name}")
-    };
+    private Characteristic GetCharacteristicByName(string name) =>
+        Investigator.GetCharacteristic(name)
+        ?? throw new ArgumentException($"Unknown characteristic: {name}");
 
     // ── Apply / reset ────────────────────────────────
 
-    private void StoreBaseValues()
-    {
-        _baseValues = new()
-        {
-            ["STR"] = Investigator.Strength.Regular,
-            ["CON"] = Investigator.Constitution.Regular,
-            ["SIZ"] = Investigator.Size.Regular,
-            ["DEX"] = Investigator.Dexterity.Regular,
-            ["APP"] = Investigator.Appearance.Regular,
-            ["INT"] = Investigator.Intelligence.Regular,
-            ["POW"] = Investigator.Power.Regular,
-            ["EDU"] = Investigator.Education.Regular,
-        };
-    }
+    private void StoreBaseValues() =>
+        _baseValues = Investigator.Characteristics.ToDictionary(c => c.Name, c => c.Regular);
 
     private void RestoreBaseValues()
     {

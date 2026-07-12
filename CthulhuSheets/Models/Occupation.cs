@@ -26,18 +26,7 @@ public class Occupation
 
     public static int Evaluate(SkillPointFormula formula, Investigator investigator)
     {
-        var baseValue = formula.Characteristic switch
-        {
-            "EDU" => investigator.Education.Regular ?? 0,
-            "DEX" => investigator.Dexterity.Regular ?? 0,
-            "STR" => investigator.Strength.Regular ?? 0,
-            "CON" => investigator.Constitution.Regular ?? 0,
-            "SIZ" => investigator.Size.Regular ?? 0,
-            "APP" => investigator.Appearance.Regular ?? 0,
-            "INT" => investigator.Intelligence.Regular ?? 0,
-            "POW" => investigator.Power.Regular ?? 0,
-            _ => 0
-        };
+        var baseValue = investigator.GetCharacteristic(formula.Characteristic)?.Regular ?? 0;
         return baseValue * formula.Multiplier;
     }
 }
