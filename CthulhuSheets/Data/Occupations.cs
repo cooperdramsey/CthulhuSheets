@@ -1,6 +1,5 @@
 namespace CthulhuSheets.Data;
 
-// TODO may find alternative means of storage for this? Maybe static config json?
 public static class Occupations
 {
     public static readonly Occupation[] All =

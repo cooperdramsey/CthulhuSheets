@@ -367,3 +367,5 @@ FodyWeavers.xsd
 
 # References folder
 References/
+# Visual Studio local design-time build cache
+*.lscache

@@ -11,7 +11,7 @@ public partial class MainLayout : IDisposable
 
     protected override async Task OnInitializedAsync()
     {
-        InvestigatorService.OnChanged += StateHasChanged;
+        InvestigatorService.OnChanged += HandleChanged;
         InvestigatorService.OnStorageError += ShowStorageError;
         await InvestigatorService.InitializeAsync();
         await InvestigatorService.RestoreActiveAsync();
@@ -19,14 +19,21 @@ public partial class MainLayout : IDisposable
 
     public void Dispose()
     {
-        InvestigatorService.OnChanged -= StateHasChanged;
+        InvestigatorService.OnChanged -= HandleChanged;
         InvestigatorService.OnStorageError -= ShowStorageError;
     }
 
+    // OnChanged can be raised off the render thread; marshal back via InvokeAsync
+    // (matching Roster/Home) before re-rendering.
+    private void HandleChanged() => _ = InvokeAsync(StateHasChanged);
+
     private void ShowStorageError(string message)
     {
-        Snackbar.Add(message, Severity.Error);
-        StateHasChanged();
+        _ = InvokeAsync(() =>
+        {
+            Snackbar.Add(message, Severity.Error);
+            StateHasChanged();
+        });
     }
 
     private async Task HandleFileSelected(IBrowserFile file)

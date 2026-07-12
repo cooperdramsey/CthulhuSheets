@@ -9,6 +9,10 @@ window.requestPersistentStorage = async function () {
     }
 };
 
+window.getViewport = function () {
+    return { width: window.innerWidth, height: window.innerHeight };
+};
+
 window.cthulhuLocalStorage = {
     removeKeys: function (prefix) {
         Object.keys(localStorage)

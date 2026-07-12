@@ -59,11 +59,10 @@ public partial class RollButton
 
         _modifier = 0;
 
-        var vw = await JSRuntime.InvokeAsync<double>("eval", "window.innerWidth");
-        var vh = await JSRuntime.InvokeAsync<double>("eval", "window.innerHeight");
+        var viewport = await JSRuntime.InvokeAsync<Viewport>("getViewport");
 
         // Flip horizontally if popup would overflow right edge
-        _popupX = e.ClientX + 6 + PopupWidth > vw
+        _popupX = e.ClientX + 6 + PopupWidth > viewport.Width
             ? e.ClientX - 6 - PopupWidth
             : e.ClientX + 6;
 
@@ -90,4 +89,6 @@ public partial class RollButton
         _open = false;
         await OnRoll.InvokeAsync(_modifier);
     }
+
+    private sealed record Viewport(double Width, double Height);
 }
