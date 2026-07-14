@@ -63,4 +63,35 @@ public class CthulhuJsonTests
         Assert.Contains("\n", indented);           // WriteIndented
         Assert.Contains("\"name\":", indented);     // still camelCase
     }
+
+    [Fact]
+    public void Options_WritesEnumsAsStrings()
+    {
+        var investigator = new Investigator { Name = "X" };
+        investigator.Preferences.SkillSort = SkillSortMode.HighestFirst;
+
+        var json = JsonSerializer.Serialize(investigator, CthulhuJson.Options);
+
+        Assert.Contains("\"skillSort\":\"HighestFirst\"", json);
+        Assert.DoesNotContain("\"skillSort\":1", json);
+    }
+
+    [Fact]
+    public void Options_ReadsNumericEnumForBackCompat()
+    {
+        var restored = JsonSerializer.Deserialize<Investigator>(
+            "{\"preferences\":{\"skillSort\":1}}", CthulhuJson.Options);
+
+        Assert.NotNull(restored);
+        Assert.Equal(SkillSortMode.HighestFirst, restored!.Preferences.SkillSort);
+    }
+
+    [Fact]
+    public void Options_MissingPreferencesDefaultsToAlphabetical()
+    {
+        var restored = JsonSerializer.Deserialize<Investigator>("{\"name\":\"X\"}", CthulhuJson.Options);
+
+        Assert.NotNull(restored);
+        Assert.Equal(SkillSortMode.Alphabetical, restored!.Preferences.SkillSort);
+    }
 }

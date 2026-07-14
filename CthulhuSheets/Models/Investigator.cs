@@ -99,4 +99,8 @@ public class Investigator
 
     // Fellow Investigators
     public List<FellowInvestigator> FellowInvestigators { get; set; } = [];
+
+    // Per-character UI preferences (sort order, etc.). Defaults to new() so saves
+    // written before this field existed deserialize to the defaults (Alphabetical).
+    public CharacterPreferences Preferences { get; set; } = new();
 }

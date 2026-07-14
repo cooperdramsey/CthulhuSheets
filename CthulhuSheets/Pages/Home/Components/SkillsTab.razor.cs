@@ -12,12 +12,9 @@ public partial class SkillsTab
 
     private Task PersistAsync() => InvestigatorService.PersistAsync();
 
-    private enum SortMode { Alpha, RegularDesc, RegularAsc }
-
     private string _skillFilter = string.Empty;
     private bool _skillsEditMode;
     private readonly Dictionary<Skill, int> _lastSkillRolls = new();
-    private SortMode _sortMode = SortMode.Alpha;
     private int? _minRegular = null;
     private bool _combinedSelectMode;
     private readonly HashSet<Skill> _combinedSelection = new();
@@ -36,11 +33,11 @@ public partial class SkillsTab
             if (_minRegular.HasValue && _minRegular.Value > 0)
                 skills = skills.Where(s => s.EffectiveRegular >= _minRegular.Value);
 
-            return _sortMode switch
+            return Investigator.Preferences.SkillSort switch
             {
-                SortMode.RegularDesc => skills.OrderByDescending(s => s.EffectiveRegular).ThenBy(s => s.Name),
-                SortMode.RegularAsc  => skills.OrderBy(s => s.EffectiveRegular).ThenBy(s => s.Name),
-                _                    => skills.OrderBy(s => s.Name),
+                SkillSortMode.HighestFirst => skills.OrderByDescending(s => s.EffectiveRegular).ThenBy(s => s.Name),
+                SkillSortMode.LowestFirst  => skills.OrderBy(s => s.EffectiveRegular).ThenBy(s => s.Name),
+                _                          => skills.OrderBy(s => s.Name),
             };
         }
     }
@@ -131,6 +128,12 @@ public partial class SkillsTab
     private async Task LoadDefaultSkills()
     {
         DefaultSkills.AddMissingTo(Investigator);
+        await PersistAsync();
+    }
+
+    private async Task SetSort(SkillSortMode mode)
+    {
+        Investigator.Preferences.SkillSort = mode;
         await PersistAsync();
     }
 }
