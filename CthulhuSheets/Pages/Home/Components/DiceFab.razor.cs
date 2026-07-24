@@ -4,7 +4,7 @@ public partial class DiceFab : IDisposable
 {
     [Inject] private DiceRollService DiceRollService { get; set; } = default!;
 
-    private static readonly int[] DiceSides = [2, 4, 6, 10, 12, 20, 100];
+    private static readonly int[] DiceSides = [2, 4, 6, 8, 10, 12, 20, 100];
 
     private bool _menuOpen;
     private readonly Dictionary<int, int> _selectedCounts = [];

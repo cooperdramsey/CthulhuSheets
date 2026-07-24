@@ -243,7 +243,12 @@
                     <MudIcon Icon="@Icons.Material.Filled.DirectionsRun" Size="Size.Small" Color="Color.Warning" />
                     <MudText Typo="Typo.caption" Color="Color.Secondary">Movement Rate</MudText>
                 </span>
-                <MudText Typo="Typo.body2">@(Investigator.MovementRate ?? 0)</MudText>
+                <MudText Typo="Typo.body2">
+                    @(Investigator.MovementRate ?? 0)@if (Investigator.MovementDistancePerRound is int dist)
+                    {
+                        <span class="sidebar-move-distance"> (@dist yds/round)</span>
+                    }
+                </MudText>
             </div>
             <div class="stat-row">
                 <span class="stat-label-icon">

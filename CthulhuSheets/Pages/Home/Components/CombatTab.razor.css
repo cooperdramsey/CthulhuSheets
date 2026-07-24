@@ -16,11 +16,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
-    padding: 12px 20px;
+    gap: var(--space-2xs);
+    padding: var(--space-md) var(--space-xl);
     background: var(--mud-palette-surface);
     border: 1px solid var(--mud-palette-divider);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     min-width: 80px;
 }
 
@@ -33,6 +33,12 @@
 .combat-stat-value {
     font-weight: 700 !important;
     line-height: 1.1 !important;
+}
+
+.combat-move-distance {
+    font-size: 0.75rem;
+    color: var(--mud-palette-text-secondary);
+    line-height: 1.1;
 }
 
 .combat-stat-chip--dodge {

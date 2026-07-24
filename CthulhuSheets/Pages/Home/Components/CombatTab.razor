@@ -20,6 +20,10 @@
                 <MudText Typo="Typo.caption" Color="Color.Secondary">Move</MudText>
             </div>
             <MudText Typo="Typo.h5" Class="combat-stat-value">@(Investigator.MovementRate?.ToString() ?? "—")</MudText>
+            @if (Investigator.MovementDistancePerRound is int dist)
+            {
+                <span class="combat-move-distance">@dist yds/round</span>
+            }
         </div>
         <div class="combat-stat-chip combat-stat-chip--dodge">
             <MudText Typo="Typo.caption" Color="Color.Secondary">Dodge</MudText>

@@ -46,4 +46,23 @@ public class ModelDerivedValueTests
         Assert.Equal(40, s.Half);
         Assert.Equal(16, s.Fifth);
     }
+
+    [Theory]
+    [InlineData(8, 40)]
+    [InlineData(7, 35)]
+    [InlineData(1, 5)]
+    public void Investigator_MovementDistancePerRound_IsFiveTimesMov(int mov, int expected)
+    {
+        var investigator = new Investigator { MovementRate = mov };
+
+        Assert.Equal(expected, investigator.MovementDistancePerRound);
+    }
+
+    [Fact]
+    public void Investigator_MovementDistancePerRound_IsNull_WhenMovUnset()
+    {
+        var investigator = new Investigator { MovementRate = null };
+
+        Assert.Null(investigator.MovementDistancePerRound);
+    }
 }

@@ -70,6 +70,14 @@ public class Investigator
     public int? Build { get; set; }
     public string? DamageBonus { get; set; }
 
+    // Max yards an investigator can cover in one combat round: MOV × 5
+    // (ch_3, p.33 / glossary). Derived from MovementRate — never persisted, so
+    // it can't drift when MOV is manually edited. Null when MOV is unset, letting
+    // views hide the distance entirely.
+    [JsonIgnore]
+    public int? MovementDistancePerRound =>
+        MovementRate is int mov ? mov * 5 : null;
+
     // Skills
     public List<Skill> Skills { get; set; } = [];
 

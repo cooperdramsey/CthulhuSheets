@@ -84,7 +84,12 @@
 .stat-label-icon {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: var(--space-xs);
+}
+
+.sidebar-move-distance {
+    font-size: 0.75rem;
+    color: var(--mud-palette-text-secondary);
 }
 
 .luck-header {

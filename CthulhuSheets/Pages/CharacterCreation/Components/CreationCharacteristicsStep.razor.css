@@ -360,6 +360,12 @@
     color: var(--mud-palette-primary);
 }
 
+.derived-subvalue {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--mud-palette-text-secondary);
+}
+
 .derived-hint {
     font-size: 0.7rem;
     color: var(--mud-palette-text-disabled);
