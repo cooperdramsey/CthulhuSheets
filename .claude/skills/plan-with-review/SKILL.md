@@ -8,8 +8,8 @@ description: >-
   immediate code. Clarifies every assumption with the user (at least twice) via
   AskUserQuestion, makes the plan honor the Call of Cthulhu 7e rules in
   references/rules_condensed/, reviews the finished plan with the rules-review
-  skill plus a scope/gap pass, presents findings + remediations for approval,
-  then saves the final plan to plans/.
+  skill, a dotnet-code-review consulting pass, and a scope/gap pass, presents
+  findings + remediations for approval, then saves the final plan to plans/.
 ---
 
 # Plan With Review
@@ -91,7 +91,7 @@ plan must include an explicit step for saved-character compatibility: how
 existing saves deserialize after the change, and a migration or default if they
 wouldn't.
 
-### 5. Review the plan (two passes)
+### 5. Review the plan (three passes)
 Once drafted, review the plan itself:
 
 1. **Rules review.** Invoke the `rules-review` skill **pointed at the plan
@@ -99,14 +99,22 @@ Once drafted, review the plan itself:
    `plans/<slug>.md` against the rules"). It checks every formula, threshold,
    rounding rule, and constraint the plan specifies against
    `references/rules_condensed/`. Capture its findings.
-2. **Scope / gap pass.** Independently re-read the **original input
+2. **Code-quality review.** Invoke the `dotnet-code-review` skill in
+   **Consulting Mode** pointed at the plan document. Its eight specialists
+   (Blazor component quality, DRY, simplification, performance, naming, error
+   handling, SOLID, interface hygiene) pressure-test the design and produce
+   **plan remediations** — logic placed in the wrong layer, reinvented systems,
+   over-engineering, render-path costs, unhandled failure/persistence cases,
+   over-broad surfaces. Don't re-derive its checklists here; invoke the skill
+   and capture its output.
+3. **Scope / gap pass.** Independently re-read the **original input
    requirements** against the plan and look for: missed scope, requirements with
    no corresponding step, unhandled edge cases, ordering problems (a step that
    depends on a later one), validation gaps, and anything the plan silently
    assumed. 
 
 ### 6. Present findings + remediations for approval
-Present **everything found** in both passes to the user. For each finding give:
+Present **everything found** across all three passes to the user. For each finding give:
 the issue, where in the plan it is, why it matters, and a **concrete proposed
 remediation**. Do not fix anything yet — wait for the user's approval. If nothing
 was found, say so plainly and still show the user the review was done.
