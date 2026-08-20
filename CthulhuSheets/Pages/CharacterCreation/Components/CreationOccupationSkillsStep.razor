@@ -372,7 +372,7 @@
                                      Margin="Margin.Dense"
                                      HideSpinButtons="true"
                                      ReadOnly="true" />
-                    @if (isOccSkill && !isCthulhu)
+                    @if ((isOccSkill || isCR) && !isCthulhu)
                     {
                         <MudNumericField T="int"
                                          Value="occAlloc"
