@@ -1,4 +1,5 @@
 using CthulhuSheets.Data;
+using CthulhuSheets.Helpers;
 
 namespace CthulhuSheets.Pages.Home.Components;
 
@@ -25,6 +26,36 @@ public partial class CombatTab
     private int? _dodgeRoll;
     private readonly Dictionary<Weapon, int> _weaponRolls = new();
     private bool _weaponsEditMode;
+
+    // Automatic fire quick-reference inputs. They are intentionally transient:
+    // they describe the current attack rather than investigator data.
+    private int _automaticFireSkill;
+    private int _automaticFireBullets = 3;
+    private int _automaticFireVolleyNumber = 1;
+
+    private int AutomaticFireVolleyLimit =>
+        AutomaticFireRules.GetMaximumVolleySize(_automaticFireSkill);
+
+    private int AutomaticFireRegularHits =>
+        AutomaticFireRules.GetRegularSuccessHits(_automaticFireBullets);
+
+    private int AutomaticFirePenaltyDice =>
+        AutomaticFireRules.GetPenaltyDice(_automaticFireVolleyNumber);
+
+    private int AutomaticFireDifficultyIncreases =>
+        AutomaticFireRules.GetDifficultyIncreases(_automaticFireVolleyNumber);
+
+    private void OnAutomaticFireSkillChanged(int value)
+    {
+        _automaticFireSkill = Math.Max(0, value);
+        _automaticFireBullets = Math.Min(_automaticFireBullets, AutomaticFireVolleyLimit);
+    }
+
+    private void OnAutomaticFireBulletsChanged(int value) =>
+        _automaticFireBullets = Math.Clamp(value, 1, AutomaticFireVolleyLimit);
+
+    private void OnAutomaticFireVolleyNumberChanged(int value) =>
+        _automaticFireVolleyNumber = Math.Max(1, value);
 
     private void ToggleWeaponsEditMode() => _weaponsEditMode = !_weaponsEditMode;
 

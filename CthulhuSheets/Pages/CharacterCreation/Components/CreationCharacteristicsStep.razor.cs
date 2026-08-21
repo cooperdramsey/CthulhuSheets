@@ -490,5 +490,10 @@ public partial class CreationCharacteristicsStep
         // Pools are freshly reset before this runs (current values unset), so the
         // shared helper seeds full pools and computes the derived stats.
         CharacteristicHelper.RecomputeDerived(Investigator);
+
+        if (_ageApplied && Investigator.MovementRate is int movementRate)
+        {
+            _ageLog.Add($"MOV recalculated to {movementRate}: uses final STR, DEX, and SIZ, plus any age penalty.");
+        }
     }
 }

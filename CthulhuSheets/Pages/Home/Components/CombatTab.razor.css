@@ -3,12 +3,12 @@
 .combat-container {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: var(--space-2xl);
 }
 
 .combat-stats-bar {
     display: flex;
-    gap: 12px;
+    gap: var(--space-md);
     flex-wrap: wrap;
 }
 
@@ -27,7 +27,7 @@
 .combat-stat-label {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: var(--space-xs);
 }
 
 .combat-stat-value {
@@ -48,14 +48,14 @@
 .combat-dodge-row {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: var(--space-sm);
 }
 
 .combat-dodge-tier {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1px;
+    gap: var(--space-2xs);
 }
 
 .combat-dodge-num {
@@ -75,13 +75,13 @@
 .combat-dodge-sep {
     font-size: 1rem;
     opacity: 0.4;
-    margin-top: -4px;
+    margin-top: calc(-1 * var(--space-xs));
 }
 
 .combat-weapons-section {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--space-sm);
 }
 
 .combat-weapons-header {
@@ -167,8 +167,8 @@
 
 .weapon-roll-icon-placeholder {
     display: block;
-    width: 1rem;
-    height: 1rem;
+    width: var(--icon-sm);
+    height: var(--icon-sm);
 }
 
 .weapon-roll-cell {
@@ -195,8 +195,8 @@
 .roll-action {
     display: flex;
     align-items: center;
-    gap: 4px;
-    margin-top: 4px;
+    gap: var(--space-xs);
+    margin-top: var(--space-xs);
 }
 
 .roll-result {
@@ -208,5 +208,122 @@
 }
 
 .roll-check-icon {
-    font-size: 1rem !important;
+    font-size: var(--icon-sm) !important;
+}
+
+.combat-reference-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.combat-reference-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding: var(--space-xs) 0;
+}
+
+.combat-reference-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-sm);
+}
+
+.combat-reference-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    border: 1px solid var(--mud-palette-divider);
+    border-radius: var(--radius-sm);
+    background: var(--mud-palette-surface);
+}
+
+.combat-reference-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    margin: 0;
+    padding-inline-start: var(--space-lg);
+    color: var(--mud-palette-text-secondary);
+    font-size: 0.875rem;
+}
+
+.combat-reference-modifiers {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    color: var(--mud-palette-text-secondary);
+    font-size: 0.875rem;
+}
+
+.combat-reference-modifiers > div {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+}
+
+.combat-reference-modifier-label {
+    align-self: flex-start;
+    padding: var(--space-2xs) var(--space-xs);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.combat-reference-modifier-label--bonus {
+    color: var(--mud-palette-success-darken);
+    background: var(--mud-palette-success-hover);
+}
+
+.combat-reference-modifier-label--penalty {
+    color: var(--mud-palette-error-darken);
+    background: var(--mud-palette-error-hover);
+}
+
+.automatic-fire-reference {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    padding: var(--space-xs) 0;
+}
+
+.automatic-fire-inputs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-md);
+}
+
+.automatic-fire-results {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-sm);
+}
+
+.automatic-fire-result {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    padding: var(--space-sm);
+    border: 1px solid var(--mud-palette-divider);
+    border-radius: var(--radius-sm);
+    background: var(--mud-palette-surface);
+}
+
+.automatic-fire-result--warning {
+    border-color: var(--mud-palette-warning);
+}
+
+.automatic-fire-result-label {
+    font-size: 0.75rem;
+    color: var(--mud-palette-text-secondary);
+}
+
+@media (max-width: 600px) {
+    .combat-reference-grid,
+    .automatic-fire-inputs,
+    .automatic-fire-results {
+        grid-template-columns: 1fr;
+    }
 }

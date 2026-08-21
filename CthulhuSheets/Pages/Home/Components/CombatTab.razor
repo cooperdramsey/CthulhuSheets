@@ -90,7 +90,7 @@
                 <span class="weapon-col-header">Damage</span>
                 <span class="weapon-col-header weapon-col-center">Atk/Rnd</span>
                 <span class="weapon-col-header">Range</span>
-                <span class="weapon-col-header weapon-col-center">Ammo</span>
+                <span class="weapon-col-header weapon-col-center">Mag Size</span>
                 <span class="weapon-col-header weapon-col-center">Malf</span>
                 <span></span>
                 @foreach (var weapon in Investigator.Weapons)
@@ -208,5 +208,174 @@
                 }
             </div>
         }
+    </div>
+
+    <div class="combat-reference-section">
+        <MudText Typo="Typo.h6">Combat Reference</MudText>
+        <MudExpansionPanels MultiExpansion="true" Class="combat-reference-panels">
+            <MudExpansionPanel Text="Combat Round">
+                <div class="combat-reference-content">
+                    <div class="combat-reference-grid">
+                        <div class="combat-reference-card">
+                            <MudText Typo="Typo.subtitle2">Turn order</MudText>
+                            <ul class="combat-reference-list">
+                                <li>Act in DEX order, highest first; break ties with the higher combat skill.</li>
+                                <li>Each combatant acts once per round. Some monsters make multiple attacks on their turn.</li>
+                                <li>You may delay to act later; simultaneous delayers still resolve by DEX.</li>
+                            </ul>
+                        </div>
+                        <div class="combat-reference-card">
+                            <MudText Typo="Typo.subtitle2">Actions</MudText>
+                            <ul class="combat-reference-list">
+                                <li>Attack, attempt a fighting maneuver, flee, cast a spell, or take another timed action.</li>
+                                <li>Combat rolls cannot be pushed; the next attempt is simply your next attack.</li>
+                                <li>Use your action to flee when you have a route and are not restrained.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </MudExpansionPanel>
+
+            <MudExpansionPanel Text="Melee &amp; Maneuvers">
+                <div class="combat-reference-content">
+                    <div class="combat-reference-grid">
+                        <div class="combat-reference-card">
+                            <MudText Typo="Typo.subtitle2">Opposed melee</MudText>
+                            <ul class="combat-reference-list">
+                                <li><strong>Fight back:</strong> compare Fighting successes. The higher result deals damage; a tie goes to the attacker.</li>
+                                <li><strong>Dodge:</strong> compare Fighting to Dodge. The attacker needs the higher result; a tie goes to the defender.</li>
+                                <li>After a defender has fought back or dodged once in a round, further melee attacks against them gain one bonus die.</li>
+                            </ul>
+                        </div>
+                        <div class="combat-reference-card">
+                            <MudText Typo="Typo.subtitle2">Damage &amp; maneuvers</MudText>
+                            <ul class="combat-reference-list">
+                                <li>Unarmed damage is 1D3. Armor reduces damage that passes through it.</li>
+                                <li>On your turn, an Extreme success maximizes damage; impaling weapons also add one rolled weapon-damage die.</li>
+                                <li>For a maneuver, state a definite goal and compare Build first: one or two lower gives one or two penalty dice; three lower is impossible.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </MudExpansionPanel>
+
+            <MudExpansionPanel Text="Firearms">
+                <div class="combat-reference-content">
+                    <div class="combat-reference-grid">
+                        <div class="combat-reference-card">
+                            <MudText Typo="Typo.subtitle2">Attack &amp; range</MudText>
+                            <ul class="combat-reference-list">
+                                <li>Roll Firearms; the attack is not opposed, and a failed roll deals no damage.</li>
+                                <li>Within base range: Regular. Up to twice base range: Hard. Up to four times base range: Extreme.</li>
+                                <li>At very long range, an impale requires a critical success (01). Readied firearms act at DEX + 50.</li>
+                            </ul>
+                        </div>
+                        <div class="combat-reference-card">
+                            <MudText Typo="Typo.subtitle2">Common modifiers</MudText>
+                            <div class="combat-reference-modifiers">
+                                <div>
+                                    <span class="combat-reference-modifier-label combat-reference-modifier-label--bonus">Bonus die</span>
+                                    <span>Aim for one round, point-blank range, or a large target (Build 4+).</span>
+                                </div>
+                                <div>
+                                    <span class="combat-reference-modifier-label combat-reference-modifier-label--penalty">Penalty die</span>
+                                    <span>Diving for cover, 50%+ concealment, fast/small targets, firing into melee, multiple handgun shots, or loading and firing.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="combat-reference-card">
+                            <MudText Typo="Typo.subtitle2">Aiming &amp; cover</MudText>
+                            <ul class="combat-reference-list">
+                                <li>Aim on your turn to fire next round with one bonus die. Moving or taking damage loses the aim.</li>
+                                <li>A successful dive-for-cover Dodge gives the shooter one penalty die; the diver forfeits their next attack.</li>
+                                <li>Firing into melee has one penalty die. On a fumble, the shot hits an ally instead.</li>
+                            </ul>
+                        </div>
+                        <div class="combat-reference-card">
+                            <MudText Typo="Typo.subtitle2">Reloading &amp; malfunctions</MudText>
+                            <ul class="combat-reference-list">
+                                <li>Load two shells in one round, swap a clip in one round, or load an MG belt in two rounds.</li>
+                                <li>2–3 handgun shots in a round each take one penalty die.</li>
+                                <li>A roll at or above the weapon's malfunction number means it does not fire.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </MudExpansionPanel>
+
+            <MudExpansionPanel Text="Automatic Fire">
+                <div class="automatic-fire-reference">
+                    <MudText Typo="Typo.body2" Color="Color.Secondary">
+                        A volley contains up to one tenth of the relevant SMG or MG skill, rounded down, with a minimum of three bullets.
+                    </MudText>
+
+                    <div class="automatic-fire-inputs">
+                        <MudNumericField T="int"
+                                         Value="_automaticFireSkill"
+                                         ValueChanged="OnAutomaticFireSkillChanged"
+                                         Label="SMG/MG skill"
+                                         Min="0"
+                                         Max="99"
+                                         Variant="Variant.Outlined"
+                                         Margin="Margin.Dense"
+                                         HideSpinButtons="true" />
+                        <MudNumericField T="int"
+                                         Value="_automaticFireBullets"
+                                         ValueChanged="OnAutomaticFireBulletsChanged"
+                                         Label="Bullets in volley"
+                                         Min="1"
+                                         Max="@AutomaticFireVolleyLimit"
+                                         Variant="Variant.Outlined"
+                                         Margin="Margin.Dense"
+                                         HideSpinButtons="true" />
+                        <MudNumericField T="int"
+                                         Value="_automaticFireVolleyNumber"
+                                         ValueChanged="OnAutomaticFireVolleyNumberChanged"
+                                         Label="Volley number"
+                                         Min="1"
+                                         Variant="Variant.Outlined"
+                                         Margin="Margin.Dense"
+                                         HideSpinButtons="true" />
+                    </div>
+
+                    <div class="automatic-fire-results">
+                        <div class="automatic-fire-result">
+                            <span class="automatic-fire-result-label">Maximum volley</span>
+                            <strong>@AutomaticFireVolleyLimit bullets</strong>
+                        </div>
+                        <div class="automatic-fire-result">
+                            <span class="automatic-fire-result-label">Regular success</span>
+                            <strong>@AutomaticFireRegularHits hit@(AutomaticFireRegularHits == 1 ? string.Empty : "s")</strong>
+                        </div>
+                        <div class="automatic-fire-result">
+                            <span class="automatic-fire-result-label">Extreme success</span>
+                            <strong>All @_automaticFireBullets hit; first half impale</strong>
+                        </div>
+                        <div class="automatic-fire-result">
+                            <span class="automatic-fire-result-label">Roll modifier</span>
+                            @if (AutomaticFirePenaltyDice > 0)
+                            {
+                                <strong>@AutomaticFirePenaltyDice penalty die@(AutomaticFirePenaltyDice == 1 ? string.Empty : "ce")</strong>
+                            }
+                            else
+                            {
+                                <strong>Normal firearms roll</strong>
+                            }
+                        </div>
+                        @if (AutomaticFireDifficultyIncreases > 0)
+                        {
+                            <div class="automatic-fire-result automatic-fire-result--warning">
+                                <span class="automatic-fire-result-label">Difficulty</span>
+                                <strong>Raise @AutomaticFireDifficultyIncreases step@(AutomaticFireDifficultyIncreases == 1 ? string.Empty : "s")</strong>
+                            </div>
+                        }
+                    </div>
+
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">
+                        One trigger pull per round; declare bullets up to the weapon's capacity. First volley: normal firearms roll. Each later volley adds a penalty die (maximum two); every volley after that raises the difficulty one step. Make a fresh roll for each volley or new target. A burst is one volley of 2–3 bullets. If the attack's difficulty is already Extreme, an Extreme success hits but does not impale.
+                    </MudText>
+                </div>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
     </div>
 </div>
