@@ -1,0 +1,15 @@
+{
+  "enabledPlugins": {
+    "workflow@cooper-skills": true,
+    "code-quality@cooper-skills": true,
+    "dotnet-blazor@cooper-skills": true
+  },
+  "extraKnownMarketplaces": {
+    "cooper-skills": {
+      "source": {
+        "source": "github",
+        "repo": "cooperdramsey/claude-skills"
+      }
+    }
+  }
+}

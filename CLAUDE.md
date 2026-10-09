@@ -10,6 +10,50 @@ Always verify your changes before reporting them as done:
 - **`dotnet test`** must pass — run the full test suite to confirm nothing regressed, not just a
   build. Do this for every change with runtime impact, even a small one.
 
+## Architecture & Conventions
+
+A Blazor WebAssembly app in three logical layers, plus tests:
+
+- **Domain / logic** — `CthulhuSheets/Models/`, `Helpers/` and `Data/`. Models, pure rules logic, and static
+  rules data. Pulls in no Blazor, `IJSRuntime` or storage types. Rules math (derived stats, skill and sanity
+  rules) lives in `Helpers/` — `CharacteristicHelper.cs`, `SkillRules.cs`, `SanityRules.cs`.
+- **Services** — `CthulhuSheets/Services/` (`InvestigatorService`, `DiceRollService`) and `Services/Storage/`
+  (`ICharacterStore`, `IndexedDbCharacterStore`, `LocalStorageCharacterStore`, `StorageMigrator`).
+- **UI** — `Pages/`, `Shared/`, `Layout/`. Components are thin: they render state and forward intent. A feature
+  is `X.razor` (markup) + `X.razor.cs` (logic) + a scoped `X.razor.css`.
+- **Tests** — `CthulhuSheets.Tests`.
+
+Hard rules, never traded away:
+
+- **Rules math lives in the domain layer, never in components.**
+- **Persisted models round-trip as JSON.** Anything reachable from `Investigator` or `Roster` is saved through
+  `ICharacterStore` (IndexedDB, falling back to localStorage). A change to these needs a plan for characters
+  already saved — a default, or a migration through `StorageMigrator`.
+- **Static rules data is code, and a wrong value corrupts every character.** `Data/Occupations.cs` and
+  `Data/DefaultSkills.cs` hold printed rules values; check them against the rules reference.
+- Async methods carry the `Async` suffix; styling follows the design tokens and MudBlazor palette below.
+
+The rules-bearing parts of the code are mapped file by file in the `rules-review` skill.
+
+## Review & Verification
+
+- **Review skill:** `dotnet-code-review` (the full eight-specialist aggregate). It applies to plans too, in
+  Consulting Mode.
+- **Conformance review:** `rules-review` checks the code against the Call of Cthulhu 7th Edition rules. The
+  condensed rules in `references/rules_condensed/` are the source of truth (fuller text in
+  `references/rules_md/`). Run it on any plan or change that touches rules-bearing logic or data.
+- **Testing:** new domain logic (`Models`, `Helpers`, `Services`) comes with unit tests in
+  `CthulhuSheets.Tests` — that is the point of keeping logic out of components.
+- **Done means:** the bar under **Verifying changes** above — `dotnet build` clean and `dotnet test` green.
+
+## Documentation & Vocabulary
+
+- **Living docs:** none beyond this file; keep the architecture notes above current when a system changes.
+- **Plans and requirements:** `plans/` (kebab-case slugs) and `plans/requirements/`.
+- **Vocabulary** — use the Call of Cthulhu 7e terms exactly and invent no synonyms: Characteristic
+  (STR/CON/SIZ/DEX/APP/INT/POW/EDU/LUCK), Skill, Occupation, Sanity, Investigator, Weapon, Damage Bonus, Build,
+  Credit Rating.
+
 ## Tech & styling architecture
 
 - **Blazor WebAssembly + MudBlazor** (Material Design component library).
